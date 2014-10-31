@@ -19,6 +19,7 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
@@ -26,13 +27,13 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocumentType;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
-import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.preferences.js.PreferredJSLibVersions;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -47,11 +48,12 @@ import org.w3c.dom.NodeList;
 public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 	public static final String PROPOPERTY_JQUERY_MOBILE_INSERT_JS_CSS   = "insert jquery mobile js css"; //$NON-NLS-1$
 	public static final String PROPOPERTY_PREFERRED_JS_LIB_VERSIONS = "preferred-js-lib-versions";
+	public static final String PALETTE_PATH = "palettePath";
 	
 	// palettePath - %Palette%/Mobile/jQuery Mobile/1.page/0. JS#CSS
 	public static final String INSERT_JS_CSS_SIGNATURE = "<jquery.mobile.js.css>"; //$NON-NLS-1$
 	
-	private static final String MOBILE_PATH = "/Mobile/"; //$NON-NLS-1$
+	public static final String MOBILE_PATH = "/Mobile/"; //$NON-NLS-1$
 
 	private static String link(String href) {
 		return "<link rel=\"stylesheet\" href=\"" + href + "\" /";
@@ -84,8 +86,8 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 	}
 	
 	public boolean isMobile(ISourceViewer v, Properties p, String[] texts) {
-		if(p.containsKey(SharableConstants.PALETTE_PATH)){
-			String path = p.getProperty(SharableConstants.PALETTE_PATH);
+		if(p.containsKey(PALETTE_PATH)){
+			String path = p.getProperty(PALETTE_PATH);
 			if(path.contains(MOBILE_PATH)){
 				modify(v, p, texts);
 				return true;
@@ -464,5 +466,22 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 			}
 		}
 		return false;
+	}
+	
+	public int correctOffset(IDocument document, int offset, PaletteItemDropCommand command){
+		ITextSelection selection = correctSelection(document, new TextSelection(document, offset, 0), command);
+		return selection.getOffset();
+	}
+	
+	public ITextSelection correctSelection(IDocument document, ITextSelection selection, PaletteItemDropCommand command){
+		 return correctSelection(document, selection, command.getPositionCorrector());
+	}
+	
+	public void insertIntoEditor(final ISourceViewer v, Properties p, PaletteItemDropCommand command){
+		insertIntoEditor(v, p, command.getPositionCorrector());
+	}
+	
+	public void insertIntoEditor(ITextEditor editor, Properties p, PaletteItemDropCommand command) {
+		insertIntoEditor(editor, p, command.getPositionCorrector());
 	}
 }

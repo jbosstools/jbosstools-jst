@@ -405,7 +405,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 	public IEditorPart openEditor(String fileName) {
 		IEditorPart result = super.openEditor(fileName);
 		if(getVersion() != IonicVersion.IONIC_1_0) {
-			switchVersion(getVersion().toString());
+			switchVersion(getVersion());
 		}
 		return result;
 	}

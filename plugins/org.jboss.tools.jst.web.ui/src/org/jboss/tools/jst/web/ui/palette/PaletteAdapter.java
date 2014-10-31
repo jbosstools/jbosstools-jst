@@ -16,8 +16,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.palette.PaletteContainer;
-import org.eclipse.gef.palette.PaletteEntry;
-import org.eclipse.gef.palette.ToolEntry;
+import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
@@ -38,20 +37,19 @@ import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.views.palette.IPaletteAdapter;
 import org.jboss.tools.common.model.ui.views.palette.IPalettePageAdapter;
 import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
-import org.jboss.tools.common.model.ui.views.palette.PaletteInsertManager;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteItem;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteTool;
+import org.jboss.tools.jst.web.ui.palette.model.IPaletteModel;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteRoot;
 
 public class PaletteAdapter implements IPaletteAdapter {
 	private static final URL BASE_URL = EclipseResourceUtil.getInstallURL(Platform.getBundle(ModelUIPlugin.PLUGIN_ID));
 	private static final String IMAGE_PATH = "images/xstudio/palette/"; //$NON-NLS-1$
 
 	private IPalettePageAdapter viewPart = null;
-	private PaletteModel model = null; 
+	private IPaletteModel model = null; 
 	private PaletteViewer viewer = null;
 	private Control palette = null;
 	private DescriptionManager descriptionManager = null;
@@ -77,11 +75,11 @@ public class PaletteAdapter implements IPaletteAdapter {
 	}
 	
 	private boolean isJSF(){
-		return model.getType().equals(PaletteModel.TYPE_JSF);
+		return model.getType().equals(IPaletteModel.TYPE_JSF);
 	}
 	
 	private boolean isMobile(){
-		return model.getType().equals(PaletteModel.TYPE_HTML5);
+		return model.getType().equals(IPaletteModel.TYPE_HTML5);
 	}
 	
 	private SearchPattern pattern = new SearchPattern();
@@ -91,7 +89,7 @@ public class PaletteAdapter implements IPaletteAdapter {
 	 * @param model
 	 * @param text
 	 */
-	public void testFilter(PaletteModel model, String text){
+	public void testFilter(IPaletteModel model, String text){
 		pattern.setPattern("*"+text);
 		filter(model.getPaletteRoot());
 	}
@@ -105,9 +103,9 @@ public class PaletteAdapter implements IPaletteAdapter {
 		List children = container.getChildren();
 		for(Object child : children){
 			if(!(child instanceof PaletteContainer)){
-				if(child instanceof PaletteItem){
-					PaletteItem entry = (PaletteItem)child;
-					if(pattern.matches(entry.getKeywordsAsString())){
+				if(child instanceof PaletteTool){
+					PaletteTool entry = (PaletteTool)child;
+					if(pattern.matches(entry.getPaletteItem().getKeywordsAsString())){
 						entry.setVisible(true);
 					}else{
 						entry.setVisible(false);
@@ -158,7 +156,9 @@ public class PaletteAdapter implements IPaletteAdapter {
 		}
 
 		modelListener = new PaletteModelListener();
-		model.addModelTreeListener(modelListener);
+		if(model instanceof PaletteModel){
+			((PaletteModel) model).addModelTreeListener(modelListener);
+		}
 
 		viewer.addDragStartSupport();
 
@@ -172,7 +172,9 @@ public class PaletteAdapter implements IPaletteAdapter {
 	}
 	
 	public void dispose() {
-		model.removeModelTreeListener(modelListener);
+		if(model instanceof PaletteModel){
+			((PaletteModel) model).removeModelTreeListener(modelListener);
+		}
 		if(isJSF()){
 			dropManager.dispose();
 		}
@@ -193,9 +195,12 @@ public class PaletteAdapter implements IPaletteAdapter {
 		if(viewer != null) {
 			viewer.deselectAll();
 		}
-		model.load(lastAddedXCat);
+		if(model instanceof PaletteModel){
+			((PaletteModel)model).load(lastAddedXCat);
+		}else{
+			model.load();
+		}
 		setEnabled(true);
-///		setEnabled(viewPart.idEnabled());
 	}
 
 	private ImageDescriptor getImageDescriptor(String fileName) {
@@ -215,7 +220,9 @@ public class PaletteAdapter implements IPaletteAdapter {
 		}
 		
 		public void run() {
-			model.openEditor(palette.getShell());			
+			if(model instanceof PaletteModel){
+				((PaletteModel)model).openEditor(palette.getShell());
+			}
 		}
 	}
 	
@@ -225,7 +232,9 @@ public class PaletteAdapter implements IPaletteAdapter {
 			setToolTipText(PaletteUIMessages.SHOW_HIDE);
 		}
 		public void run() {
-			model.runShowHideDialog();			
+			if(model instanceof PaletteModel){
+				((PaletteModel)model).runShowHideDialog();
+			}
 		}
 	}
 
@@ -235,7 +244,9 @@ public class PaletteAdapter implements IPaletteAdapter {
 			setToolTipText(PaletteUIMessages.IMPORT);
 		}
 		public void run() {
-			model.runImportTLDDialog();			
+			if(model instanceof PaletteModel){
+				((PaletteModel)model).runImportTLDDialog();
+			}
 		}
 	}
 
@@ -267,22 +278,25 @@ public class PaletteAdapter implements IPaletteAdapter {
 				}
 				return;
 			}
-			XModel xmodel = model.getXModel();
-			XModelObject exo = event.getModelObject();
-			boolean q = event.kind() == XModelTreeEvent.STRUCTURE_CHANGED && xmodel.getRoot().getPath().equals(exo.getPath());
-			XModelObject xroot = xmodel.getRoot("Palette"); //$NON-NLS-1$
-			if (xroot == null || isExist(xroot, event.getModelObject()) || q) {
-				if (event.kind() == XModelTreeEvent.CHILD_ADDED && xroot != null && xroot.getPath().equals(exo.getPath())) {
-					Object info = event.getInfo();
-					if (info instanceof XModelObject) {
-						lastAddedCat = (XModelObject)info; 
+			if(model instanceof PaletteModel){
+				XModel xmodel = ((PaletteModel)model).getXModel();
+
+				XModelObject exo = event.getModelObject();
+				boolean q = event.kind() == XModelTreeEvent.STRUCTURE_CHANGED && xmodel.getRoot().getPath().equals(exo.getPath());
+				XModelObject xroot = xmodel.getRoot("Palette"); //$NON-NLS-1$
+				if (xroot == null || isExist(xroot, event.getModelObject()) || q) {
+					if (event.kind() == XModelTreeEvent.CHILD_ADDED && xroot != null && xroot.getPath().equals(exo.getPath())) {
+						Object info = event.getInfo();
+						if (info instanceof XModelObject) {
+							lastAddedCat = (XModelObject)info; 
+						}
 					}
-				}
-				if(isTransaction) {
-					isDirty = true;
-				} else {
-					reload(lastAddedCat);
-					lastAddedCat = null;
+					if(isTransaction) {
+						isDirty = true;
+					} else {
+						reload(lastAddedCat);
+						lastAddedCat = null;
+					}
 				}
 			}
 		}

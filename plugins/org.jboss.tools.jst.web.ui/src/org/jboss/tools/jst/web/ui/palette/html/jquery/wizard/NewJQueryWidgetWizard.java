@@ -12,18 +12,15 @@ package org.jboss.tools.jst.web.ui.palette.html.jquery.wizard;
 
 import java.io.File;
 
-import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
-import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
-import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
-import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
-import org.jboss.tools.jst.web.ui.internal.preferences.js.PreferredJSLibVersions;
 import org.jboss.tools.jst.web.WebModelPlugin;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteItemDropCommand;
+import org.jboss.tools.jst.web.ui.internal.preferences.js.PreferredJSLibVersions;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.VersionedNewHTMLWidgetWizard;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 
 /**
  * 
@@ -63,15 +60,8 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 	public void setCommand(IDropCommand command) {
 		super.setCommand(command);
 		
-		String path = getCommandProperties().getProperty(SharableConstants.PALETTE_PATH);
-		if(path != null) {
-			for (JQueryMobileVersion v: JQueryMobileVersion.ALL_VERSIONS) {
-				if(path.indexOf(PaletteModel.VERSION_PREFIX + v.toString()) > 0) {
-					version = v;
-				}
-			}
-		}
-
+		version = (JQueryMobileVersion) ((PaletteItemDropCommand)command).getPaletteItem().getCategory().getVersionGroup().getVersion();
+		
 		preferredVersions =new PreferredJSLibVersions(getFile(), getVersion());
 		preferredVersions.updateLibEnablementAndSelection();		
 	}
@@ -295,19 +285,5 @@ public abstract class NewJQueryWidgetWizard<P extends NewJQueryWidgetWizardPage>
 			}			
 		}
 		
-	}
-
-	/**
-	 * Helper method that returns results generated 
-	 * by palette item wizard with default settings
-	 * for jQuery Mobile category.
-	 * 
-	 * @param textEditor
-	 * @param version
-	 * @param item
-	 * @return
-	 */
-	public static PaletteItemResult runWithoutUi(JSPTextEditor textEditor, JQueryMobileVersion version, String item) {
-		return runWithoutUi(textEditor, JQueryConstants.JQM_CATEGORY, version.toString(), item);
 	}
 }

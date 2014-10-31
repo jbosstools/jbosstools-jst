@@ -16,6 +16,7 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.image.XModelObjectImageDescriptor;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 
 public class PaletteCategory extends PaletteDrawer implements PaletteXModelObject {
 
@@ -24,9 +25,9 @@ public class PaletteCategory extends PaletteDrawer implements PaletteXModelObjec
 	private XModelObject xobject;
 	private PaletteModel paletteModel;
 	
-	private String version = null;
+	private IHTMLLibraryVersion version = null;
 
-	private String[] availableVersions = new String[0];
+	private IHTMLLibraryVersion[] availableVersions = new IHTMLLibraryVersion[0];
 
 	public PaletteCategory(XModelObject xobject, boolean open) {
 		super(null);
@@ -78,19 +79,19 @@ public class PaletteCategory extends PaletteDrawer implements PaletteXModelObjec
 		setLabel(label);
 	}
 
-	public String getVersion() {
+	public IHTMLLibraryVersion getVersion() {
 		return version;
 	}
 
-	public String[] getAvailableVersions() {
+	public IHTMLLibraryVersion[] getAvailableVersions() {
 		return availableVersions;
 	}
 
-	public void setVersion(String s) {
+	public void setVersion(IHTMLLibraryVersion s) {
 		version = s;
 	}
 
-	public void setAvailableVersions(String[] vs) {
+	public void setAvailableVersions(IHTMLLibraryVersion[] vs) {
 		availableVersions = vs;
 	}
 }

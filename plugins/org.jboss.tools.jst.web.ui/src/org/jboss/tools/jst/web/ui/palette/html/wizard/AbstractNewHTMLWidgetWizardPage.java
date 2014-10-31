@@ -55,6 +55,7 @@ import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.util.SwtUtil;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteItemDropCommand;
 
 /**
  * 
@@ -67,7 +68,7 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 	protected StyledText text;
 	protected Browser browser;
 	protected File sourceFile = null;
-	protected String sourceURL = null;	
+	protected String sourceURL = null;
 	
 	public AbstractNewHTMLWidgetWizardPage(String pageName, String title) {
 		super(pageName, title);
@@ -83,8 +84,7 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
     }
 
 	protected void createWarningMessage() {
-		String palettePath = getWizard().getCommandProperties().getProperty(SharableConstants.PALETTE_PATH);
-		IPositionCorrector corrector = PaletteInsertManager.getInstance().createCorrectorInstance(palettePath);
+		IPositionCorrector corrector = ((PaletteItemDropCommand)getWizard().command).getPositionCorrector();
 		if(corrector != null) {
 			ITextSelection s = (ITextSelection)getWizard().getWizardModel().getDropData().getSelectionProvider().getSelection();
 			IDocument doc = getWizard().getWizardModel().getDropData().getSourceViewer().getDocument();
@@ -233,14 +233,14 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 		if(parent != null) editor.doFillIntoGrid(parent);
 		editor.addPropertyChangeListener(this);
 		addEditor(editor);
-		Combo c = (parent != null) ? findCombo(editor) : null;
+		Combo c = (parent != null) ? findCombo(editor, parent) : null;
 		if(c != null) {
 			new ComboContentProposalProvider(c);
 		}
 	}
 
-	private Combo findCombo(IFieldEditor editor) {
-		for (Object o: editor.getEditorControls()) {
+	private Combo findCombo(IFieldEditor editor, Composite parent) {
+		for (Object o: editor.getEditorControls(parent)) {
 			if(o instanceof Combo) {
 				return (Combo)o; 
 			}

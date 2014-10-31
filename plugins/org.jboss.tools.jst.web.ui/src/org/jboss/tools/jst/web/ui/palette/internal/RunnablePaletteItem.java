@@ -10,18 +10,22 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.internal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.jboss.tools.common.model.ui.editors.dnd.DropData;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.common.text.IExecutableTextProposal;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteItemDropCommand;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItemWizard;
 
 /**
  * Objects of this class are returned by PaletteManager. and items of Palette.
@@ -32,15 +36,10 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizar
  *
  */
 public class RunnablePaletteItem implements IExecutableTextProposal {
-	String category;
-	String version;
-	String name;
-	List<String> alternatives = new ArrayList<String>();
+	private IPaletteItem paletteItem;
 
-	public RunnablePaletteItem(String category, String version, String name) {
-		this.category = category;
-		this.version = version;
-		this.name = name;
+	public RunnablePaletteItem(IPaletteItem paletteItem) {
+		this.paletteItem = paletteItem;
 	}
 
 	/**
@@ -48,15 +47,15 @@ public class RunnablePaletteItem implements IExecutableTextProposal {
 	 * @return category of palette item
 	 */
 	public String getCategory() {
-		return category;
+		return paletteItem.getCategory().getVersionGroup().getGroup().getName();
 	}
 
 	/**
 	 * 
 	 * @return category version of palette item 
 	 */
-	public String getVersion() {
-		return version;
+	public IHTMLLibraryVersion getVersion() {
+		return paletteItem.getCategory().getVersionGroup().getVersion();
 	}
 
 	/**
@@ -64,7 +63,7 @@ public class RunnablePaletteItem implements IExecutableTextProposal {
 	 * @return name of palette item
 	 */
 	public String getName() {
-		return name;
+		return paletteItem.getName();
 	}
 
 	/**
@@ -72,7 +71,7 @@ public class RunnablePaletteItem implements IExecutableTextProposal {
 	 * @return
 	 */
 	public List<String> getAlternatives() {
-		return alternatives;
+		return paletteItem.getKeywords();
 	}
 
 	/**
@@ -81,7 +80,12 @@ public class RunnablePaletteItem implements IExecutableTextProposal {
 	 * @return result of generation of palette item wizard with default settings
 	 */
 	public PaletteItemResult getResult(JSPTextEditor textEditor) {
-		return AbstractNewHTMLWidgetWizard.runWithoutUi(textEditor, category, version, name);
+		IPaletteItemWizard wizard = paletteItem.createWizard();
+		if(wizard instanceof AbstractNewHTMLWidgetWizard){
+			return ((AbstractNewHTMLWidgetWizard) wizard).runWithoutUi(textEditor);
+		}else{
+			return new PaletteItemResult(paletteItem.getStartText(), paletteItem.getEndText());
+		}
 	}
 
 	@Override
@@ -105,7 +109,16 @@ public class RunnablePaletteItem implements IExecutableTextProposal {
 			WebUiPlugin.getDefault().logError(e);
 		}
 
-		AbstractNewHTMLWidgetWizard.applyWithoutUi(jsp, this);
+		IPaletteItemWizard wizard = paletteItem.createWizard();
+		if(wizard instanceof AbstractNewHTMLWidgetWizard){
+			((AbstractNewHTMLWidgetWizard) wizard).applyWithoutUi(jsp);
+		}else{
+			DropData dropData = new DropData(PaletteItemTransfer.PALETTE_ITEM, "",
+					textEditor.getEditorInput(), ((JSPMultiPageEditor)textEditor).getJspEditor().getTextViewer(),
+					textEditor.getSelectionProvider());
+			PaletteItemDropCommand command = new PaletteItemDropCommand(paletteItem, true);
+			command.execute(dropData);
+		}
 	}
 
 }

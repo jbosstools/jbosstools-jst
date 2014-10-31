@@ -14,6 +14,7 @@ import org.eclipse.draw2d.FocusEvent;
 import org.eclipse.draw2d.FocusListener;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.gef.palette.PaletteDrawer;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteDrawerImpl;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteCategory;
 
 public class MobileDrawerEditPart extends CustomDrawerEditPart {
@@ -28,7 +29,7 @@ public class MobileDrawerEditPart extends CustomDrawerEditPart {
         }
         
         public IFigure createFigure() {
-        		PaletteCategory category = (PaletteCategory)getModel();
+        		PaletteDrawerImpl category = (PaletteDrawerImpl)getModel();
 
                 MobileDrawerFigure fig = new MobileDrawerFigure(category, getViewer().getControl()) {
                         public IFigure getToolTip() {

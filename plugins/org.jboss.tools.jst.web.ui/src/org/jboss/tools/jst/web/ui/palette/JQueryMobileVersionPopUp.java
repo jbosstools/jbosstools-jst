@@ -31,6 +31,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Control;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.palette.MobileDrawerFigure.VersionFigure;
 
 class JQueryMobileVersionPopUp extends PopUpHelper {
@@ -101,11 +102,11 @@ class JQueryMobileVersionPopUp extends PopUpHelper {
                 getShell().forceFocus();
         }
         
-        public void show(String[] versions){
+        public void show(IHTMLLibraryVersion[] versions){
                 String currentVersion = figureToShowNear.getVersion();
                 Panel panel = new Panel();
                 panel.setLayoutManager(new GridLayout(1, false));
-                for(String version : versions){
+                for(IHTMLLibraryVersion version : versions){
                         ItemFigure label = new ItemFigure(version);
                         panel.add(label);
                         if(version.equals(currentVersion)){
@@ -123,8 +124,8 @@ class JQueryMobileVersionPopUp extends PopUpHelper {
                 private Color backColor = ColorConstants.menuBackgroundSelected;
                 private Color foreColor = ColorConstants.menuForegroundSelected;
                 
-                public ItemFigure(final String text){
-                        super(new Label(text));
+                public ItemFigure(final IHTMLLibraryVersion version){
+                        super(new Label(version.toString()));
                         setRolloverEnabled(true);
                         setRequestFocusEnabled(false);
                         setFocusTraversable(false);
@@ -133,7 +134,7 @@ class JQueryMobileVersionPopUp extends PopUpHelper {
                                 @Override
                                 public void actionPerformed(ActionEvent event) {
                                         JQueryMobileVersionPopUp.this.hide();
-                                        figureToShowNear.setVersion(text);
+                                        figureToShowNear.setVersion(version);
                                 }
                         });
                 }

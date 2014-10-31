@@ -3,18 +3,21 @@ package org.jboss.tools.jst.web.ui.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.eclipse.gef.palette.PaletteContainer;
 import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.gef.palette.ToolEntry;
-import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
 import org.jboss.tools.jst.web.ui.palette.PaletteAdapter;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
-
-import junit.framework.TestCase;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteModelImpl;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteTool;
+import org.jboss.tools.jst.web.ui.palette.model.IPaletteModel;
 
 public class PaletteFilterTest  extends TestCase {
 	public void testFilter(){
-		PaletteModel model = PaletteModel.getInstance(new PagePaletteContents(null));
+		IPaletteModel model = new PaletteModelImpl();
+		//model.setPaletteContents(new PagePaletteContents(null));
 		
 		PaletteAdapter adapter = new PaletteAdapter();
 		
@@ -35,9 +38,7 @@ public class PaletteFilterTest  extends TestCase {
 		}
 	}
 	
-	private void checkName(PaletteAdapter adapter, PaletteModel model, String name){
-		System.out.println("Check filter for name - "+name);
-		
+	private void checkName(PaletteAdapter adapter, IPaletteModel model, String name){
 		adapter.testFilter(model, name);
 		
 		assertEntryVisible(model.getPaletteRoot(), name);
@@ -47,9 +48,10 @@ public class PaletteFilterTest  extends TestCase {
 		List children = container.getChildren();
 		for(Object child : children){
 			if(!(child instanceof PaletteContainer)){
-				if(child instanceof ToolEntry){
-					PaletteEntry entry = (PaletteEntry)child;
-					if(entry.getLabel().contains(name)){
+				if(child instanceof PaletteTool){
+					PaletteTool entry = (PaletteTool)child;
+					IPaletteItem item = entry.getPaletteItem();
+					if(item.getKeywordsAsString().toLowerCase().contains(name.toLowerCase())){
 						if(!entry.isVisible()){
 							fail("Element - "+name+" must be visible!");
 						}
@@ -57,7 +59,6 @@ public class PaletteFilterTest  extends TestCase {
 						if(entry.isVisible()){
 							fail("Element - "+entry.getLabel()+" is visible. Only element - "+name+" must be visible!");
 						}
-						
 					}
 				}
 			} else {

@@ -19,24 +19,41 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
+import org.jboss.tools.common.model.ui.editors.dnd.DropData;
 import org.jboss.tools.common.model.ui.views.palette.IPalettePageAdapter;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPTagProposalFactory;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteItemDropCommand;
+import org.jboss.tools.jst.web.ui.palette.internal.PaletteItemDragSourceListener;
+import org.jboss.tools.jst.web.ui.palette.internal.PaletteItemTransfer;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteTool;
+import org.jboss.tools.jst.web.ui.palette.model.IPaletteModel;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteItem;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 
 public class PaletteViewer extends org.eclipse.gef.ui.palette.PaletteViewer {
 
 	private IPalettePageAdapter viewPart;
-	PaletteDragSourceListener listener;
+	DragSourceListener listener;
+	private IPaletteModel model;
 
     static Transfer[] transferTypes = new Transfer[] {
-            TextTransfer.getInstance(),ModelTransfer.getInstance() };
+            TextTransfer.getInstance(), ModelTransfer.getInstance() };
+    static Transfer[] html5TransferTypes = new Transfer[] {
+    	PaletteItemTransfer.getInstance() };
 
-	public PaletteViewer(IPalettePageAdapter viewPart, PaletteModel model) {
+	public PaletteViewer(IPalettePageAdapter viewPart, IPaletteModel model) {
 		this.viewPart = viewPart;
-		if(model.getType().equals(PaletteModel.TYPE_HTML5)){
+		this.model = model;
+		if(model.getType().equals(IPaletteModel.TYPE_HTML5)){
 			setEditPartFactory(new MobilePaletteEditPartFactory());
 		}else{
 			setEditPartFactory(new CustomPaletteEditPartFactory());
@@ -44,10 +61,24 @@ public class PaletteViewer extends org.eclipse.gef.ui.palette.PaletteViewer {
 	}
 	
 	void addDragStartSupport() {
-        listener = new PaletteDragSourceListener(this);
-		final DragSource dragSource = new DragSource(getControl(), DND.DROP_COPY | DND.DROP_MOVE);
-		dragSource.setTransfer(transferTypes);
-		dragSource.addDragListener(listener);		
+		DragSource dragSource = new DragSource(getControl(), DND.DROP_COPY | DND.DROP_MOVE);
+		if(model.getType().equals(IPaletteModel.TYPE_HTML5)){
+			dragSource.setTransfer(html5TransferTypes);
+			listener = new PaletteItemDragSourceListener(this);
+		}else{
+			dragSource.setTransfer(transferTypes);
+			listener = new PaletteDragSourceListener(this);
+		}
+		dragSource.addDragListener(listener);
+	}
+	
+	private boolean isDragging(){
+		if(listener instanceof PaletteItemDragSourceListener){
+			return ((PaletteItemDragSourceListener) listener).isDragging();
+		}else if(listener instanceof PaletteDragSourceListener){
+			return ((PaletteDragSourceListener) listener).isDragging();
+		}
+		return false;
 	}
 
 	public void setActiveTool(ToolEntry tool) {
@@ -63,11 +94,31 @@ public class PaletteViewer extends org.eclipse.gef.ui.palette.PaletteViewer {
 		}
 		super.setActiveTool(null);
 
-		if (tool instanceof PaletteItem && !listener.isDragging()) {
-			insertIntoEditor((PaletteItem)tool);
+		if(!isDragging()){
+			if (tool instanceof PaletteItem) {
+				insertIntoEditor((PaletteItem)tool);
+			}else if(tool instanceof PaletteTool){
+				insertIntoEditor((PaletteTool)tool);
+			}
 		}
 	}
 
+	private void insertIntoEditor(PaletteTool tool) {
+		IPaletteItem item = tool.getPaletteItem();
+		ITextEditor editor = viewPart.getActiveTextEditor();
+		if(editor instanceof JSPMultiPageEditor){
+			DropData dropData = new DropData(PaletteItemTransfer.PALETTE_ITEM, "",
+					editor.getEditorInput(), ((JSPMultiPageEditor)editor).getJspEditor().getTextViewer(),
+					editor.getSelectionProvider());
+				//dropData.setValueProvider(createAttributeDescriptorValueProvider());
+			
+			//dropData.setAttributeName(dropContext.getAttributeName());
+			PaletteItemDropCommand command = new PaletteItemDropCommand(item, false);
+			command.setTagProposalFactory(JSPTagProposalFactory.getInstance());
+			command.execute(dropData);
+		}
+	}
+	
 	private void insertIntoEditor(PaletteItem item) {
 		viewPart.insertIntoEditor(item.getXModelObject());
 	}

@@ -8,6 +8,8 @@ import org.eclipse.ui.IEditorPart;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.html.HTMLConstants;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.HTMLVersion;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.internal.PaletteManager;
@@ -36,35 +38,35 @@ public class PaletteManagerTest extends AbstractPaletteEntryTest {
 	}
 
 	public void testVersions() {
-		String[] versions = PaletteManager.getInstance().getVersions(JQueryConstants.JQM_CATEGORY);
+		IHTMLLibraryVersion[] versions = PaletteManager.getInstance().getVersions(JQueryConstants.JQM_CATEGORY);
 		assertEquals(2, versions.length);
-		assertEquals(JQueryMobileVersion.JQM_1_3.toString(), versions[0]);
-		assertEquals(JQueryMobileVersion.JQM_1_4.toString(), versions[1]);
+		assertEquals(JQueryMobileVersion.JQM_1_3, versions[0]);
+		assertEquals(JQueryMobileVersion.JQM_1_4, versions[1]);
 		
 		versions = PaletteManager.getInstance().getVersions(HTMLConstants.HTML_CATEGORY);
 		assertEquals(1, versions.length);
-		assertEquals("5.0", versions[0]);
+		assertEquals(HTMLVersion.HTML_5_0, versions[0]);
 	}
 
 	public void testItemsInJQuery14() {
 		String category = JQueryConstants.JQM_CATEGORY;
-		String version = JQueryMobileVersion.JQM_1_4.toString();
+		IHTMLLibraryVersion version = JQueryMobileVersion.JQM_1_4;
 		doTestItems(category, version, 20, "Button");
 	}
 
 	public void testItemsInJQuery13() {
 		String category = JQueryConstants.JQM_CATEGORY;
-		String version = JQueryMobileVersion.JQM_1_3.toString();
+		IHTMLLibraryVersion version = JQueryMobileVersion.JQM_1_3;
 		doTestItems(category, version, 20, "Button");
 	}
 
 	public void testItemsInHTML50() {
 		String category = HTMLConstants.HTML_CATEGORY;
-		String version = "5.0";
+		IHTMLLibraryVersion version = HTMLVersion.HTML_5_0;
 		doTestItems(category, version, 5, "Form");
 	}
 
-	public void doTestItems(String category, String version, int minSize, String... testItemNames) {
+	public void doTestItems(String category, IHTMLLibraryVersion version, int minSize, String... testItemNames) {
 		openEditor("a14.html");
 		Collection<RunnablePaletteItem> items = PaletteManager.getInstance().getItems(category, version);
 		Set<String> names = new HashSet<String>();

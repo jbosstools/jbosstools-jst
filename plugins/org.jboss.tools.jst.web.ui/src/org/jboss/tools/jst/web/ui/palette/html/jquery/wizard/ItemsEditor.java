@@ -96,6 +96,7 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 
 	public Composite createControl(Composite parent, String folderName) {
 		if(parent == null) {
+			control = null;
 			createEditors();
 			return null;
 		}

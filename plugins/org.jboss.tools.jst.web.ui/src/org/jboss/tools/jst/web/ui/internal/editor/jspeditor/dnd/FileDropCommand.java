@@ -16,10 +16,8 @@ import java.util.Properties;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.jboss.tools.common.model.ui.editors.dnd.DefaultDropCommand;
 import org.jboss.tools.common.model.ui.editors.dnd.DropCommandFactory;
@@ -29,6 +27,7 @@ import org.jboss.tools.common.model.ui.editors.dnd.ExternalDropWizardModel;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropWizardModel;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
+import org.jboss.tools.common.model.util.EclipseResourceUtil;
 
 /**
  * 
@@ -52,10 +51,10 @@ public class FileDropCommand extends DefaultDropCommand {
 		}
 
 		Properties properties = new Properties();
-		properties.put(PaletteInsertHelper.PROPERTY_TAG_NAME,getDefaultModel().getTagProposal().getName());
-		properties.put(PaletteInsertHelper.PROPERTY_START_TEXT, generateStartText());
-		properties.put(PaletteInsertHelper.PROPERTY_END_TEXT, generateEndText());
-		properties.put(PaletteInsertHelper.PROPERTY_REFORMAT_BODY, getReformatBodyProperty());
+		properties.put(JSPPaletteInsertHelper.PROPERTY_TAG_NAME,getDefaultModel().getTagProposal().getName());
+		properties.put(JSPPaletteInsertHelper.PROPERTY_START_TEXT, generateStartText());
+		properties.put(JSPPaletteInsertHelper.PROPERTY_END_TEXT, generateEndText());
+		properties.put(JSPPaletteInsertHelper.PROPERTY_REFORMAT_BODY, getReformatBodyProperty());
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI, uri);
 		String version = ((TagProposal)getDefaultModel().getTagProposal()).getLibraryVersion();
 		properties.put(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_VERSION, version);

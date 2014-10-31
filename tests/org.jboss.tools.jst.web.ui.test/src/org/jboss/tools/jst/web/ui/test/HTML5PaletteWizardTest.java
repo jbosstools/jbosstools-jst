@@ -18,16 +18,13 @@ import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.ui.IEditorPart;
-import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.XModelObjectConstants;
-import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.common.model.ui.views.palette.IPositionCorrector;
-import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
-import org.jboss.tools.common.model.ui.views.palette.PaletteInsertManager;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.HTMLVersion;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteItemDropCommand;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizardPage;
@@ -43,7 +40,11 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizar
 import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizardPage;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteCategory;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteGroup;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteVersionGroup;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteModelImpl;
 
 /**
  * 
@@ -304,13 +305,18 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 	}
 
 	public void testPaletteItemsWithoutUI() {
-		XModelObject g = PreferenceModelUtilities.getPreferenceModel().getByPath(PaletteModel.MOBILE_PATH);
-		List<String> failures = new ArrayList<String>(); 
-		XModelObject[] cs = g.getChildren();
-		for (XModelObject c: cs) {
-			String name = c.getAttributeValue(XModelObjectConstants.ATTR_NAME);
-			if(name.indexOf('.') >= 0) name = name.substring(name.indexOf('.') + 1);
-			runPaletteItemsWithoutUI(failures, textEditor, c, name);
+		PaletteModelImpl model = new PaletteModelImpl();
+		model.load();
+		IPaletteGroup jqmGroup = model.getPaletteGroup("jQuery Mobile");
+		assertNotNull(jqmGroup);
+		
+		List<String> failures = new ArrayList<String>();
+		for(IPaletteVersionGroup vGroup : jqmGroup.getPaletteVersionGroups()){
+			for(IPaletteCategory category : vGroup.getCategories()){
+				for(IPaletteItem item : category.getItems()){
+					runPaletteItemsWithoutUI(failures, textEditor, item);
+				}
+			}
 		}
 		if(!failures.isEmpty()) {
 			StringBuilder text = new StringBuilder();
@@ -322,62 +328,61 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 		}
 	}
 
-	public static void runPaletteItemsWithoutUI(List<String> failures, JSPTextEditor textEditor, XModelObject group, String category) {
-		XModelObject[] cs = group.getChildren();
-		if(cs.length == 0) {
-			try {
-				long t = System.currentTimeMillis();
-				String path = group.getPath();
-				int i = path.indexOf(PaletteModel.VERSION_PREFIX);
-				if(i < 0) return;
-				String v = path.substring(i + 8);
-				int j = v.indexOf("/");
-				v = v.substring(0, j);
-				String name = group.getAttributeValue(XModelObjectConstants.ATTR_NAME);
-				if(name.indexOf('.') >= 0) name = name.substring(name.indexOf('.') + 1);
-				PaletteItemResult r = AbstractNewHTMLWidgetWizard.runWithoutUi(textEditor, category, v, name);
-				long dt = System.currentTimeMillis() - t;
-				System.out.println("success " + group.getPath() + " in " + dt);
-			} catch (Exception e) {
-				failures.add(group.getPath());
+	public static void runPaletteItemsWithoutUI(List<String> failures, JSPTextEditor textEditor, IPaletteItem item) {
+		try {
+			String name = item.getName();
+			if(name.equals("Field Container")) {
+				//no wizard.
+				return;
 			}
-		} else {
-			for (XModelObject c: cs) {
-				runPaletteItemsWithoutUI(failures, textEditor, c, category);
-			}
+			long t = System.currentTimeMillis();
+			PaletteItemResult r = ((AbstractNewHTMLWidgetWizard)item.createWizard()).runWithoutUi(textEditor);
+			long dt = System.currentTimeMillis() - t;
+			System.out.println("success " + item.getName() + " in " + dt);
+		} catch (Exception e) {
+			failures.add(item.getName());
 		}
 	}
 
 	public void testPositionCorrectors() throws Exception {
-		XModelObject g = PreferenceModelUtilities.getPreferenceModel().getByPath(PaletteModel.MOBILE_PATH + "/" + JQM_CATEGORY);
-		assertNotNull(g);
+		PaletteModelImpl model = new PaletteModelImpl();
+		model.load();
+		IPaletteGroup jqmGroup = model.getPaletteGroup("jQuery Mobile");
+		assertNotNull(jqmGroup);
+		
 		List<String> failures = new ArrayList<String>();
-		for (XModelObject c: g.getChildren()) {
-			doTestPositionCorrectors(failures, c);
+		for(IPaletteVersionGroup vGroup : jqmGroup.getPaletteVersionGroups()){
+			for(IPaletteCategory category : vGroup.getCategories()){
+				for(IPaletteItem item : category.getItems()){
+					doTestPositionCorrectors(failures, item);
+				}
+			}
+		}
+		if(!failures.isEmpty()) {
+			StringBuilder text = new StringBuilder();
+			text.append("The following position correctors failed:\n");
+			for (String s: failures) {
+				text.append(s).append("\n");
+			}
+			fail(text.toString());
 		}
 	}
 
-	private void doTestPositionCorrectors(List<String> failures, XModelObject group) throws Exception {
-		XModelObject[] cs = group.getChildren();
-		if(cs.length == 0) {
-			try {
-				String path = group.getPath();
-				if(path.endsWith("JS#CSS") || path.endsWith("Field Container")) {
-					//no corrector for libraries.
-					return;
-				}
-				IPositionCorrector corrector = PaletteInsertManager.getInstance().createCorrectorInstance(path);
-				assertNotNull(corrector);
-				IDocument doc = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
-				ITextSelection s = PaletteInsertHelper.getInstance().correctSelection(doc, new TextSelection(doc, 0, 0), path);
-				assertNotNull(s);
-			} catch (Exception e) {
-				failures.add(group.getPath());
+	private void doTestPositionCorrectors(List<String> failures, IPaletteItem item) throws Exception {
+		try {
+			String name = item.getName();
+			if(name.equals("JS/CSS") || name.equals("Field Container")) {
+				//no corrector for libraries.
+				return;
 			}
-		} else {
-			for (XModelObject c: cs) {
-				doTestPositionCorrectors(failures, c);
-			}
+			IPositionCorrector corrector = item.createPositionCorrector();
+			assertNotNull(corrector);
+			IDocument doc = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
+			PaletteItemDropCommand command = new PaletteItemDropCommand(item, true);
+			ITextSelection s = MobilePaletteInsertHelper.getInstance().correctSelection(doc, new TextSelection(doc, 0, 0), command);
+			assertNotNull(s);
+		} catch (Exception e) {
+			failures.add(item.getName());
 		}
 	}
 

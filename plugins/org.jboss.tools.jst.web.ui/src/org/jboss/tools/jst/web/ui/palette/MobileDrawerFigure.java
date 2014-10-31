@@ -24,18 +24,17 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteCategory;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteRoot;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteDrawerImpl;
 
 class MobileDrawerFigure extends CustomDrawerFigure {
 	private Control control;
 	private static JQueryMobileVersionPopUp popup;
 
-	private PaletteCategory category;
+	private PaletteDrawerImpl category;
         
-	public MobileDrawerFigure(PaletteCategory category, Control control) {
+	public MobileDrawerFigure(PaletteDrawerImpl category, Control control) {
 		super(control);
 
 		this.category = category;
@@ -46,8 +45,8 @@ class MobileDrawerFigure extends CustomDrawerFigure {
 		Figure pinFigure = (Figure)title.getChildren().get(0);
 		Figure drawerFigure = (Figure)title.getChildren().get(1);
 
-		if(category.getAvailableVersions().length > 0) {
-			VersionFigure label = new VersionFigure(category.getVersion());
+		if(category.getVersions().length > 0) {
+			VersionFigure label = new VersionFigure(category.getVersion().toString());
 			GridLayout layout = new GridLayout(4, false);
 			title.setLayoutManager(layout);
                
@@ -62,7 +61,7 @@ class MobileDrawerFigure extends CustomDrawerFigure {
 	protected void handleExpandStateChanged() {
 		super.handleExpandStateChanged();
 		if(isCalledByButtonModel()) {
-			category.getPaletteModel().onCategoryExpandChange(category.getLabel(), isExpanded());
+			category.getPaletteGroup().getPaletteModel().onCategoryExpandChange(category.getLabel(), isExpanded());
 		}
 	}
 
@@ -95,16 +94,15 @@ class MobileDrawerFigure extends CustomDrawerFigure {
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					popup = new JQueryMobileVersionPopUp(control, VersionFigure.this);
-					popup.show(category.getAvailableVersions());
+					popup.show(category.getVersions());
 				}
 			});
 		}
 
-		public void setVersion(String newVersion) {
-			((Label)getChildren().get(0)).setText(newVersion);
-			PaletteModel paletteModel = ((PaletteRoot)category.getParent()).getPaletteModel();
-			paletteModel.getPaletteContents().setPreferredVersion(category.getLabel(), newVersion);
-			paletteModel.reloadCategory(category);
+		public void setVersion(IHTMLLibraryVersion newVersion) {
+			((Label)getChildren().get(0)).setText(newVersion.toString());
+			category.getPaletteGroup().getPaletteModel().getPaletteContents().setPreferredVersion(category.getLabel(), newVersion);
+			category.loadVersion(newVersion);
 		}
                 
 		public String getVersion() {

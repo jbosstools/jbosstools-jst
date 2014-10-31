@@ -21,9 +21,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.part.PageBookView;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.views.palette.IPaletteAdapter;
@@ -126,6 +128,11 @@ public class PalettePageImpl extends Page implements PalettePage, IPalettePageAd
 
 	public void insertIntoEditor(XModelObject macro) {
 		paletteCreator.insertIntoEditor(macro);
+	}
+	
+	@Override
+	public ITextEditor getActiveTextEditor() {
+		return paletteCreator.getActiveTextEditor();
 	}
 
     public void dispose() {

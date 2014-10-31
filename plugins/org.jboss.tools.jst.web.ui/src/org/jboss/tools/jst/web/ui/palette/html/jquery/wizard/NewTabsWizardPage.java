@@ -59,8 +59,10 @@ public class NewTabsWizardPage extends NewJQueryWidgetWizardPage {
 
 		IFieldEditor theme = JQueryFieldEditorFactory.createDataThemeEditor(getVersion());
 		addEditor(theme, parent, true);
-
-		updateEnablement();
+		
+		if(parent != null){
+			updateEnablement();
+		}
 	}
 
 	@Override

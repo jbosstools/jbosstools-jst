@@ -19,6 +19,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 
 /**
@@ -99,12 +100,12 @@ public class PagePaletteContents extends PaletteContents {
 		return true;
 	}
 
-	public String getVersion(String category) {
+	public IHTMLLibraryVersion getVersion(String category) {
 		CategoryVersion v = categoryVersions.get(category);
 		return v == null ? null : v.getVersion();
 	}
 
-	public void setPreferredVersion(String category, String version) {
+	public void setPreferredVersion(String category, IHTMLLibraryVersion version) {
 		CategoryVersion v = categoryVersions.get(category);
 		if(v != null && v.preferredVersion != version) {
 			v.preferredVersion = version;
@@ -113,19 +114,19 @@ public class PagePaletteContents extends PaletteContents {
 
 	class CategoryVersion {
 		VersionComputer versionComputer;
-		String detectedVersion = null;
-		String preferredVersion = null;
+		IHTMLLibraryVersion detectedVersion = null;
+		IHTMLLibraryVersion preferredVersion = null;
 
 		public CategoryVersion(VersionComputer versionComputer) {
 			this.versionComputer = versionComputer;
 		}
 
-		public String getVersion() {
+		public IHTMLLibraryVersion getVersion() {
 			return(preferredVersion != null) ? preferredVersion : detectedVersion;
 		}
 
 		public boolean computeVersion() {
-			String newVersion = versionComputer.computeVersion(getFile());
+			IHTMLLibraryVersion newVersion = versionComputer.computeVersion(getFile());
 			boolean isNew = !isSame(newVersion);
 			if(isNew) {
 				preferredVersion = null;
@@ -134,7 +135,7 @@ public class PagePaletteContents extends PaletteContents {
 			return isNew;
 		}
 
-		private boolean isSame(String newVersion) {
+		private boolean isSame(IHTMLLibraryVersion newVersion) {
 			return (detectedVersion == null) ? newVersion == null : detectedVersion.equals(newVersion);
 		}		 
 	}
@@ -142,14 +143,14 @@ public class PagePaletteContents extends PaletteContents {
 }
 
 interface VersionComputer {
-	public String computeVersion(IFile file);
+	public IHTMLLibraryVersion computeVersion(IFile file);
 }
 
 class JQueryVersionComputer implements VersionComputer {
 	static String prefix = "jquery.mobile-";
 
 	@Override
-	public String computeVersion(IFile file) {
+	public IHTMLLibraryVersion computeVersion(IFile file) {
 		return JQueryMobileRecognizer.getVersion(file);
 //		String content = FileUtil.getContentFromEditorOrFile(file);
 //		int i = 0;

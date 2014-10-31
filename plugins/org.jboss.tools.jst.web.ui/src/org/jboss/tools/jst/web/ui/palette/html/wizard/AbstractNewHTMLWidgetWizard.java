@@ -29,16 +29,9 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
-import org.jboss.tools.common.meta.action.XActionInvoker;
-import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.XModelObjectConstants;
-import org.jboss.tools.common.model.options.PreferenceModelUtilities;
-import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.editors.dnd.DefaultDropWizardPage;
-import org.jboss.tools.common.model.ui.editors.dnd.DropCommandFactory;
 import org.jboss.tools.common.model.ui.editors.dnd.DropData;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
-import org.jboss.tools.common.model.ui.editors.dnd.IDropWizard;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropWizardExtension;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropWizardModel;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator;
@@ -46,24 +39,24 @@ import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.NodeWriter;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.RootNode;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
-import org.jboss.tools.common.model.ui.views.palette.PaletteInsertManager;
-import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
-import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPTagProposalFactory;
-import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteDropCommand;
-import org.jboss.tools.jst.web.ui.palette.internal.RunnablePaletteItem;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.LinkAttributeProvider;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.LinkAttributeProvider.ElementID;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPTagProposalFactory;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteItemDropCommand;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItemWizard;
 
 /**
  * 
  * @author Viacheslav Kabanovich
  *
  */
-public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChangeListener, IDropWizard, IDropWizardExtension, IWorkbenchWizard, HTMLConstants {
+public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChangeListener, IPaletteItemWizard, IDropWizardExtension, IWorkbenchWizard, HTMLConstants {
 	protected IDropCommand command;
 	Set<String> ids = new HashSet<String>();
+	protected IPaletteItem paletteItem;
 
 	/**
 	 * Shared by all pages width of left panel, computed once and then used 
@@ -77,6 +70,16 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 	public void initWithoutUI() {
 		addPages();
 		((AbstractNewHTMLWidgetWizardPage)getPages()[0]).createFields();
+	}
+	
+	@Override
+	public void setPaletteItem(IPaletteItem paletteItem){
+		this.paletteItem = paletteItem;
+	}
+	
+	@Override
+	public IPaletteItem getPaletteItem(){
+		return paletteItem;
 	}
 	
 	@Override
@@ -162,7 +165,7 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 	}
 
 	protected Properties getCommandProperties() {
-		return ((PaletteDropCommand)command).getProperties();
+		return ((PaletteItemDropCommand)command).getProperties();
 	}
 
 	/**
@@ -336,9 +339,11 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 	 * @param item
 	 * @return
 	 */
-	public static PaletteItemResult runWithoutUi(JSPTextEditor textEditor, String category, String version, String item) {
-		XModelObject m = findMacro(category, version, item);
-		return (m != null) ? runPaletteItemWithoutUI(textEditor, m) : null;
+	public PaletteItemResult runWithoutUi(JSPTextEditor textEditor) {
+		initWizardWithoutUI(textEditor);
+		String startText = g.generateStartTag();
+		String endText = g.generateEndTag();
+		return new PaletteItemResult(startText, endText);
 	}
 
 	/**
@@ -348,99 +353,23 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 	 * @param textEditor
 	 * @param item
 	 */
-	public static void applyWithoutUi(JSPTextEditor textEditor, RunnablePaletteItem item) {
-		XModelObject m = findMacro(item.getCategory(), item.getVersion(), item.getName());
-		IDropCommand dropCommand = createDropCommand(textEditor, m);
-		AbstractNewHTMLWidgetWizard wizard = createWizardWithoutUI(textEditor, m);
-		if(wizard != null) {
-			wizard.performFinish();
-		} else {
-			dropCommand.execute();
-		}
+	public void applyWithoutUi(JSPTextEditor textEditor) {
+		initWizardWithoutUI(textEditor);
+		
+		performFinish();
+	}
+	
+	private void initWizardWithoutUI(JSPTextEditor textEditor) {
+		command = createDropCommand(textEditor);
+		setCommand(command);
+		initWithoutUI();
 	}
 
-	private static XModelObject findMacro(String category, String version, String item) {
-		XModelObject c = findCategory(category);
-		if(c == null) return null;		
-		XModelObject g = c.getChildByPath(PaletteModel.VERSION_PREFIX + version);
-		if(g == null) return null;
-		return findMacro(g, item);		
-	}
 
-	private static XModelObject findCategory(String category) {
-		XModelObject g = PreferenceModelUtilities.getPreferenceModel().getByPath(PaletteModel.MOBILE_PATH);
-		XModelObject[] cs = g.getChildren();
-		for (XModelObject c: cs) {
-			String n = c.getAttributeValue(XModelObjectConstants.ATTR_NAME);
-			if(category.equals(n) || n.endsWith("." + category)) return c;
-		}
-		return null;
-	}
-
-	private static XModelObject findMacro(XModelObject g, String item) {
-		XModelObject[] cs = g.getChildren();
-		if(cs.length == 0) {
-			String n = g.getAttributeValue(XModelObjectConstants.ATTR_NAME);
-			if(item.equals(n) || n.endsWith("." + item)) return g;
-		} else {
-			for (XModelObject c: cs) {
-				XModelObject m = findMacro(c, item);
-				if(m != null) return m;
-			}
-		}
-		return null;
-	}
-
-	private static PaletteItemResult runPaletteItemWithoutUI(JSPTextEditor textEditor, XModelObject macro) {
-		AbstractNewHTMLWidgetWizard wizard = createWizardWithoutUI(textEditor, macro);
-		if(wizard != null) {
-			String startText = wizard.getWizardModel().getElementGenerator().generateStartTag();
-			String endText = wizard.getWizardModel().getElementGenerator().generateEndTag();
-			return new PaletteItemResult(startText, endText);
-		} else {
-			String startText = macro.getAttributeValue(XModelObjectConstants.START_TEXT);
-			String endText = macro.getAttributeValue(XModelObjectConstants.END_TEXT);
-			return new PaletteItemResult(startText, endText);
-		}
-	}
-
-	/**
-	 * Returns Palette wizard created without UI.
-	 * Method performFinish() can be invoked to insert into editor
-	 * text generated by default. 
-	 * Method AbstractNewHTMLWidgetWizardPage.setEditorValue(String, String) 
-	 * can be invoked on the first page to set wizard before invoking 
-	 * performFinish().
-	 * 
-	 * @param textEditor
-	 * @param macro
-	 * @return
-	 */
-	private static AbstractNewHTMLWidgetWizard createWizardWithoutUI(JSPTextEditor textEditor, XModelObject macro) {
-		IDropCommand dropCommand = createDropCommand(textEditor, macro);
-		return createWizardWithoutUI(dropCommand, macro);
-	}
-
-	private static AbstractNewHTMLWidgetWizard createWizardWithoutUI(IDropCommand dropCommand, XModelObject macro) {
-		// Set wizard.
-		Properties properties = new Properties();
-		properties.setProperty(SharableConstants.PALETTE_PATH, macro.getPath());
-		String wizardName = PaletteInsertManager.getInstance().getWizardName(properties);
-		if(wizardName != null) {
-			AbstractNewHTMLWidgetWizard wizard = (AbstractNewHTMLWidgetWizard)PaletteInsertManager.getInstance().createWizardInstance(properties);
-			wizard.setCommand(dropCommand);
-			wizard.initWithoutUI();
-			return wizard;
-		} else {
-			return null;
-		}
-	}
-
-	private static IDropCommand createDropCommand(JSPTextEditor textEditor, XModelObject macro) {
+	protected IDropCommand createDropCommand(JSPTextEditor textEditor) {
 		//1. Copy item to dnd buffer
 		Properties p = new Properties();
 		p.setProperty("isDrag", "true"); //$NON-NLS-1$ //$NON-NLS-2$
-		XActionInvoker.invoke("CopyActions.Copy", macro, p); //$NON-NLS-1$
 
 		//2. Create drop data.
 		DropData dropData = new DropData("vpe/model", null,
@@ -448,12 +377,8 @@ public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChang
 				textEditor.getSelectionProvider());
 		dropData.setValueProvider(textEditor.createAttributeDescriptorValueProvider());
 		
-//		dropData.setAttributeName(dropContext.getAttributeName());
-		
-		//3. Create drop command.
-		IDropCommand dropCommand = DropCommandFactory.getInstance()
-				.getDropCommand("vpe/model",
-						JSPTagProposalFactory.getInstance());
+		IDropCommand dropCommand = new PaletteItemDropCommand(paletteItem, false);
+		dropCommand.setTagProposalFactory(JSPTagProposalFactory.getInstance());
 		dropCommand.getDefaultModel().setDropData(dropData);
 		dropCommand.initialize();
 		return dropCommand;

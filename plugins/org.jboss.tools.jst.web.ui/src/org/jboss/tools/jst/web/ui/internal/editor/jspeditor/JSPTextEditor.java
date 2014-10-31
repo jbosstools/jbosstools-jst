@@ -31,6 +31,7 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.ITextViewerExtension5;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.TextEvent;
+import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.formatter.IContentFormatter;
@@ -40,6 +41,8 @@ import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
+import org.eclipse.jface.util.DelegatingDragAdapter;
+import org.eclipse.jface.util.DelegatingDropAdapter;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -79,12 +82,15 @@ import org.eclipse.ui.editors.text.ILocationProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetSorter;
 import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
+import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.sse.ui.StructuredTextViewerConfiguration;
@@ -97,6 +103,8 @@ import org.eclipse.wst.sse.ui.internal.provisional.extensions.ConfigurationPoint
 import org.eclipse.wst.sse.ui.views.contentoutline.ContentOutlineConfiguration;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
 import org.eclipse.wst.xml.core.internal.document.ElementImpl;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.jboss.tools.common.core.resources.XModelObjectEditorInput;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelBuffer;
@@ -122,6 +130,7 @@ import org.jboss.tools.common.model.ui.texteditors.dnd.TextEditorDrop;
 import org.jboss.tools.common.model.ui.texteditors.dnd.TextEditorDropProvider;
 import org.jboss.tools.common.model.ui.views.palette.IIgnoreSelection;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
+import org.jboss.tools.common.model.ui.views.palette.XModelPaletteInsertHelper;
 import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.text.xml.IOccurrencePreferenceProvider;
 import org.jboss.tools.common.text.xml.XmlEditorPlugin;
@@ -137,6 +146,9 @@ import org.jboss.tools.jst.web.ui.internal.editor.editor.IVisualController;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.FileTagProposalLoader;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPTagProposalFactory;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteItemDropCommand;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteItemDropTargetListener;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.TagProposal;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.xpl.StyledTextDropTargetEffect;
 import org.jboss.tools.jst.web.ui.internal.editor.messages.JstUIMessages;
@@ -149,6 +161,9 @@ import org.jboss.tools.jst.jsp.text.xpl.IStructuredTextOccurrenceStructureProvid
 import org.jboss.tools.jst.jsp.text.xpl.StructuredTextOccurrenceStructureProviderRegistry;
 import org.jboss.tools.jst.web.ui.internal.editor.ui.action.ExtendedFormatAction;
 import org.jboss.tools.jst.web.ui.internal.editor.ui.action.IExtendedAction;
+import org.jboss.tools.jst.web.ui.palette.internal.CompoundDropTargetListener;
+import org.jboss.tools.jst.web.ui.palette.internal.PaletteItemTransfer;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
@@ -166,6 +181,7 @@ import org.jboss.tools.jst.web.kb.taglib.TagLibraryManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManager;
 import org.jboss.tools.jst.web.tld.VpeTaglibManagerProvider;
 import org.osgi.framework.Bundle;
+import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -919,15 +935,23 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	}
 	
 	StyledTextDropTargetEffect dropEffect;
+	
+	public StyledTextDropTargetEffect getDropEffect(){
+		return dropEffect;
+	}
 
 	private void createDrop() {
 		DropTarget target = new DropTarget(getSourceViewer().getTextWidget(),
 				DND.DROP_MOVE | DND.DROP_COPY);
 		Transfer[] types = new Transfer[] { ModelTransfer.getInstance(),
 				HTMLTransfer.getInstance(), TextTransfer.getInstance(),
-				FileTransfer.getInstance() };
+				FileTransfer.getInstance(), PaletteItemTransfer.getInstance() };
 		target.setTransfer(types);
-		target.addDropListener(new DTL());
+		CompoundDropTargetListener dropTargetListener = new CompoundDropTargetListener();
+		dropTargetListener.add(new DTL());
+		dropTargetListener.add(new PaletteItemDropTargetListener(this));
+		
+		target.addDropListener(dropTargetListener);
 		dropEffect = new StyledTextDropTargetEffect(getSourceViewer().getTextWidget());
 		target.setDropTargetEffect(dropEffect);
 	}
@@ -941,42 +965,49 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		
 		private int operation;
 
+		@Override	
 		public void dragEnter(DropTargetEvent event) {
 			lastpos = -1;
 			operation = event.detail;
-		}
-
-		public void dragLeave(DropTargetEvent event) {
-			lastpos = -1;
-		}
-
-		public void dragOperationChanged(DropTargetEvent event) {
-			lastdetail = operation = event.detail;
-		}
-
-		public void dragOver(DropTargetEvent event) {
 			if (!isEditable()
 					|| (getModelObject() != null && !getModelObject()
 							.isObjectEditable())) {
 				event.detail = DND.DROP_NONE;
 				return;
 			}
-			JSPTagProposalFactory.getInstance();
+			
+			//JSPTagProposalFactory.getInstance();
 			dropContext.setDropTargetEvent(event);
-			if (dropContext.getFlavor() == null) {
+			if (!dropContext.isDropAllowed()) {
 				event.detail = DND.DROP_NONE;
 				return;
 			}
-			
-// commented by yradtsevich, see JBIDE-6439 (InnerDragBuffer is removed,
-// nodes are transfered through vpe/xpath flavor now)			
-//			// Drop from VPE to Source is forbidden
-//			if (dropContext.getFlavor().equals("text/html")) { //$NON-NLS-1$
-//				if (InnerDragBuffer.getInnerDragObject() != null) {
-//					event.detail = DND.DROP_NONE;
-//				}
-//				return;
-//			}
+		}
+
+		@Override
+		public void dragLeave(DropTargetEvent event) {
+			lastpos = -1;
+		}
+
+		@Override
+		public void dragOperationChanged(DropTargetEvent event) {
+			lastdetail = operation = event.detail;
+		}
+
+		@Override
+		public void dragOver(DropTargetEvent event) {
+			if (!isEditable()
+					|| (getModelObject() != null && !getModelObject()
+							.isObjectEditable())) {
+				event.detail = lastdetail = DND.DROP_NONE;
+				return;
+			}
+			JSPTagProposalFactory.getInstance();
+			dropContext.setDropTargetEvent(event);
+			if (dropContext.getFlavor() == null) {
+				event.detail = lastdetail = DND.DROP_NONE;
+				return;
+			}
 			
 			// show current cursor position during the drag JBIDE-13791 & JBIDE-14562
 			event.feedback = DND.FEEDBACK_SCROLL | DND.FEEDBACK_SELECT;
@@ -1045,6 +1076,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 			}
 		}
 
+		@Override
 		public void drop(DropTargetEvent event) {
             int offset = getPosition(event.x, event.y);
             selectAndReveal(offset, 0);
@@ -1056,6 +1088,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
             dropContext.runDropCommand(JSPTextEditor.this, event);
         }
 
+		@Override
         public void dropAccept(DropTargetEvent event) {
         }
 
@@ -1078,7 +1111,25 @@ public class JSPTextEditor extends StructuredTextEditor implements
 				XModelObject o = XModelTransferBuffer.getInstance().getBuffer().source();
 				if(o != null) path = o.getPath();
 			}
-			result = PaletteInsertHelper.getInstance().correctOffset(getModel().getStructuredDocument(), result, path);
+			result = XModelPaletteInsertHelper.getInstance().correctOffset(getModel().getStructuredDocument(), result, path);
+		}
+		
+		return result;
+	}
+
+	public int getDropPosition(int x, int y, PaletteItemDropCommand command) {
+		ISourceViewer v = getSourceViewer();
+		int result = 0;
+		if(v != null) {
+			result = getPosition(v.getTextWidget(), x, y);
+			if (v instanceof ITextViewerExtension5) {
+			    ITextViewerExtension5 ext = (ITextViewerExtension5) v;
+			    int off = ext.widgetOffset2ModelOffset(result);
+			    if (off >= 0) {
+			    	result = off;
+			    }
+			}
+			result = MobilePaletteInsertHelper.getInstance().correctOffset(getModel().getStructuredDocument(), result, command);
 		}
 		
 		return result;
@@ -1448,7 +1499,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 		}
 	}
 
-	boolean isInsideResponseRedirect(Text textNode, int off) {
+	public boolean isInsideResponseRedirect(Text textNode, int off) {
 		if (off < 0)
 			return false;
 		String START = "response.sendRedirect(\""; //$NON-NLS-1$

@@ -58,7 +58,13 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewToggleWiza
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewToggleWizardPage;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteCategory;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteGroup;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteVersionGroup;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteModelImpl;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.jboss.tools.jst.web.ui.test.HTML5PaletteWizardTest;
 
@@ -1007,20 +1013,26 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 	private void compareUIAndNonUIWizards(IDropWizard wizard, String itemName) {
 		String startText = wizard.getWizardModel().getElementGenerator().generateStartTag();
 		String endText = wizard.getWizardModel().getElementGenerator().generateEndTag();
-		PaletteItemResult result = NewIonicWidgetWizard.runWithoutUi(textEditor, getVersion(), itemName);
+		IDropWizard newWizard = ((NewIonicWidgetWizard)wizard).getPaletteItem().createWizard();
+		PaletteItemResult result = ((NewIonicWidgetWizard)newWizard).runWithoutUi(textEditor);
 		assertNotNull(result);
 		assertEquals(startText, result.getStartText());
 		assertEquals(endText, result.getEndText());
 	}
 
 	public void testPaletteItemsWithoutUI() {
-		XModelObject g = PreferenceModelUtilities.getPreferenceModel().getByPath(PaletteModel.MOBILE_PATH + "/Ionic");
-		List<String> failures = new ArrayList<String>(); 
-		XModelObject[] cs = g.getChildren();
-		for (XModelObject c: cs) {
-			String name = c.getAttributeValue(XModelObjectConstants.ATTR_NAME);
-			if(name.indexOf('.') >= 0) name = name.substring(name.indexOf('.') + 1);
-			HTML5PaletteWizardTest.runPaletteItemsWithoutUI(failures, textEditor, c, name);
+		PaletteModelImpl model = new PaletteModelImpl();
+		model.load();
+		IPaletteGroup jqmGroup = model.getPaletteGroup("Ionic");
+		assertNotNull(jqmGroup);
+		
+		List<String> failures = new ArrayList<String>();
+		for(IPaletteVersionGroup vGroup : jqmGroup.getPaletteVersionGroups()){
+			for(IPaletteCategory category : vGroup.getCategories()){
+				for(IPaletteItem item : category.getItems()){
+					HTML5PaletteWizardTest.runPaletteItemsWithoutUI(failures, textEditor, item);
+				}
+			}
 		}
 		if(!failures.isEmpty()) {
 			StringBuilder text = new StringBuilder();
@@ -1031,7 +1043,6 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 			fail(text.toString());
 		}
 	}
-
 	protected void compareGeneratedAndInsertedText(NewIonicWidgetWizard<?> wizard) {
 		String generatedText = wizard.getTextForTextView();
 

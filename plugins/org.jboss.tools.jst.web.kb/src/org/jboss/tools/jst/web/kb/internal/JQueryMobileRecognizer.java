@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.kb.internal;
 
 import org.eclipse.core.resources.IFile;
 import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 
 /**
@@ -46,15 +47,15 @@ public class JQueryMobileRecognizer extends JSRecognizer {
 	 * @param context
 	 * @return
 	 */
-	public static String getVersion(IFile file) {
+	public static IHTMLLibraryVersion getVersion(IFile file) {
 		String version = getJSReferenceVersion(file, JQUERY_MOBILE_JS_LIB_NAME);
 		if(version==null) {
 			return null;
 		}
 		if(version.equals(JQueryMobileVersion.JQM_1_3.toString())) {
-			return JQueryMobileVersion.JQM_1_3.toString();
+			return JQueryMobileVersion.JQM_1_3;
 		}
-		return JQueryMobileVersion.JQM_1_4.toString();
+		return JQueryMobileVersion.JQM_1_4;
 	}
 
 	@Override

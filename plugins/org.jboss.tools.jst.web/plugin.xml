@@ -32,16 +32,6 @@
       <keys path="help/keys-web-lists.properties"/>
    </extension>
 
- <extension
-       point="org.jboss.tools.common.model.preferences">
-    <contribution
-          resource="meta/mobile-palette.xml" priority="4">
-    </contribution>
-    <contribution
-          resource="meta/jquery-mobile-1.4-palette.xml" priority="4">
-    </contribution>
- </extension>
-
    <extension point="org.jboss.tools.common.model.specialwizard">
       <specialwizard class="org.jboss.tools.jst.web.project.AddServletSupportWizard" id="org.jboss.tools.jst.web.project.AddServletSupportWizard">
       </specialwizard>

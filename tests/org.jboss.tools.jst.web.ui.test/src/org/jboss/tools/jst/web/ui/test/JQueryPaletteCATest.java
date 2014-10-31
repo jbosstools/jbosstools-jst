@@ -31,7 +31,7 @@ public class JQueryPaletteCATest extends PaletteCATest {
 
 	@Override
 	public Collection<RunnablePaletteItem> getItems() {
-		return PaletteManager.getInstance().getItems(JQueryConstants.JQM_CATEGORY, getVersion().toString());
+		return PaletteManager.getInstance().getItems(JQueryConstants.JQM_CATEGORY, getVersion());
 	}
 
 	protected JQueryMobileVersion getVersion() {

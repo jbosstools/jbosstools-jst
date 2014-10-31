@@ -526,7 +526,7 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 	public IEditorPart openEditor(String fileName) {
 		IEditorPart result = super.openEditor(fileName);
 		if(getVersion() != JQueryMobileVersion.getLatestDefaultVersion()) {
-			switchVersion(getVersion().toString());
+			switchVersion(getVersion());
 		}
 		return result;
 	}

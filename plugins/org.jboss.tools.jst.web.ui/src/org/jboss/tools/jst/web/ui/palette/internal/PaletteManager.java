@@ -15,13 +15,13 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.XModelObjectConstants;
-import org.jboss.tools.common.model.options.PreferenceModelUtilities;
-import org.jboss.tools.common.model.ui.image.XModelObjectImageDescriptor;
-import org.jboss.tools.common.model.ui.views.palette.PaletteInsertManager;
-import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.ui.palette.internal.html.ILibraryPaletteItem;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteCategory;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteGroup;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
+import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteVersionGroup;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteModelImpl;
 
 /**
  * This class returns categories, versions, and items of Palette.
@@ -37,6 +37,8 @@ public class PaletteManager {
 	public static PaletteManager getInstance() {
 		return instance;
 	}
+	
+	private PaletteModelImpl model = new PaletteModelImpl();
 
 	private PaletteManager() {}
 
@@ -48,30 +50,16 @@ public class PaletteManager {
 	 * @return
 	 */
 	public String[] getCategories() {
-		XModelObject g = PreferenceModelUtilities.getPreferenceModel().getByPath(PaletteModel.MOBILE_PATH);
-		XModelObject[] cs = g.getChildren();
-		String[] result = new String[cs.length];
-		for (int i = 0; i < cs.length; i++) {
-			String category = cs[i].getAttributeValue(XModelObjectConstants.ATTR_NAME);
-			if(category.indexOf('.') >= 0) {
-				category = category.substring(category.indexOf('.') + 1);
-			}
-			result[i] = category;
-		}
-		return result;
+		return model.getPaletteGroups();
 	}
 
 	/**
-	 * Returns the default icon (16x16) of the category
-	 * @param category
+	 * Returns the default icon (16x16) of the palette group
+	 * @param groupName
 	 * @return
 	 */
 	public ImageDescriptor getImageDescriptor(String category) {
-		XModelObject c = findCategory(category);
-		if(c != null && c.getAttributeValue("icon") != null && c.getAttributeValue("icon").length() > 0) {
-			return new XModelObjectImageDescriptor(c);
-		}
-		return null;
+		return model.getPaletteGroup(category).getImageDescriptor();
 	}
 
 	/**
@@ -79,82 +67,37 @@ public class PaletteManager {
 	 * Currently available are
 	 * 		For JQueryConstants.JQM_CATEGORY versions are listed in JQueryMobileVersion
 	 * 		For HTMLConstants.HTML_CATEGORY  versions are listed in HTMLVersion
-	 * @param category
+	 * @param groupName
 	 * @return
 	 */
-	public String[] getVersions(String category) {
-		XModelObject g = findCategory(category);
-		if(g == null) {
-			return new String[0];
-		}
-		XModelObject[] cs = g.getChildren();
-		String[] result = new String[cs.length];
-		for (int i = 0; i < cs.length; i++) {
-			String name = cs[i].getAttributeValue(XModelObjectConstants.ATTR_NAME);
-			if(name.startsWith(PaletteModel.VERSION_PREFIX)) {
-				result[i] = name.substring(8); 
-			}
-		}
-		return result;
+	public IHTMLLibraryVersion[] getVersions(String groupName) {
+		return model.getPaletteGroup(groupName).getVersions();
 	}
 
 	/**
 	 * Returns runnable objects for palette items.
+	 * Not supposed to return Library Palette Items
 	 * Available versions
 	 * 		For JQueryConstants.JQM_CATEGORY versions are listed in JQueryMobileVersion
 	 * 		For HTMLConstants.HTML_CATEGORY  versions are listed in HTMLVersion
-	 * @param category
+	 * @param groupName
 	 * @param version
 	 * @return
 	 */
-	public Collection<RunnablePaletteItem> getItems(String category, String version) {
-		List<RunnablePaletteItem> result = new ArrayList<RunnablePaletteItem>();
-		XModelObject g = findCategory(category);
-		if(g != null) {
-			g = g.getChildByPath(PaletteModel.VERSION_PREFIX + version);
-		}
-		if(g == null) {
-			return result;
-		}
-		collectItems(result, category, version, g);
-		return result;
-	}
-
-	private void collectItems(List<RunnablePaletteItem> result, String category, String version, XModelObject g) {
-		XModelObject[] cs = g.getChildren();
-		if(cs.length == 0) {
-			String name = g.getAttributeValue(XModelObjectConstants.ATTR_NAME);
-			String startText = g.getAttributeValue(XModelObjectConstants.START_TEXT);
-			if(MobilePaletteInsertHelper.INSERT_JS_CSS_SIGNATURE.equals(startText)) {
-				return;
-			}
-			if(name.indexOf('.') >= 0) {
-				name = name.substring(name.indexOf('.') + 1);
-			}
-			RunnablePaletteItem item = new RunnablePaletteItem(category, version, name);
-			List<String> ls = PaletteInsertManager.getInstance().getKeyWords(g.getPath());
-			if(ls != null && !ls.isEmpty()) {
-				item.getAlternatives().addAll(ls);
-			}
-			result.add(item);
-		} else {
-			for (int i = 0; i < cs.length; i++) {
-				collectItems(result, category, version, cs[i]);
-			}
-		}
-	}
-
-	private XModelObject findCategory(String category) {
-		XModelObject g = PreferenceModelUtilities.getPreferenceModel().getByPath(PaletteModel.MOBILE_PATH);
-		if(g != null) {
-			XModelObject[] cs = g.getChildren();
-			for (int i = 0; i < cs.length; i++) {
-				String name = cs[i].getAttributeValue(XModelObjectConstants.ATTR_NAME);
-				if(name.equals(category) || name.endsWith("." + category)) {
-					return cs[i];
+	public Collection<RunnablePaletteItem> getItems(String groupName, IHTMLLibraryVersion version) {
+		List<RunnablePaletteItem> list = new ArrayList<RunnablePaletteItem>();
+		IPaletteGroup group = model.getPaletteGroup(groupName);
+		for(IPaletteVersionGroup versionGroup : group.getPaletteVersionGroups()){
+			if(version.equals(versionGroup.getVersion())){
+				for(IPaletteCategory category : versionGroup.getCategories()){
+					for(IPaletteItem item : category.getItems()){
+						if(!(item instanceof ILibraryPaletteItem)){
+							list.add(new RunnablePaletteItem(item));
+						}
+					}
 				}
 			}
 		}
-		return null;
+		return list;
 	}
 }

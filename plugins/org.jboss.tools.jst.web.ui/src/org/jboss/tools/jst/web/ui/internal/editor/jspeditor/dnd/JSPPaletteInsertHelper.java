@@ -16,10 +16,11 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
+import org.jboss.tools.common.model.ui.views.palette.XModelPaletteInsertHelper;
 import org.jboss.tools.jst.web.tld.URIConstants;
 import org.jboss.tools.jst.web.tld.model.helpers.TLDToPaletteHelper;
 
-public class JSPPaletteInsertHelper extends PaletteInsertHelper {
+public class JSPPaletteInsertHelper extends XModelPaletteInsertHelper {
     public static final String PROPOPERTY_ADD_TAGLIB = TLDToPaletteHelper.ADD_TAGLIB;
 	public static final String PROPOPERTY_TAGLIBRARY_URI = URIConstants.LIBRARY_URI;
 	public static final String PROPOPERTY_TAGLIBRARY_VERSION = URIConstants.LIBRARY_VERSION;
@@ -42,7 +43,7 @@ public class JSPPaletteInsertHelper extends PaletteInsertHelper {
     public JSPPaletteInsertHelper() {}
 
 	protected void modify(ISourceViewer v, Properties p, String[] texts) {
-		if(!MobilePaletteInsertHelper.getInstance().isMobile(v, p, texts)){
+		//if(!MobilePaletteInsertHelper.getInstance().isMobile(v, p, texts)){
 			p.put("viewer", v);
 			String tagname = p.getProperty(PROPERTY_TAG_NAME);
 			String uri = p.getProperty(PROPOPERTY_TAGLIBRARY_URI);
@@ -59,7 +60,7 @@ public class JSPPaletteInsertHelper extends PaletteInsertHelper {
 			String defaultPrefix = p.getProperty(PROPOPERTY_DEFAULT_PREFIX);
 			IDocument d = v.getDocument();
 			applyPrefix(texts, d, tagname, uri, defaultPrefix);
-		}
+		//}
 	}
 
 

@@ -36,17 +36,18 @@ import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.event.XModelTreeListener;
 import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.util.ModelUtilities;
-import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.common.model.ui.views.palette.editor.PaletteEditor;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteModelImpl;
 
-public class PaletteModel {
-	public static String TYPE_HTML5 = PaletteContents.TYPE_MOBILE;
-	public static String TYPE_JSF = PaletteContents.TYPE_JSF;
+public class PaletteModel implements IPaletteModel{
+	public static String TYPE_HTML5 = IPaletteModel.TYPE_HTML5;
+	public static String TYPE_JSF = IPaletteModel.TYPE_JSF;
 	
-	private static Map<String, PaletteModel> instances = new HashMap<String, PaletteModel>();
+	private static Map<String, IPaletteModel> instances = new HashMap<String, IPaletteModel>();
 	private static Object monitor = new Object();
 
 	/**
@@ -73,7 +74,7 @@ public class PaletteModel {
 		return type;
 	}
 
-	public static final PaletteModel getInstance(PagePaletteContents contents) {
+	public static final IPaletteModel getInstance(PagePaletteContents contents) {
 		String[] natures = contents.getNatureTypes();
 		boolean jsf = natures != null && natures.length > 0 && natures[0].equals(TYPE_JSF);
 		String type = jsf ? TYPE_JSF : TYPE_HTML5;
@@ -82,22 +83,28 @@ public class PaletteModel {
 		if(!jsf && file != null) {
 			code = file.getFullPath().toString();
 		}
-		PaletteModel instance = instances.get(code);
+		IPaletteModel instance = instances.get(code);
 		if (instance != null) {
 			if(file != null) {
 				instance.setPaletteContents(contents);
-				instance.load(null);
+				instance.load();
 			}
 			return instance;
 		} else {
 			synchronized (monitor) {
 				if (instance == null) {
-					PaletteModel inst = new PaletteModel();
+					IPaletteModel inst;
+					if(type.equals(TYPE_HTML5)){
+						inst = new PaletteModelImpl();
+					}else{
+						inst = new PaletteModel();
+						((PaletteModel)inst).type = type;
+						((PaletteModel)inst).createModel();
+					}
 					if(file != null) {
 						inst.setPaletteContents(contents);
 					}
-					inst.type = type;
-					inst.createModel();
+					
 					instance = inst;
 					instances.put(code, instance);
 				}
@@ -127,7 +134,7 @@ public class PaletteModel {
 				IEditorInput input = ((IEditorPart)part).getEditorInput();
 				if(input instanceof IFileEditorInput) {
 					IFile file = ((IFileEditorInput)input).getFile();
-					PaletteModel instance = instances.get(file.getFullPath().toString());
+					IPaletteModel instance = instances.get(file.getFullPath().toString());
 					if(instance != null) {
 						instance.getPreferredExpandedCategory();
 					}
@@ -307,9 +314,9 @@ public class PaletteModel {
 				versions.add(n);
 			}
 		}
-		String[] availableVersions = versions.toArray(new String[0]);
+		IHTMLLibraryVersion[] availableVersions = versions.toArray(new IHTMLLibraryVersion[0]);
 
-		String selectedVersion = getSelectedVersion(name);
+		IHTMLLibraryVersion selectedVersion = getSelectedVersion(name);
 		
 		if(selectedVersion == null || xcat.getChildByPath(VERSION_PREFIX + selectedVersion) == null) {
 			selectedVersion = availableVersions[availableVersions.length - 1];
@@ -323,7 +330,7 @@ public class PaletteModel {
 		return selected;
 	}
 
-	private String getSelectedVersion(String categoryName) {
+	private IHTMLLibraryVersion getSelectedVersion(String categoryName) {
 		return contents == null ? null : contents.getVersion(categoryName);
 	}
 	
@@ -400,8 +407,8 @@ public class PaletteModel {
 		return contents;
 	}
 
-	static String HTML5_EXPANDED_CATEGORY = WebUiPlugin.PLUGIN_ID + ".HTML5_EXPANDED_CATEGORY";
-	static QualifiedName HTML5_EXPANDED_CATEGORY_NAME = new QualifiedName(WebUiPlugin.PLUGIN_ID, "HTML5_EXPANDED_CATEGORY");
+	public static String HTML5_EXPANDED_CATEGORY = WebUiPlugin.PLUGIN_ID + ".HTML5_EXPANDED_CATEGORY";
+	public static QualifiedName HTML5_EXPANDED_CATEGORY_NAME = new QualifiedName(WebUiPlugin.PLUGIN_ID, "HTML5_EXPANDED_CATEGORY");
 
 	public void onCategoryExpandChange(String name, boolean state) {
 		if(contents != null && type == TYPE_HTML5) {
@@ -417,7 +424,7 @@ public class PaletteModel {
 		}
 	}
 
-	private String getPreferredExpandedCategory() {
+	public String getPreferredExpandedCategory() {
 		if(contents != null && type == TYPE_HTML5) {
 			IFile f = contents.getFile();
 			try {
@@ -437,5 +444,14 @@ public class PaletteModel {
 			}
 		}
 		return null;
+	}
+
+	public void saveOptions() {
+		getXModel().saveOptions();
+	}
+
+	@Override
+	public void load() {
+		load(null);
 	}
 }

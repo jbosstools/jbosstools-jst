@@ -31,7 +31,7 @@ public class HTML5PaletteCATest extends PaletteCATest {
 
 	@Override
 	public Collection<RunnablePaletteItem> getItems() {
-		return PaletteManager.getInstance().getItems(HTMLConstants.HTML_CATEGORY, HTMLVersion.HTML_5_0.toString());
+		return PaletteManager.getInstance().getItems(HTMLConstants.HTML_CATEGORY, HTMLVersion.HTML_5_0);
 	}
 
 	@Override

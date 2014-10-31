@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.palette.internal;
 
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 
 /**
@@ -18,7 +19,7 @@ import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 public class JQMPaletteTagLib14 extends JQMPaletteTagLib13 {
 
 	@Override
-	protected String getJQMVersion() {
-		return JQueryMobileVersion.JQM_1_4.toString();
+	protected IHTMLLibraryVersion getJQMVersion() {
+		return JQueryMobileVersion.JQM_1_4;
 	}
 }

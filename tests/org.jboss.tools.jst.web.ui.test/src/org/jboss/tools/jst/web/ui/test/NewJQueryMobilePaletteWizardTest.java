@@ -200,7 +200,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	}
 
 	public void testApplyWithoutUI() {
-		Collection<RunnablePaletteItem> items = PaletteManager.getInstance().getItems(JQueryConstants.JQM_CATEGORY, getVersion().toString());
+		Collection<RunnablePaletteItem> items = PaletteManager.getInstance().getItems(JQueryConstants.JQM_CATEGORY, getVersion());
 		ITextSelection s = (ITextSelection)textEditor.getSelectionProvider().getSelection();
 		for (RunnablePaletteItem item: items) {
 			if("Button".equals(item.getName())) {
@@ -516,7 +516,8 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 	private void compareUIAndNonUIWizards(IDropWizard wizard, String itemName) {
 		String startText = wizard.getWizardModel().getElementGenerator().generateStartTag();
 		String endText = wizard.getWizardModel().getElementGenerator().generateEndTag();
-		PaletteItemResult result = NewJQueryWidgetWizard.runWithoutUi(textEditor, getVersion(), itemName);
+		IDropWizard newWizard = ((NewJQueryWidgetWizard)wizard).getPaletteItem().createWizard();
+		PaletteItemResult result = ((NewJQueryWidgetWizard)newWizard).runWithoutUi(textEditor);
 		assertNotNull(result);
 		assertEquals(startText, result.getStartText());
 		assertEquals(endText, result.getEndText());
@@ -1096,6 +1097,7 @@ public class NewJQueryMobilePaletteWizardTest extends AbstractPaletteEntryTest i
 		doTestSearchFilter(wizardPage, wizard);
 
 		compareGeneratedAndInsertedText(wizard);
+		
 	}
 
 	public void testNewTabsWizard() {

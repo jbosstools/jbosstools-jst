@@ -10,7 +10,6 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;
 
-import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 
@@ -29,7 +28,7 @@ public class AddJSCSSREferencesWizard extends NewIonicWidgetWizard<NewIonicWidge
 
 	@Override
 	protected String[] generateData() {
-		String startText = getCommandProperties().getProperty(XModelObjectConstants.START_TEXT);
+		String startText = paletteItem.getStartText();
 		String endText = "";
 		return new String[]{startText, endText};
 	}

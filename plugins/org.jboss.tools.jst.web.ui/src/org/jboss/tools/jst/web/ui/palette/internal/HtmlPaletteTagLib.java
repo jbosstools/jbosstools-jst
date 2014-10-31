@@ -12,6 +12,7 @@ package org.jboss.tools.jst.web.ui.palette.internal;
 
 import org.jboss.tools.jst.web.kb.internal.HTML5Recognizer;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.HTMLVersion;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
 
@@ -22,9 +23,10 @@ public class HtmlPaletteTagLib extends PaletteTagLibrary {
 
 	public HtmlPaletteTagLib() {
 		super(null, "html50", null, "html50palette", true);
-		String version = HTMLVersion.HTML_5_0.toString();
+		IHTMLLibraryVersion version = HTMLVersion.HTML_5_0;
 		this.name = "HTML " + version + " templates";
-		setVersion(version);
+		setPaletteLibraryVersion(version);
+		setVersion(version.toString());
 	}
 
 	@Override

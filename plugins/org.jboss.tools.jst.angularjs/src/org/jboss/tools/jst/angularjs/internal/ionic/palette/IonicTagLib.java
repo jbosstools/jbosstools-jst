@@ -13,6 +13,7 @@ package org.jboss.tools.jst.angularjs.internal.ionic.palette;
 import org.jboss.tools.jst.angularjs.internal.ionic.IonicRecognizer;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicConstants;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicVersion;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
 import org.jboss.tools.jst.web.ui.palette.internal.PaletteTagLibrary;
 
@@ -26,9 +27,10 @@ public class IonicTagLib extends PaletteTagLibrary {
 
 	public IonicTagLib() {
 		super(null, "ionic", null, "ionicpalette", true);
-		String version = IonicVersion.IONIC_1_0.toString();
+		IHTMLLibraryVersion version = IonicVersion.IONIC_1_0;
 		this.name = "Ionic " + version + " templates";
-		setVersion(version);
+		setPaletteLibraryVersion(version);
+		setVersion(version.toString());
 	}
 
 	@Override

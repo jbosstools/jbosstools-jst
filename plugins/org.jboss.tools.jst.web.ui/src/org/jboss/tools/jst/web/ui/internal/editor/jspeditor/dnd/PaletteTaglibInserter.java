@@ -65,7 +65,7 @@ public class PaletteTaglibInserter {
 				!p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_TAGLIBRARY_URI).equals(JSP_URI) &&
 				p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX) != null &&
 				p.getProperty(JSPPaletteInsertHelper.PROPOPERTY_DEFAULT_PREFIX).length() > 0 &&
-				p.getProperty(PaletteInsertHelper.PROPERTY_START_TEXT) != null;
+				p.getProperty(JSPPaletteInsertHelper.PROPERTY_START_TEXT) != null;
 	}
 
 	public boolean inserTaglibInOldJsp(IDocument d, Properties p) {

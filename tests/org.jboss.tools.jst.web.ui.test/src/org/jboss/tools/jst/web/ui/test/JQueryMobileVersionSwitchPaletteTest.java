@@ -47,7 +47,7 @@ public class JQueryMobileVersionSwitchPaletteTest extends AbstractPaletteEntryTe
 
 	public void testSwitchVersionTo13() {
 		editor = openEditor("a14.html");
-		switchVersion(JQueryMobileVersion.JQM_1_3.toString());
+		switchVersion(JQueryMobileVersion.JQM_1_3);
 		checkVersion(JQueryMobileVersion.JQM_1_3);
 	}
 
@@ -58,7 +58,7 @@ public class JQueryMobileVersionSwitchPaletteTest extends AbstractPaletteEntryTe
 
 	public void testSwitchVersionTo14() {
 		editor = openEditor("a.html");
-		switchVersion(JQueryMobileVersion.JQM_1_4.toString());
+		switchVersion(JQueryMobileVersion.JQM_1_4);
 		checkVersion(JQueryMobileVersion.JQM_1_4);
 	}
 

@@ -10,19 +10,19 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.jface.internal.text.html.HTMLTextPresenter;
-import org.eclipse.jface.text.IInformationControl;
-import org.eclipse.jface.text.DefaultInformationControl;
-import org.eclipse.jface.text.IInformationControlCreator;
-import org.eclipse.jface.text.AbstractHoverInformationControlManager;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
-
+import org.eclipse.jface.internal.text.html.HTMLTextPresenter;
+import org.eclipse.jface.text.AbstractHoverInformationControlManager;
+import org.eclipse.jface.text.DefaultInformationControl;
+import org.eclipse.jface.text.IInformationControl;
+import org.eclipse.jface.text.IInformationControlCreator;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Shell;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteTool;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteItem;
 
 public class DescriptionManager extends AbstractHoverInformationControlManager {
@@ -38,12 +38,14 @@ public class DescriptionManager extends AbstractHoverInformationControlManager {
 		org.eclipse.swt.graphics.Point p = getHoverEventLocation();
 		EditPart part = viewer.findObjectAt(new Point(p.x, p.y));
 		if (part instanceof GraphicalEditPart) {
+			IFigure fig = ((GraphicalEditPart)part).getFigure();
+			org.eclipse.draw2d.geometry.Rectangle r = fig.getBounds();
 			Object model = part.getModel();
 			if (model instanceof PaletteItem) {
-				IFigure fig = ((GraphicalEditPart)part).getFigure();
-				org.eclipse.draw2d.geometry.Rectangle r = fig.getBounds();
-				//fig.getParent().translateToAbsolute(r);
 				setInformation(((PaletteItem)model).getHtmlDescription(), new Rectangle(p.x, p.y, r.width, r.height));
+				return;
+			}else if (model instanceof PaletteTool) {
+				setInformation(((PaletteTool)model).getPaletteItem().getTooltip(), new Rectangle(p.x, p.y, r.width, r.height));
 				return;
 			}
 		}

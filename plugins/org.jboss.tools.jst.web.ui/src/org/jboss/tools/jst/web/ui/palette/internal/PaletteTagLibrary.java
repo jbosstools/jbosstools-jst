@@ -21,6 +21,7 @@ import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibrary;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
@@ -35,6 +36,7 @@ public abstract class PaletteTagLibrary extends CustomTagLibrary {
 
 	private static int relevance = DEFAULT_GROUP_RELEVANCE;
 	private ImageDescriptor image = null;
+	private IHTMLLibraryVersion paletteLibraryVersion;
 
 	public PaletteTagLibrary(String name, String uri, String version, String defaultPrefix, Boolean ignoreCase) {
 		setURI(uri);
@@ -54,14 +56,24 @@ public abstract class PaletteTagLibrary extends CustomTagLibrary {
 				Collection<RunnablePaletteItem> items = getItems();
 				for (RunnablePaletteItem item : items) {
 					PaletteItemResult result = item.getResult(editor);
-					String startText = result.getStartText();
-					if(startWith(startText, query)) {
-						proposals.add(getProposal(item, result, editor));
+					if(result != null){
+						String startText = result.getStartText();
+						if(startText != null && startWith(startText, query)){
+							proposals.add(getProposal(item, result, editor));
+						}
 					}
 				}
 			}
 		}
 		return proposals.toArray(new TextProposal[proposals.size()]);
+	}
+	
+	protected void setPaletteLibraryVersion(IHTMLLibraryVersion paletteLibraryVersion){
+		this.paletteLibraryVersion = paletteLibraryVersion;
+	}
+
+	protected IHTMLLibraryVersion getPaletteLibraryVersion(){
+		return paletteLibraryVersion;
 	}
 
 	private boolean startWith(String text, KbQuery query) {
@@ -120,7 +132,7 @@ public abstract class PaletteTagLibrary extends CustomTagLibrary {
 	}
 
 	public Collection<RunnablePaletteItem> getItems() {
-		return PaletteManager.getInstance().getItems(getCategory(), getVersion());
+		return PaletteManager.getInstance().getItems(getCategory(), getPaletteLibraryVersion());
 	}
 
 	protected abstract String getCategory();

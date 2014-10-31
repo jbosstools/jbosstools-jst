@@ -68,9 +68,9 @@ public class PaletteDropCommand extends FileDropCommand {
 	}
 
 	protected void addCustomProperties(Properties runningProperties) {		
-		newLine = properties.getProperty(PaletteInsertHelper.PROPERTY_NEW_LINE);
+		newLine = properties.getProperty(JSPPaletteInsertHelper.PROPERTY_NEW_LINE);
 		if (newLine == null) newLine="true"; //$NON-NLS-1$
-		runningProperties.setProperty(PaletteInsertHelper.PROPERTY_NEW_LINE, newLine);
+		runningProperties.setProperty(JSPPaletteInsertHelper.PROPERTY_NEW_LINE, newLine);
 		String addTaglib = properties.getProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB);
 		if(addTaglib == null) addTaglib = "true"; //$NON-NLS-1$
 		runningProperties.setProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, addTaglib);
@@ -81,10 +81,10 @@ public class PaletteDropCommand extends FileDropCommand {
 			if(startText == null && endText == null) return;
 			int pos = ((ITextSelection)getDefaultModel().getDropData().getSelectionProvider().getSelection()).getOffset();
 			getDefaultModel().getDropData().getSourceViewer().setSelectedRange(pos, 0);
-			if(startText != null) properties.setProperty(PaletteInsertHelper.PROPERTY_START_TEXT, startText);
-			if(endText != null) properties.setProperty(PaletteInsertHelper.PROPERTY_END_TEXT, endText);
-			if(reformat != null) properties.setProperty(PaletteInsertHelper.PROPERTY_REFORMAT_BODY, reformat);
-			if(newLine != null) properties.setProperty(PaletteInsertHelper.PROPERTY_NEW_LINE, newLine);
+			if(startText != null) properties.setProperty(JSPPaletteInsertHelper.PROPERTY_START_TEXT, startText);
+			if(endText != null) properties.setProperty(JSPPaletteInsertHelper.PROPERTY_END_TEXT, endText);
+			if(reformat != null) properties.setProperty(JSPPaletteInsertHelper.PROPERTY_REFORMAT_BODY, reformat);
+			if(newLine != null) properties.setProperty(JSPPaletteInsertHelper.PROPERTY_NEW_LINE, newLine);
 			JSPPaletteInsertHelper.getInstance().insertIntoEditor(
 					getDefaultModel().getDropData().getSourceViewer(),
 					properties

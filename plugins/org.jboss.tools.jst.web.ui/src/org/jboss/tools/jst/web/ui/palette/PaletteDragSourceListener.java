@@ -10,48 +10,51 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette;
 
-import java.util.*;
+import java.util.List;
+import java.util.Properties;
 
 import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.internal.ui.palette.editparts.*;
 import org.eclipse.gef.ui.palette.editparts.PaletteEditPart;
-import org.eclipse.swt.dnd.*;
+import org.eclipse.swt.dnd.DragSourceAdapter;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.widgets.Display;
-
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelTransferBuffer;
 import org.jboss.tools.common.model.plugin.ModelPlugin;
-import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
-import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPPaletteInsertHelper;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteItem;
 
 public class PaletteDragSourceListener extends DragSourceAdapter {
 	EditPartViewer viewer;
-	boolean isDragging = false;
+	private boolean dragging = false;
 
 	public PaletteDragSourceListener(EditPartViewer viewer) {
 		this.viewer = viewer;
 	}
-
+	
 	boolean isDragging() {
-		return isDragging;
+		return dragging;
 	}
 
+	@Override
 	public void dragStart(DragSourceEvent event) {
-			XModelTransferBuffer.getInstance().enable();
 			List list = ((PaletteViewer)viewer).getSelectedEditParts();
 			XModelObject object = (list.size() == 0) ? null : getObject(list.get(0));
 			if(object == null) {
 				event.doit = false;
 				return;
 			}
+			dragging = true;
+			XModelTransferBuffer.getInstance().enable();
 			Properties p = new Properties();
 			p.setProperty("isDrag", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 			XActionInvoker.invoke("CopyActions.Copy", object, p); //$NON-NLS-1$
-			isDragging = true;
 	}
+	
+	@Override
 	public void dragSetData(DragSourceEvent event) {
 		if (TextTransfer.getInstance().isSupportedType(event.dataType)) {
 			List list = ((PaletteViewer)viewer).getSelectedEditParts();
@@ -77,17 +80,19 @@ public class PaletteDragSourceListener extends DragSourceAdapter {
 			} else {			
 				event.data = "data"; //$NON-NLS-1$
 			}
-		} else {
-///			event.data = new String[] {"model object"};
-			event.data = "model object"; //$NON-NLS-1$
-		}
+		}// else {
+		//	event.data = "model object"; //$NON-NLS-1$
+		//}
 	}
 
+	
+	@Override
 	public void dragFinished(DragSourceEvent event) { 
 		event.data = null;
+		XModelTransferBuffer.getInstance().disable();
 		Display.getDefault().asyncExec(new Runnable() {
 			public void run() {
-				isDragging = false;
+				dragging = false;
 			}
 		});
 	}
@@ -106,9 +111,5 @@ public class PaletteDragSourceListener extends DragSourceAdapter {
 			}
 		}
 		return null;
-	}
-
-	public void dragFinish(DragSourceEvent event) {
-		XModelTransferBuffer.getInstance().disable();
 	}
 }

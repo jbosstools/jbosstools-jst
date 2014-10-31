@@ -13,12 +13,21 @@ package org.jboss.tools.jst.web.ui.test;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.MobilePaletteInsertHelper;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteItemDropCommand;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteTool;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteItem;
 
 public class MobilePaletteInsertPositionTest extends AbstractPaletteEntryTest implements JQueryConstants {
@@ -43,7 +52,7 @@ public class MobilePaletteInsertPositionTest extends AbstractPaletteEntryTest im
 		IDocument document = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
 		ToolEntry entry = findEntry(getPaletteViewer(), JQM_CATEGORY, "Page");
 		assertNotNull(entry);
-		PaletteItem paletteItem = (PaletteItem)entry;
+		PaletteTool paletteItem = (PaletteTool)entry;
 		String content = FileUtil.getContentFromEditorOrFile(f);
 
 		String ancor = "<!--page-1-begin-->";
@@ -77,7 +86,7 @@ public class MobilePaletteInsertPositionTest extends AbstractPaletteEntryTest im
 		IDocument document = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
 		ToolEntry entry = findEntry(getPaletteViewer(), JQM_CATEGORY, "Footer Bar");
 		assertNotNull(entry);
-		PaletteItem paletteItem = (PaletteItem)entry;
+		PaletteTool paletteItem = (PaletteTool)entry;
 		String content = FileUtil.getContentFromEditorOrFile(f);
 
 		int afterContent = content.indexOf("<!--content-end-->");
@@ -96,10 +105,10 @@ public class MobilePaletteInsertPositionTest extends AbstractPaletteEntryTest im
 		IFile f = project.getFile("p14_3.html");
 		editor = openEditor("p14_3.html");
 		IDocument document = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
-		ToolEntry entry = findEntry(getPaletteViewer(), JQM_CATEGORY, "Text Input");
+		PaletteTool entry = (PaletteTool)findEntry(getPaletteViewer(), JQM_CATEGORY, "Text Input");
 		
 		assertNotNull(entry);
-		PaletteItem paletteItem = (PaletteItem)entry;
+		//PaletteItem paletteItem = (PaletteItem)entry;
 		String content = FileUtil.getContentFromEditorOrFile(f);
 
 		int afterComment = content.indexOf("<!--after comment-->");
@@ -107,14 +116,15 @@ public class MobilePaletteInsertPositionTest extends AbstractPaletteEntryTest im
 		int beforeComment = content.indexOf(ancor) + ancor.length();
 		
 		int offset = content.indexOf("word1");
-		assertPositionCorrection(paletteItem, document, offset, beforeComment);
+		assertPositionCorrection(entry, document, offset, beforeComment);
 
 		offset = content.indexOf("word2");
-		assertPositionCorrection(paletteItem, document, offset, afterComment);
+		assertPositionCorrection(entry, document, offset, afterComment);
 	}
 
-	void assertPositionCorrection(PaletteItem paletteItem, IDocument document, int offset, int expectedOffset) {
-		int newOffset = PaletteInsertHelper.getInstance().correctOffset(document, offset, paletteItem.getXModelObject().getPath());
+	void assertPositionCorrection(PaletteTool paletteTool, IDocument document, int offset, int expectedOffset) {
+		PaletteItemDropCommand command = new PaletteItemDropCommand(paletteTool.getPaletteItem(), true);
+		int newOffset = MobilePaletteInsertHelper.getInstance().correctOffset(document, offset, command);
 		assertEquals(expectedOffset, newOffset);
 	}
 }

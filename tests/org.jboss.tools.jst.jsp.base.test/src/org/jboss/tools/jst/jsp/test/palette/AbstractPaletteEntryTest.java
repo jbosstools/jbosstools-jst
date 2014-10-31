@@ -12,6 +12,8 @@ package org.jboss.tools.jst.jsp.test.palette;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -31,18 +33,16 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.IPage;
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PalettePageImpl;
-import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.PaletteAdapter;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteCategory;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteModelImpl;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteRootImpl;
 import org.jboss.tools.test.util.WorkbenchUtils;
-
-import junit.framework.TestCase;
 
 /**
  * 
@@ -105,12 +105,11 @@ public class AbstractPaletteEntryTest extends TestCase {
 		
 	}
 
-	public void switchVersion(String version) {
+	public void switchVersion(IHTMLLibraryVersion version) {
 		PaletteViewer viewer = getPaletteViewer();
-		org.jboss.tools.jst.web.ui.palette.model.PaletteRoot root = (org.jboss.tools.jst.web.ui.palette.model.PaletteRoot)viewer.getPaletteRoot();
+		PaletteRootImpl root = (PaletteRootImpl)viewer.getPaletteRoot();
 		root.getPaletteModel().getPaletteContents().setPreferredVersion(JQueryConstants.JQM_CATEGORY, version);
-		ToolEntry page = findEntry(viewer, JQueryConstants.JQM_CATEGORY, "Page");
-		root.getPaletteModel().reloadCategory((PaletteCategory)page.getParent());
+		((PaletteModelImpl)root.getPaletteModel()).reloadCategory();
 	}
 
 	public Shell findShell() {
@@ -162,7 +161,6 @@ public class AbstractPaletteEntryTest extends TestCase {
 				for (Object o2: l2) {
 					if(o2 instanceof ToolEntry) {
 						ToolEntry t = (ToolEntry)o2;
-//						System.out.println("-->" + t.getLabel());
 						if(entry.equals(t.getLabel())) {
 							return t;
 						}

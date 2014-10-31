@@ -1,69 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
-
- <extension
-       point="org.jboss.tools.common.model.preferences">
-    <contribution
-          resource="meta/ionic-1.0-palette.xml" priority="4">
-    </contribution>
- </extension>
-
-   <extension
-         point="org.jboss.tools.common.model.ui.InsertTagWizard">
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/0.JS#CSS" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.AddJSCSSREferencesWizard"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/1.Content" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewContentWizard" 
-      	keywords="content"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/101.Refresher" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRefresherWizard" 
-      	keywords="refresher"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/102.Navigation" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewNavigationWizard" 
-      	keywords="nav bar view"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/2.Scroll" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizard" 
-      	keywords="scroll"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/3.Header_Bar" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewHeaderBarWizard" 
-      	keywords="header bar"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/4.Footer_Bar" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewFooterBarWizard" 
-      	keywords="footer bar"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/5.Tabs" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizard" 
-      	keywords="tab tabs"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/6.Tab" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizard" 
-      	keywords="tab tabs"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/7.Slidebox" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSlideboxWizard" 
-      	keywords="slide box"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/8.Side_Menu" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSideMenuWizard" 
-      	keywords="side menu"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/1.page/9.List" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewListWizard" 
-      	keywords="list"/>
-
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/1.Checkbox" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewCheckBoxWizard" 
-      	keywords="check box"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/2.Radio" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizard" 
-      	keywords="radio,button"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/3.Toggle" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewToggleWizard" 
-      	keywords="flip,toggle,switch"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/4.Button" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewButtonWizard" 
-      	keywords="button"/>
-      <tag name="_Palette_/Mobile/Ionic/version:1.0/2.form/5.Text_Input" 
-      	class="org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTextInputWizard" 
-      	keywords="text,input,button"/>
-   </extension>
-
    <extension
          point="org.jboss.tools.jst.web.kb.tagLib">
       <tag-lib
@@ -78,6 +15,12 @@
 
 	<extension point="org.jboss.tools.jst.web.ui.jscssLibs">
 		<libs path="meta/js-css.xml"/>
-	</extension> 
+	</extension>
+ <extension
+       point="org.jboss.tools.jst.web.ui.PaletteGroup">
+    <group
+          class="org.jboss.tools.jst.angularjs.internal.ionic.palette.model.IonicPaletteGroup">
+    </group>
+ </extension> 
 
 </plugin>
