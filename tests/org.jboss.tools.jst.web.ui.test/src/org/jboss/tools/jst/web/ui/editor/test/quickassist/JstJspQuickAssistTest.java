@@ -24,7 +24,6 @@ import org.eclipse.jface.text.source.TextInvocationContext;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
@@ -33,8 +32,10 @@ import org.jboss.tools.test.util.ProjectImportTestSetup;
 public class JstJspQuickAssistTest extends TestCase {
 	private static final String PROJECT_NAME = "StaticWebProject";
 	private static final String PAGE_NAME = "WebContent/quickassist/html5.html";
-	private static final String TEST_STRING = "ng-tro-lo-lo";
-	private static final String TEST_QUICKQIX_CLASSNAME = "org.eclipse.wst.html.ui.internal.text.correction.IgnoreAttributeNameCompletionProposal";
+	private static final String TEST_ATTRIBUTE_STRING = "ng-tro-lo-lo-attribute";
+	private static final String TEST_ATTRIBUTE_QUICKQIX_CLASSNAME = "org.eclipse.wst.html.ui.internal.text.correction.IgnoreAttributeNameCompletionProposal";
+	private static final String TEST_ELEMENT_STRING = "ng-tro-lo-lo-element";
+	private static final String TEST_ELEMENT_QUICKQIX_CLASSNAME = "org.jboss.tools.jst.web.ui.internal.html.text.correction.IgnoreElementNameCompletionProposal";
 	private IProject project;
 
 	public void setUp() throws Exception {
@@ -48,9 +49,20 @@ public class JstJspQuickAssistTest extends TestCase {
 	 *
 	 * @throws CoreException
 	 */
-	public void testWSTQuickAssistProcessors() throws CoreException {
-		checkProposalExistance(project, PAGE_NAME, TEST_STRING, 0, 
-				TEST_QUICKQIX_CLASSNAME);
+	public void testWSTQuickAssistProcessorsForAttrubutes() throws CoreException {
+		checkProposalExistance(project, PAGE_NAME, TEST_ATTRIBUTE_STRING, 0, 
+				TEST_ATTRIBUTE_QUICKQIX_CLASSNAME);
+	}
+	
+	/**
+	 * Test case for the following issue:
+	 * (JBIDE-18724) HTML Validation: Ability to ignore custom htm tags (e.g. <ion-*>)
+	 *
+	 * @throws CoreException
+	 */
+	public void testWSTQuickAssistProcessorsForElements() throws CoreException {
+		checkProposalExistance(project, PAGE_NAME, TEST_ELEMENT_STRING, 0, 
+				TEST_ELEMENT_QUICKQIX_CLASSNAME);
 	}
 	
 	private void checkProposalExistance(IProject project, String fileName, String str, int id, 
