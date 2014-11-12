@@ -1,0 +1,1 @@
+= Enable Angularjs IDE Features in HTML Visual Editor
