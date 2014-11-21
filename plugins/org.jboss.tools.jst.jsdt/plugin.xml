@@ -61,6 +61,11 @@
           class="tern.eclipse.ide.ui.properties.TernModulesPropertyPage"
           id="org.jboss.tools.jst.jsdt.modules"
           name="Modules">
+       <enabledWhen>
+          <adapt type="org.eclipse.core.resources.IProject">
+             <test property="tern.eclipse.ide.ui.isTernProject" />
+          </adapt>
+       </enabledWhen>
     </page>
  </extension>
 </plugin>
