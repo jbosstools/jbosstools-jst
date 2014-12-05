@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2013 Red Hat, Inc. 
+ * Copyright (c) 2013-2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.taglib;
 
+import org.eclipse.core.resources.IFile;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 
 /**
@@ -18,9 +19,27 @@ import org.jboss.tools.common.el.core.resolver.ELContext;
 public interface ITagLibRecognizer {
 
 	/**
-	 * Returns true if the library should be loaded by the tag library manager for this resource.
+	 * Returns true if the library should be loaded by the tag library manager for this context.
 	 * @param lib
 	 * @return
 	 */
 	boolean shouldBeLoaded(ITagLibrary lib, ELContext context);
+
+	/**
+	 * Returns true if the library with the given version is used in this context.
+	 * If version==null then the version does not matter. Any version of the library is recognized as used.
+	 * @param version
+	 * @param context
+	 * @return
+	 */
+	boolean isUsed(IHTMLLibraryVersion version, ELContext context);
+
+	/**
+	 * Returns true if the library with the given version is used in this file.
+	 * If version==null then the version does not matter. Any version of the library is recognized as used.
+	 * @param version
+	 * @param context
+	 * @return
+	 */
+	boolean isUsed(IHTMLLibraryVersion version, IFile file);
 }

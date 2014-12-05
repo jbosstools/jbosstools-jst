@@ -18,7 +18,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.common.model.ui.editors.dnd.DropData;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.common.text.IExecutableTextProposal;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;

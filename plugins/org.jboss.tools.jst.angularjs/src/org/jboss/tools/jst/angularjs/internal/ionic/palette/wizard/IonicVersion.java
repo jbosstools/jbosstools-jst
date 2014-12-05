@@ -12,7 +12,8 @@ package org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;
 
 import org.eclipse.core.resources.IFile;
 import org.jboss.tools.jst.angularjs.internal.ionic.IonicRecognizer;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.internal.AngularJSRecognizer;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 
 /**
  * List of Ionic versions supported by Palette.
@@ -46,7 +47,7 @@ public enum IonicVersion implements IHTMLLibraryVersion {
 	@Override
 	public boolean isPreferredJSLib(IFile file, String libName) {
 		if(IonicConstants.IONIC_CATEGORY.equals(libName)) {
-			return file == null || !IonicRecognizer.isAngularTemplate(file);
+			return file == null || !AngularJSRecognizer.isAngularTemplate(file);
 		}
 		return false;
 	}

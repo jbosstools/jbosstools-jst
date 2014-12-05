@@ -19,20 +19,20 @@ import org.jboss.tools.jst.angularjs.AngularJsPlugin;
 public class AngularJsUIImages extends CommonUIImages {
 	private static String WIZARDS_PATH = "wizards/"; //$NON-NLS-1$
 	
-	public static String CONTENT_IMAGE = WIZARDS_PATH + "ContentWizBan.png"; //$NON-NLS-1$
-	public static String CHECKBOX_IMAGE = WIZARDS_PATH + "IonicCheckboxWizBan.png"; //$NON-NLS-1$
-	public static String NAVIGATION_IMAGE = WIZARDS_PATH + "IonicNavigationWizBan.png"; //$NON-NLS-1$
-	public static String RADIO_IMAGE = WIZARDS_PATH + "IonicRadioWizBan.png"; //$NON-NLS-1$
-	public static String REFRESHER_IMAGE = WIZARDS_PATH + "IonicRefresherWizBan.png"; //$NON-NLS-1$
-	public static String TOGGLE_IMAGE = WIZARDS_PATH + "IonicToggleWizBan.png"; //$NON-NLS-1$
-	public static String LIST_IMAGE = WIZARDS_PATH + "ListWizBan.png"; //$NON-NLS-1$
-	public static String SCROLL_IMAGE = WIZARDS_PATH + "ScrollWizBan.png"; //$NON-NLS-1$
-	public static String SIDEMENU_IMAGE = WIZARDS_PATH + "SideMenuWizBan.png"; //$NON-NLS-1$
-	public static String SLIDEBOX_IMAGE = WIZARDS_PATH + "SlideBoxWizBan.png"; //$NON-NLS-1$
-	public static String TABS_IMAGE = WIZARDS_PATH + "IonicTabsWizBan.png"; //$NON-NLS-1$
-	public static String TAB_IMAGE = WIZARDS_PATH + "IonicTabWizBan.png"; //$NON-NLS-1$
-	public static String BUTTON_IMAGE = WIZARDS_PATH + "IonicButtonWizBan.png"; //$NON-NLS-1$
-	public static String TEXT_INPUT_IMAGE = WIZARDS_PATH + "IonicTextInputWizBan.png"; //$NON-NLS-1$
+	public static final String CONTENT_IMAGE = WIZARDS_PATH + "ContentWizBan.png"; //$NON-NLS-1$
+	public static final String CHECKBOX_IMAGE = WIZARDS_PATH + "IonicCheckboxWizBan.png"; //$NON-NLS-1$
+	public static final String NAVIGATION_IMAGE = WIZARDS_PATH + "IonicNavigationWizBan.png"; //$NON-NLS-1$
+	public static final String RADIO_IMAGE = WIZARDS_PATH + "IonicRadioWizBan.png"; //$NON-NLS-1$
+	public static final String REFRESHER_IMAGE = WIZARDS_PATH + "IonicRefresherWizBan.png"; //$NON-NLS-1$
+	public static final String TOGGLE_IMAGE = WIZARDS_PATH + "IonicToggleWizBan.png"; //$NON-NLS-1$
+	public static final String LIST_IMAGE = WIZARDS_PATH + "ListWizBan.png"; //$NON-NLS-1$
+	public static final String SCROLL_IMAGE = WIZARDS_PATH + "ScrollWizBan.png"; //$NON-NLS-1$
+	public static final String SIDEMENU_IMAGE = WIZARDS_PATH + "SideMenuWizBan.png"; //$NON-NLS-1$
+	public static final String SLIDEBOX_IMAGE = WIZARDS_PATH + "SlideBoxWizBan.png"; //$NON-NLS-1$
+	public static final String TABS_IMAGE = WIZARDS_PATH + "IonicTabsWizBan.png"; //$NON-NLS-1$
+	public static final String TAB_IMAGE = WIZARDS_PATH + "IonicTabWizBan.png"; //$NON-NLS-1$
+	public static final String BUTTON_IMAGE = WIZARDS_PATH + "IonicButtonWizBan.png"; //$NON-NLS-1$
+	public static final String TEXT_INPUT_IMAGE = WIZARDS_PATH + "IonicTextInputWizBan.png"; //$NON-NLS-1$
 
 
 	private static AngularJsUIImages INSTANCE;

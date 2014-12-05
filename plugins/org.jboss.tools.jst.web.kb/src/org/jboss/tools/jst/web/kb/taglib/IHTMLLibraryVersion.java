@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.kb.internal.taglib.html;
+package org.jboss.tools.jst.web.kb.taglib;
 
 import org.eclipse.core.resources.IFile;
 

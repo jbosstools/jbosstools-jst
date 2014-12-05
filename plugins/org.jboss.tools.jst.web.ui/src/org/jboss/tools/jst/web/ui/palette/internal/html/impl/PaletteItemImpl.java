@@ -137,6 +137,9 @@ public class PaletteItemImpl implements IPaletteItem{
 
 	@Override
 	public String getKeywordsAsString() {
+		if(keywords == null || keywords.isEmpty()){
+			return name;
+		}
 		return keywords;
 	}
 

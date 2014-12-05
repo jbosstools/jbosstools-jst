@@ -13,7 +13,7 @@ package org.jboss.tools.jst.angularjs.internal.ionic.palette;
 import org.jboss.tools.jst.angularjs.internal.ionic.IonicRecognizer;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicConstants;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicVersion;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
 import org.jboss.tools.jst.web.ui.palette.internal.PaletteTagLibrary;
 

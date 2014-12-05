@@ -13,7 +13,7 @@ package org.jboss.tools.jst.web.ui.palette.internal.html;
 import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
 import org.jboss.tools.jst.web.ui.palette.model.IPaletteModel;
 
@@ -109,4 +109,9 @@ public interface IPaletteGroup {
 	 * @return IPaletteVersionGroup
 	 */
 	public IPaletteVersionGroup getLastVersionGroup();
+	
+	/**
+	 * Returns false if no need to load the group while the palette is being initialized 
+	 */
+	public boolean isEnabled();
 }

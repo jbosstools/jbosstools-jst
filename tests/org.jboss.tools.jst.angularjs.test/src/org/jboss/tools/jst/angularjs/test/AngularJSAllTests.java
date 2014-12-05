@@ -27,6 +27,7 @@ public class AngularJSAllTests {
 		s.addTestSuite(InsertJSCSSPaletteEntryTest.class);
 		s.addTestSuite(IonicPaletteTest.class);
 		s.addTestSuite(CAPaletteIonicTemplatesTest.class);
+		s.addTestSuite(IonicPaletteFilterTest.class);
 		suite.addTest(
 				new ProjectImportTestSetup(s,
 				"org.jboss.tools.jst.web.ui.test",

@@ -12,8 +12,8 @@ package org.jboss.tools.jst.web.kb.internal;
 
 import org.eclipse.core.resources.IFile;
 import org.jboss.tools.common.el.core.resolver.ELContext;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 
 /**
  * @author Alexey Kazakov

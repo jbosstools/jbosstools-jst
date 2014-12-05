@@ -31,7 +31,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Control;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.palette.MobileDrawerFigure.VersionFigure;
 
 class JQueryMobileVersionPopUp extends PopUpHelper {

@@ -1971,27 +1971,10 @@
       </wizard>      
    </extension>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	<extension-point id="openWithEditorExtension" name="Open With Editor Extension" schema="schema/openWithEditorExtension.exsd"/>
  <extension-point id="jscssLibs" name="JS/CSS libraries" schema="schema/jscssLibs.exsd"/>
  <extension-point id="PaletteGroup" name="PaletteGroup" schema="schema/PaletteGroup.exsd"/>
-	
+ 	
 	<extension 
 		point="org.jboss.tools.common.text.ext.hyperlinkPartitioner"
 		id="org.jboss.tools.common.text.ext.hyperlinkPartitioner"

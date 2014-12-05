@@ -11,9 +11,10 @@
 package org.jboss.tools.jst.web.kb.internal;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.util.FileUtil;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
@@ -39,17 +40,30 @@ public class HTMLRecognizer implements ITagLibRecognizer {
 		}
 
 		lastUsedContext = context;
-		IResource resource = context.getResource();
-		lastResult = false;
-		if(resource instanceof IFile) {
-			IFile file = (IFile) resource;
-			lastResult = recalculateResult(lib, context, file);
-		}
+		lastResult = recalculateResult(lib, context, context.getResource());
 
 		return lastResult;
 	}
 
 	protected boolean recalculateResult(ITagLibrary lib, ELContext context, IFile file) {
 		return context instanceof JspContextImpl || FileUtil.isDoctypeHTML(file);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer#isUsed(org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion, org.jboss.tools.common.el.core.resolver.ELContext)
+	 */
+	@Override
+	public boolean isUsed(IHTMLLibraryVersion version, ELContext context) {
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer#isUsed(org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion, org.eclipse.core.resources.IFile)
+	 */
+	@Override
+	public boolean isUsed(IHTMLLibraryVersion version, IFile file) {
+		return isUsed(version, PageContextFactory.createPageContext(file));
 	}
 }

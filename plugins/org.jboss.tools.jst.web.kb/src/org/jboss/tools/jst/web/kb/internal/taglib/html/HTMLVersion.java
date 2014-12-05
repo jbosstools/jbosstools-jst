@@ -1,6 +1,7 @@
 package org.jboss.tools.jst.web.kb.internal.taglib.html;
 
 import org.eclipse.core.resources.IFile;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 
 /**
 n * List of HTML versions supported by Palette.

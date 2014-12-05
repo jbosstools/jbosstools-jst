@@ -8,26 +8,28 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.ui.palette.internal.html.jquery;
+package org.jboss.tools.jst.web.ui.test.palette;
 
-import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.eclipse.core.resources.IFile;
+import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
-import org.jboss.tools.jst.web.ui.palette.internal.html.impl.AbstractPaletteVersionGroup;
-/**
- * 
- * @author Daniel Azarov
- *
- */
-public class JQuery13VersionGroup extends AbstractPaletteVersionGroup {
-	
-	public JQuery13VersionGroup(){
-		add(new JQueryPage13Category());
-		add(new JQueryListCategory());
-		add(new JQueryButtonCategory());
+import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
+
+public class TestTaglibRecognizer implements ITagLibRecognizer {
+
+	@Override
+	public boolean shouldBeLoaded(ITagLibrary lib, ELContext context) {
+		return false;
 	}
 
 	@Override
-	public IHTMLLibraryVersion getVersion() {
-		return JQueryMobileVersion.JQM_1_3;
+	public boolean isUsed(IHTMLLibraryVersion version, ELContext context) {
+		return false;
+	}
+
+	@Override
+	public boolean isUsed(IHTMLLibraryVersion version, IFile file) {
+		return false;
 	}
 }

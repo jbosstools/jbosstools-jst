@@ -25,6 +25,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibVersionRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Element;
@@ -43,6 +44,11 @@ public abstract class JSRecognizer extends HTML5Recognizer implements ITagLibVer
 	@Override
 	protected boolean recalculateResult(ITagLibrary lib, ELContext context, IFile file) {
 		return getJSReferenceVersion(file, getJSLibName())!=null;
+	}
+
+	@Override
+	public boolean isUsed(IHTMLLibraryVersion version, ELContext context){
+		return getJSReferenceVersion(context.getResource(), getJSLibName())!= null;
 	}
 
 	public static String getJSReferenceVersion(IFile file, String jsLibName) {

@@ -13,7 +13,7 @@ package org.jboss.tools.jst.web.ui.palette.internal.html.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteGroup;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteVersionGroup;
 import org.jboss.tools.jst.web.ui.palette.model.IPaletteModel;
@@ -78,5 +78,10 @@ public abstract class AbstractPaletteGroup implements IPaletteGroup {
 	@Override
 	public IPaletteVersionGroup getLastVersionGroup(){
 		return versionGroups.get(versionGroups.size()-1);
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 }

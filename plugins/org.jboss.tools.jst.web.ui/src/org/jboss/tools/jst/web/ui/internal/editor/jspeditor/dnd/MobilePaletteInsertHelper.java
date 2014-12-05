@@ -30,7 +30,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator;
 import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.preferences.js.PreferredJSLibVersions;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;

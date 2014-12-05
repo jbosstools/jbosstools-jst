@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.palette.internal.html.ILibraryPaletteItem;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteCategory;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteGroup;

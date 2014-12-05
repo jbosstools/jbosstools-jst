@@ -8,26 +8,32 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.ui.palette.internal.html.jquery;
+package org.jboss.tools.jst.web.ui.test.palette;
 
-import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.eclipse.core.resources.IFile;
 import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
-import org.jboss.tools.jst.web.ui.palette.internal.html.impl.AbstractPaletteVersionGroup;
-/**
- * 
- * @author Daniel Azarov
- *
- */
-public class JQuery13VersionGroup extends AbstractPaletteVersionGroup {
-	
-	public JQuery13VersionGroup(){
-		add(new JQueryPage13Category());
-		add(new JQueryListCategory());
-		add(new JQueryButtonCategory());
+
+public enum TestLibraryVersion implements IHTMLLibraryVersion {
+	TEST_1_0("1.0");
+
+	String version;
+
+	TestLibraryVersion(String version) {
+		this.version = version;
 	}
 
 	@Override
-	public IHTMLLibraryVersion getVersion() {
-		return JQueryMobileVersion.JQM_1_3;
+	public String toString() {
+		return version;
+	}
+
+	@Override
+	public boolean isPreferredJSLib(IFile file, String libName) {
+		return false;
+	}
+
+	@Override
+	public boolean isReferencingJSLib(IFile file, String libName) {
+		return false;
 	}
 }

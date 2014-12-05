@@ -45,6 +45,7 @@ public class JstWebUiAllTests {
 		s.addTestSuite(PaletteContentsTest.class);
 		s.addTestSuite(FormPropertySheetPageTest.class);
 		s.addTestSuite(SwitchPaletteTest.class);
+		s.addTestSuite(PaletteFilterTest.class);
 		suite.addTest(
 				new ProjectImportTestSetup(s,
 				"org.jboss.tools.jst.web.ui.test",
@@ -63,7 +64,6 @@ public class JstWebUiAllTests {
 		suite.addTestSuite(WebViewsTest.class);
 		suite.addTestSuite(WebWizardsTest.class);
 		suite.addTestSuite(JstWebUiPreferencesPagesTest.class);
-		suite.addTestSuite(PaletteFilterTest.class);
 
 		s = new TestSuite("Palette CA templates");
 		s.addTestSuite(HTML5PaletteCATest.class);

@@ -10,8 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.internal.html.jquery;
 
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.AbstractPaletteVersionGroup;
 /**
  * 

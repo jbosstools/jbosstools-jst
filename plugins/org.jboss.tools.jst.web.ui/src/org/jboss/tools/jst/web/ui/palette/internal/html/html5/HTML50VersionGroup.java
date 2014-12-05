@@ -11,7 +11,7 @@
 package org.jboss.tools.jst.web.ui.palette.internal.html.html5;
 
 import org.jboss.tools.jst.web.kb.internal.taglib.html.HTMLVersion;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.AbstractPaletteVersionGroup;
 /**
  * 

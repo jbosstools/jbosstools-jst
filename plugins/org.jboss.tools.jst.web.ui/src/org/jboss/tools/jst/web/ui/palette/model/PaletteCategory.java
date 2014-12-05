@@ -16,7 +16,7 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.XModelObjectConstants;
 import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.image.XModelObjectImageDescriptor;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 
 public class PaletteCategory extends PaletteDrawer implements PaletteXModelObject {
 

@@ -29,7 +29,7 @@ public class LibraryPaletteItemImpl extends PaletteItemImpl implements ILibraryP
 	public LibraryPaletteItemImpl(String name, String toolTip,	ImageDescriptor imageDescriptor,
 			Class<? extends IPaletteItemWizard> wizardClass,
 			String startText) {
-		super(name, toolTip, "", imageDescriptor, wizardClass,
+		super(name, toolTip, null, imageDescriptor, wizardClass,
 				null, startText, "");
 		
 		setReformat(false);

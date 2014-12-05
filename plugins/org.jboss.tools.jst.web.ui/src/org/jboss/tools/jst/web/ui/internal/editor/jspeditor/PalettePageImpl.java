@@ -20,8 +20,9 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.part.PageBookView;
@@ -31,6 +32,7 @@ import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.views.palette.IPaletteAdapter;
 import org.jboss.tools.common.model.ui.views.palette.IPalettePageAdapter;
 import org.jboss.tools.common.model.ui.views.palette.PaletteCreator;
+import org.jboss.tools.jst.web.ui.palette.PaletteAdapter;
 
 /**
  * 
@@ -60,6 +62,33 @@ public class PalettePageImpl extends Page implements PalettePage, IPalettePageAd
     public void init(IPageSite pageSite) {
     	super.init(pageSite);
     	paletteCreator.initActionBars();
+    	getPage().addPartListener(new IPartListener(){
+
+			@Override
+			public void partActivated(IWorkbenchPart part) {
+				PaletteAdapter adapter = (PaletteAdapter)getAdapter();
+				if(adapter != null){
+					adapter.activated();
+				}
+			}
+
+			@Override
+			public void partBroughtToTop(IWorkbenchPart part) {
+			}
+
+			@Override
+			public void partClosed(IWorkbenchPart part) {
+			}
+
+			@Override
+			public void partDeactivated(IWorkbenchPart part) {
+			}
+
+			@Override
+			public void partOpened(IWorkbenchPart part) {
+			}
+    		
+    	});
     }
 
     public void createControl(Composite parent) {
@@ -91,6 +120,9 @@ public class PalettePageImpl extends Page implements PalettePage, IPalettePageAd
 				}else{
 					reload();
 				}
+			} else if(contents.computeRecognized()) {
+				PaletteAdapter a = (PaletteAdapter)getAdapter();
+				a.filter();
 			}
 		}
 		

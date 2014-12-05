@@ -12,7 +12,7 @@ package org.jboss.tools.jst.web.ui.palette.internal.html;
 
 import java.util.List;
 
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 
 /**
  * Interface for palette version group

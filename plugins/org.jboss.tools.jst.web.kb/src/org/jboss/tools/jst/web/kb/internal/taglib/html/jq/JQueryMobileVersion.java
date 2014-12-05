@@ -13,7 +13,7 @@ package org.jboss.tools.jst.web.kb.internal.taglib.html.jq;
 import org.eclipse.core.resources.IFile;
 import org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer;
 import org.jboss.tools.jst.web.kb.internal.JQueryRecognizer;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 
 /**
  * List of supported jQuery Mobile versions.

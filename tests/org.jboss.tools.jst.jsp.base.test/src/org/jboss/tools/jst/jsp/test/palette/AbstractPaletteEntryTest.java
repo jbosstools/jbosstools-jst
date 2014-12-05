@@ -33,7 +33,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.IPage;
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropCommand;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPMultiPageEditor;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor;
@@ -131,6 +131,11 @@ public class AbstractPaletteEntryTest extends TestCase {
 	}
 
 	public PaletteViewer getPaletteViewer() {
+		PaletteAdapter adapter = getPaletteAdapter();
+		return adapter.getViewer();
+	}
+
+	public PaletteAdapter getPaletteAdapter() {
 		IWorkbenchPage page = WebUiPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		
 		IViewPart view = page.findView("org.eclipse.gef.ui.palette_view");
@@ -147,8 +152,7 @@ public class AbstractPaletteEntryTest extends TestCase {
 		IPage viewPage = palette.getCurrentPage();
 		assertTrue(viewPage instanceof PalettePageImpl);
 		PalettePageImpl palettePage = (PalettePageImpl)viewPage;
-		PaletteAdapter adapter = (PaletteAdapter)palettePage.getAdapter();
-		return adapter.getViewer();
+		return (PaletteAdapter)palettePage.getAdapter();
 	}
 
 	public ToolEntry findEntry(PaletteViewer viewer, String category, String entry) {

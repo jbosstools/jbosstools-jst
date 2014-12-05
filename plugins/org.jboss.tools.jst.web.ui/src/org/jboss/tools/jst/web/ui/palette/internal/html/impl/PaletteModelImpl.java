@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.palette.PaletteRoot;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
@@ -39,6 +39,7 @@ public class PaletteModelImpl implements IPaletteModel{
 	private static String POINT_ID = "org.jboss.tools.jst.web.ui.PaletteGroup"; //$NON-NLS-1$
 	
 	private HashMap<String, IPaletteGroup> paletteGroupMap = null;
+	private ArrayList<IPaletteGroup> sortedPaletteGroups = null;
 	
 	private PaletteRoot paletteRoot = null;
 	
@@ -57,12 +58,17 @@ public class PaletteModelImpl implements IPaletteModel{
 	
 	@Override
 	public void load() {
-		ArrayList<IPaletteGroup> paletteGroups = loadPaletteGroups();
+		sortedPaletteGroups = loadPaletteGroups();
+		paletteGroupMap = new HashMap<String, IPaletteGroup>();
 		
 		String expandedCategory = getPreferredExpandedCategory();
 		
 		paletteRoot = new PaletteRootImpl(this);
-		for(IPaletteGroup paletteGroup : paletteGroups){
+		for(IPaletteGroup paletteGroup : sortedPaletteGroups){
+			paletteGroupMap.put(paletteGroup.getName(), paletteGroup);
+			paletteGroup.setPaletteModel(this);
+			IHTMLLibraryVersion version = getSelectedVersion(paletteGroup);
+			paletteGroup.setSelectedVersion(version);
 			PaletteDrawerImpl drawer = new PaletteDrawerImpl(paletteGroup);
 			if(expandedCategory != null && expandedCategory.equals(paletteGroup.getName())){
 				drawer.setInitialState(PaletteDrawerImpl.INITIAL_STATE_OPEN);
@@ -73,18 +79,14 @@ public class PaletteModelImpl implements IPaletteModel{
 		}
 	}
 	
-	private ArrayList<IPaletteGroup> loadPaletteGroups() {
-		TreeMap<String,IPaletteGroup> groupsByOrderId = new TreeMap<String,IPaletteGroup>();
-		paletteGroupMap = new HashMap<String, IPaletteGroup>();
+	public static ArrayList<IPaletteGroup> loadPaletteGroups() {
+		TreeMap<String,IPaletteGroup>groupsByOrderId = new TreeMap<String,IPaletteGroup>();
 		
 		IExtensionPoint point = Platform.getExtensionRegistry().getExtensionPoint(POINT_ID);
 		for (IConfigurationElement element : point.getConfigurationElements()) {
 			IPaletteGroup paletteGroup = createPaletteGroupInstance(element);
-			if(paletteGroup != null){
-				paletteGroup.setPaletteModel(this);
-				IHTMLLibraryVersion version = getSelectedVersion(paletteGroup);
-				paletteGroup.setSelectedVersion(version);
-				paletteGroupMap.put(paletteGroup.getName(), paletteGroup);
+			if(paletteGroup != null && paletteGroup.isEnabled()){
+				
 				String orderId = element.getAttribute("orderId");
 				if(orderId == null){
 					orderId = paletteGroup.getName();
@@ -97,15 +99,19 @@ public class PaletteModelImpl implements IPaletteModel{
 	}
 	
 	public String[] getPaletteGroups(){
-		if(paletteGroupMap == null){
-			loadPaletteGroups();
+		if(sortedPaletteGroups == null){
+			load();
 		}
-		return paletteGroupMap.keySet().toArray(new String[]{});
+		ArrayList<String> groupNames = new ArrayList<String>();
+		for(IPaletteGroup group : sortedPaletteGroups){
+			groupNames.add(group.getName());
+		}
+		return groupNames.toArray(new String[]{});
 	}
 	
 	public IPaletteGroup getPaletteGroup(String name){
 		if(paletteGroupMap == null){
-			loadPaletteGroups();
+			load();
 		}
 		return paletteGroupMap.get(name);
 	}
@@ -121,7 +127,7 @@ public class PaletteModelImpl implements IPaletteModel{
 		return version;
 	}
 	
-	private IPaletteGroup createPaletteGroupInstance(IConfigurationElement element) {
+	private static IPaletteGroup createPaletteGroupInstance(IConfigurationElement element) {
 		try {
 			return (IPaletteGroup)element.createExecutableExtension("class"); //$NON-NLS-1$
 		} catch(CoreException e) {

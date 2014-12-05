@@ -37,7 +37,7 @@ import org.jboss.tools.common.model.event.XModelTreeListener;
 import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.util.ModelUtilities;
 import org.jboss.tools.common.model.ui.views.palette.editor.PaletteEditor;
-import org.jboss.tools.jst.web.kb.internal.taglib.html.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
@@ -87,6 +87,7 @@ public class PaletteModel implements IPaletteModel{
 		if (instance != null) {
 			if(file != null) {
 				instance.setPaletteContents(contents);
+				//instance.expandPreferredCategory = false;
 				instance.load();
 			}
 			return instance;
@@ -212,6 +213,8 @@ public class PaletteModel implements IPaletteModel{
 		return paletteRoot;
 	}
 
+	boolean expandPreferredCategory = true;
+
 	public void load(XModelObject lastAddedXCat) {
 		XModelObject xpalette = getXPaletteRoot();
 		if (paletteRoot == null) {
@@ -239,7 +242,7 @@ public class PaletteModel implements IPaletteModel{
 			i++;
 		}
 		cutOff(paletteRoot, i);
-		if(lastAddedXCat == null) {
+		if(expandPreferredCategory && lastAddedXCat == null) {
 			String preferred = getPreferredExpandedCategory();
 			if(preferred != null) {
 				for (Object c: paletteRoot.getChildren()) {
