@@ -20,6 +20,7 @@ import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 
 /**
  * @author Alexey Kazakov
@@ -55,7 +56,7 @@ public class JQueryRecognizerTest extends TestCase {
 		assertNotNull(context);
 
 		JQueryMobileRecognizer r = new JQueryMobileRecognizer();
-		String v = r.getVersion(context);
-		assertEquals(version.toString(), v);
+		IHTMLLibraryVersion v = r.getVersion(context);
+		assertEquals(version, v);
 	}
 }

@@ -22,5 +22,5 @@ public interface ITagLibVersionRecognizer extends ITagLibRecognizer {
 	 * @param context
 	 * @return
 	 */
-	String getVersion(ELContext context);
+	IHTMLLibraryVersion getVersion(ELContext context);
 }

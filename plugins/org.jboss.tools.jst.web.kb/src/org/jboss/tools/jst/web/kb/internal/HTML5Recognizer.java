@@ -13,17 +13,24 @@ package org.jboss.tools.jst.web.kb.internal;
 import org.eclipse.core.resources.IFile;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.util.FileUtil;
+import org.jboss.tools.jst.web.kb.internal.taglib.html.HTMLVersion;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibVersionRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
  * Recognizer for HTML5 files
  * @author Alexey Kazakov
  */
-public class HTML5Recognizer extends HTMLRecognizer {
+public class HTML5Recognizer extends HTMLRecognizer implements ITagLibVersionRecognizer {
 
 	@Override
 	protected boolean recalculateResult(ITagLibrary lib, ELContext context, IFile file) {
 		return FileUtil.isDoctypeHTML(file);
 	}
 
+	@Override
+	public IHTMLLibraryVersion getVersion(ELContext context) {
+		return isUsed(context) ? HTMLVersion.HTML_5_0 : null;
+	}
 }

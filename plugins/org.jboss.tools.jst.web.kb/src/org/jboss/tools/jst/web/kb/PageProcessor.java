@@ -34,6 +34,7 @@ import org.jboss.tools.jst.web.kb.taglib.IContextComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibComponent;
 import org.jboss.tools.jst.web.kb.taglib.ICustomTagLibrary;
 import org.jboss.tools.jst.web.kb.taglib.IFacesConfigTagLibrary;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibVersionRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
@@ -202,7 +203,7 @@ public class PageProcessor {
 			} else if(libs.size()>1) {
 				ICustomTagLibrary any = libs.iterator().next();
 				ITagLibRecognizer recognizer = any.getRecognizer();
-				String version = null;
+				IHTMLLibraryVersion version = null;
 				if(recognizer!=null && recognizer instanceof ITagLibVersionRecognizer) {
 					version = ((ITagLibVersionRecognizer)recognizer).getVersion(context);
 					if(version == null) {
@@ -215,7 +216,7 @@ public class PageProcessor {
 						if(shouldLoadLib(lib, context)) {
 							result.add(lib);
 						}
-					} else if(version.equals(v)) {
+					} else if(version.toString().equals(v)) {
 						result.add(lib);
 					}
 				}

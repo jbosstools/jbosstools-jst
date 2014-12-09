@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.kb.internal.taglib.html.jq;
 
 import org.eclipse.core.resources.IFile;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer;
 import org.jboss.tools.jst.web.kb.internal.JQueryRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
@@ -95,7 +96,7 @@ public enum JQueryMobileVersion implements IHTMLLibraryVersion {
 		if(JQ_CATEGORY.equals(libName)) {
 			return JQueryRecognizer.containsJQueryJSReference(file);
 		} else if(JQM_CATEGORY.equals(libName)) {
-			return JQueryMobileRecognizer.getVersion(file) != null;
+			return new JQueryMobileRecognizer().getVersion(PageContextFactory.createPageContext(file)) != null;
 		}
 		return false;
 	}

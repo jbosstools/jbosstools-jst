@@ -26,20 +26,16 @@ public interface ITagLibRecognizer {
 	boolean shouldBeLoaded(ITagLibrary lib, ELContext context);
 
 	/**
-	 * Returns true if the library with the given version is used in this context.
-	 * If version==null then the version does not matter. Any version of the library is recognized as used.
-	 * @param version
+	 * Returns true if the library is used in this context.
 	 * @param context
 	 * @return
 	 */
-	boolean isUsed(IHTMLLibraryVersion version, ELContext context);
+	boolean isUsed(ELContext context);
 
 	/**
-	 * Returns true if the library with the given version is used in this file.
-	 * If version==null then the version does not matter. Any version of the library is recognized as used.
-	 * @param version
-	 * @param context
+	 * Returns true if the library is used in this file.
+	 * @param file
 	 * @return
 	 */
-	boolean isUsed(IHTMLLibraryVersion version, IFile file);
+	boolean isUsed(IFile file);
 }

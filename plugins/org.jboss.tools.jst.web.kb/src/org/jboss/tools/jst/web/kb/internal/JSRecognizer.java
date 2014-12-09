@@ -25,7 +25,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
-import org.jboss.tools.jst.web.kb.taglib.ITagLibVersionRecognizer;
+import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -35,7 +35,7 @@ import org.w3c.dom.NodeList;
 /**
  * @author Alexey Kazakov
  */
-public abstract class JSRecognizer extends HTML5Recognizer implements ITagLibVersionRecognizer {
+public abstract class JSRecognizer extends HTML5Recognizer {
 
 	protected abstract String getJSPattern();
 	protected abstract String getJSLibName();
@@ -50,8 +50,19 @@ public abstract class JSRecognizer extends HTML5Recognizer implements ITagLibVer
 	}
 
 	@Override
-	public String getVersion(ELContext context) {
-		return getJSReferenceVersion(context.getResource(), getJSLibName());
+	public IHTMLLibraryVersion getVersion(ELContext context) {
+		return findVersion(getJSReferenceVersion(context.getResource(), getJSLibName()));
+	}
+
+	/**
+	 * Returns the IHTMLLibraryVersion representing the specified string version of the library. 
+	 * May return null or the default version (it's up to implementation) if the string version 
+	 * is null or unknown.
+	 * @param version specified string version of the library
+	 * @return
+	 */
+	protected IHTMLLibraryVersion findVersion(String version) {
+		return null;
 	}
 
 	/**

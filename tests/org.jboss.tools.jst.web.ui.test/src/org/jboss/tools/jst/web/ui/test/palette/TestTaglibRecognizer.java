@@ -12,7 +12,6 @@ package org.jboss.tools.jst.web.ui.test.palette;
 
 import org.eclipse.core.resources.IFile;
 import org.jboss.tools.common.el.core.resolver.ELContext;
-import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
@@ -24,12 +23,12 @@ public class TestTaglibRecognizer implements ITagLibRecognizer {
 	}
 
 	@Override
-	public boolean isUsed(IHTMLLibraryVersion version, ELContext context) {
+	public boolean isUsed(ELContext context) {
 		return false;
 	}
 
 	@Override
-	public boolean isUsed(IHTMLLibraryVersion version, IFile file) {
+	public boolean isUsed(IFile file) {
 		return false;
 	}
 }

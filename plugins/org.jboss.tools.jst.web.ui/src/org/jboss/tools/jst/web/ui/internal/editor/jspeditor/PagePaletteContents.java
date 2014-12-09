@@ -12,18 +12,17 @@ package org.jboss.tools.jst.web.ui.internal.editor.jspeditor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
-import org.jboss.tools.jst.web.kb.internal.JQueryMobileRecognizer;
+import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibVersionRecognizer;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteGroup;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteModelImpl;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
@@ -36,14 +35,12 @@ import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 public class PagePaletteContents extends PaletteContents {
 	IEditorPart editorPart;
 	Map<String, CategoryVersion> categoryVersions = new HashMap<String, CategoryVersion>();
-	Set<String> recognizedCategories = new HashSet<String>();
 
 	public PagePaletteContents(IEditorPart editorPart) {
 		super(editorPart);
 		this.editorPart = editorPart;
 
-		categoryVersions.put("jQuery Mobile", new CategoryVersion(new JQueryVersionComputer()));
-
+		getTaglibRecognizers();
 		computeVersions();
 		computeRecognized();
 	}
@@ -82,9 +79,8 @@ public class PagePaletteContents extends PaletteContents {
 		String[] types = getNatureTypes();
 		if(types.length > 0 && PaletteModel.TYPE_HTML5.equals(types[0])) {
 			if(file != null) {
-				for (String categoryName: categoryVersions.keySet()) {
-					CategoryVersion v = categoryVersions.get(categoryName);
-					if(v.computeVersion()) {
+				for (CategoryVersion v: getVersionObjects()) {
+					if(v.computeVersion(file)) {
 						result = true;
 					}
 				}
@@ -100,18 +96,10 @@ public class PagePaletteContents extends PaletteContents {
 		String[] types = getNatureTypes();
 		if(types.length > 0 && PaletteModel.TYPE_HTML5.equals(types[0])) {
 			if(file != null) {
-				Set<String> rc = new HashSet<String>();
-				Map<String, ITagLibRecognizer> rs = getTaglibRecognizers();
-				for (Map.Entry<String, ITagLibRecognizer> e: rs.entrySet()) {
-					String name = e.getKey();
-					ITagLibRecognizer r = e.getValue();
-					if(r.isUsed(null, file)) {
-						rc.add(name);
+				for (CategoryVersion v: getVersionObjects()) {
+					if(v.computeRecognized(file)) {
+						result = true;
 					}
-				}
-				if(!setsAreEqual(recognizedCategories, rc)) {
-					recognizedCategories = rc;
-					result = true;
 				}
 			}
 		}
@@ -119,40 +107,40 @@ public class PagePaletteContents extends PaletteContents {
 		return result;
 	}
 
-	boolean mapsAreEqual(Map<String, String> map1, Map<String, String> map2) {
-		if(map1.size() != map2.size()) {
-			return false;
-		}
-		for (String k: map2.keySet()) {
-			if(!map1.containsKey(k)) {
-				return false;
-			}
-			if(!map1.get(k).equals(map2.get(k))) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	boolean setsAreEqual(Set<String> map1, Set<String> map2) {
-		if(map1.size() != map2.size()) {
-			return false;
-		}
-		for (String k: map2) {
-			if(!map1.contains(k)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
 	public IHTMLLibraryVersion getVersion(String category) {
-		CategoryVersion v = categoryVersions.get(category);
+		CategoryVersion v = getVersionObject(category);
 		return v == null ? null : v.getVersion();
 	}
 
 	public boolean isRecognized(String category) {
-		return recognizedCategories.contains(category);
+		CategoryVersion v = getVersionObject(category);
+		return v != null && v.recognized;
+	}
+
+	private synchronized CategoryVersion[] getVersionObjects() {
+		return categoryVersions.values().toArray(new CategoryVersion[0]);
+	}
+
+	private CategoryVersion getVersionObject(String category) {
+		CategoryVersion v = null;
+		synchronized(this) {
+			v = categoryVersions.get(category);
+		}
+		if(v == null) {
+			ITagLibRecognizer r = taglibRecognizers.get(category);
+			if(r instanceof ITagLibVersionRecognizer) {
+				v = new CategoryVersion((ITagLibVersionRecognizer)r);
+				synchronized(this) {
+					categoryVersions.put(category, v);
+				}
+				IFile file = getFile();
+				if(file != null) {
+					v.computeVersion(file);
+					v.computeRecognized(file);
+				}
+			}
+		}
+		return v;
 	}
 
 	public void setPreferredVersion(String category, IHTMLLibraryVersion version) {
@@ -163,26 +151,35 @@ public class PagePaletteContents extends PaletteContents {
 	}
 
 	class CategoryVersion {
-		VersionComputer versionComputer;
+		ITagLibVersionRecognizer recognizer;
 		IHTMLLibraryVersion detectedVersion = null;
 		IHTMLLibraryVersion preferredVersion = null;
+		boolean recognized = false;
 
-		public CategoryVersion(VersionComputer versionComputer) {
-			this.versionComputer = versionComputer;
+		public CategoryVersion(ITagLibVersionRecognizer recognizer) {
+			this.recognizer = recognizer;
 		}
 
 		public IHTMLLibraryVersion getVersion() {
 			return(preferredVersion != null) ? preferredVersion : detectedVersion;
 		}
 
-		public boolean computeVersion() {
-			IHTMLLibraryVersion newVersion = versionComputer.computeVersion(getFile());
+		public boolean computeVersion(IFile file) {
+			IHTMLLibraryVersion newVersion = recognizer.getVersion(PageContextFactory.createPageContext(file));
 			boolean isNew = !isSame(newVersion);
 			if(isNew) {
 				preferredVersion = null;
 				detectedVersion = newVersion;
 			}
 			return isNew;
+		}
+	
+		public boolean computeRecognized(IFile file) {
+			if(recognized != recognizer.isUsed(file)) {
+				recognized = !recognized;
+				return true;
+			}
+			return false;
 		}
 
 		private boolean isSame(IHTMLLibraryVersion newVersion) {
@@ -204,19 +201,5 @@ public class PagePaletteContents extends PaletteContents {
 		    taglibRecognizers = tr;
 		}
 		return taglibRecognizers;
-	}
-}
-
-
-interface VersionComputer {
-	public IHTMLLibraryVersion computeVersion(IFile file);
-}
-
-class JQueryVersionComputer implements VersionComputer {
-	static String prefix = "jquery.mobile-";
-
-	@Override
-	public IHTMLLibraryVersion computeVersion(IFile file) {
-		return JQueryMobileRecognizer.getVersion(file);
 	}
 }

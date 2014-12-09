@@ -10,7 +10,6 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal;
 
-import org.eclipse.core.resources.IFile;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.jst.web.kb.internal.taglib.html.jq.JQueryMobileVersion;
 import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
@@ -29,27 +28,16 @@ public class JQueryMobileRecognizer extends JSRecognizer {
 		return JQUERY_MOBILE_JS_PATTERN_START + (lib.getVersion()!=null?lib.getVersion():"") + JQUERY_MOBILE_JS_PATTERN_END;
 	}
 
-	@Override
-	public String getVersion(ELContext context) {
-		String version = getJSReferenceVersion(context.getResource(), getJSLibName());
-		if(version==null) {
-			return null;
-		}
-		if(version.equals(JQueryMobileVersion.JQM_1_3.toString())) {
-			return JQueryMobileVersion.JQM_1_3.toString();
-		}
-		return JQueryMobileVersion.JQM_1_4.toString();
-	}
-
 	/**
-	 * Returns the version of JQM declared in the file or null if there is no JQM declaration.
-	 * Returns the default version is the declared one is unknown. 
+	 * Returns the version of JQM representing the specified  version of the library.
+	 * Returns null if string version is null.
+	 * Returns the default version is the string version is unknown. 
 	 * @param context
 	 * @return
 	 */
-	public static IHTMLLibraryVersion getVersion(IFile file) {
-		String version = getJSReferenceVersion(file, JQUERY_MOBILE_JS_LIB_NAME);
-		if(version==null) {
+	@Override
+	protected IHTMLLibraryVersion findVersion(String version) {
+		if(version == null) {
 			return null;
 		}
 		if(version.equals(JQueryMobileVersion.JQM_1_3.toString())) {

@@ -67,11 +67,6 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 		}
 		return result;
 	}
-	abstract static class DefaultJSRecognizer extends JSRecognizer {
-		public static String getJSReferenceVersion(IFile file, String jsLibName) {
-			return JSRecognizer.getJSReferenceVersion(file, jsLibName);
-		}		
-	}
 
 	public PreferredJSLibVersions(IFile file, IHTMLLibraryVersion version) {
 		f = file;
@@ -135,7 +130,7 @@ public class PreferredJSLibVersions implements IPreferredJSLibVersion {
 			} else {
 				String libNameRoot = getLibNameRoot(lib);
 				if(libNameRoot != null) {
-					enabled = f == null || DefaultJSRecognizer.getJSReferenceVersion(f, libNameRoot) == null;
+					enabled = f == null || JSRecognizer.getJSReferenceVersion(f, libNameRoot) == null;
 				}
 			}
 			if(enabled) {

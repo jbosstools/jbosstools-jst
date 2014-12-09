@@ -14,7 +14,6 @@ import org.eclipse.core.resources.IFile;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
-import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
@@ -70,7 +69,7 @@ public class HTMLRecognizer implements ITagLibRecognizer {
 	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer#isUsed(org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion, org.jboss.tools.common.el.core.resolver.ELContext)
 	 */
 	@Override
-	public boolean isUsed(IHTMLLibraryVersion version, ELContext context) {
+	public boolean isUsed(ELContext context) {
 		return isUsedInternal(null, context);
 	}
 
@@ -79,7 +78,7 @@ public class HTMLRecognizer implements ITagLibRecognizer {
 	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer#isUsed(org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion, org.eclipse.core.resources.IFile)
 	 */
 	@Override
-	public boolean isUsed(IHTMLLibraryVersion version, IFile file) {
-		return isUsed(version, PageContextFactory.createPageContext(file));
+	public boolean isUsed(IFile file) {
+		return isUsed(PageContextFactory.createPageContext(file));
 	}
 }
