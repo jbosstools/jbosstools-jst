@@ -29,7 +29,6 @@ import org.jboss.tools.common.text.ext.util.StructuredModelWrapper.ICommand;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.html.HTMLConstants;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
-import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -46,32 +45,27 @@ public class AngularJSRecognizer extends HTMLRecognizer {
 	@Override
 	protected boolean recalculateResult(ITagLibrary lib, ELContext context, IFile file) {
 		if(super.recalculateResult(lib, context, file)) {
-			return isUsed(null, context);
+			final Boolean[] result = new Boolean[] {JSRecognizer.getJSReferenceVersion(context.getResource(), ANGULAR_JS_LIB_NAME)!=null};
+			if(!result[0]) {
+				StructuredModelWrapper.execute(context.getResource(), new ICommand() {
+					public void execute(IDOMDocument xmlDocument) {
+						try {
+							NodeList list = (NodeList) XPathFactory.newInstance().newXPath().compile(ANGULAR_NG_ATTRIBUTE_PATTERN).evaluate(xmlDocument,XPathConstants.NODESET);
+							for (int i = 0; i < list.getLength(); i++) {
+								IDOMAttr attr = ((IDOMAttr)  list.item(i));
+							}
+							result[0] = list.getLength()>0;
+						} catch (XPathExpressionException e) {
+							WebKbPlugin.getDefault().logError(e);
+						}
+					}
+				});
+			}
+			return result[0];
 		}
 		return false;
 	}
 
-	@Override
-	public boolean isUsed(IHTMLLibraryVersion version, ELContext context) {
-		final Boolean[] result = new Boolean[] {JSRecognizer.getJSReferenceVersion(context.getResource(), ANGULAR_JS_LIB_NAME)!=null};
-		if(!result[0]) {
-			StructuredModelWrapper.execute(context.getResource(), new ICommand() {
-				public void execute(IDOMDocument xmlDocument) {
-					try {
-						NodeList list = (NodeList) XPathFactory.newInstance().newXPath().compile(ANGULAR_NG_ATTRIBUTE_PATTERN).evaluate(xmlDocument,XPathConstants.NODESET);
-						for (int i = 0; i < list.getLength(); i++) {
-							IDOMAttr attr = ((IDOMAttr)  list.item(i));
-						}
-						result[0] = list.getLength()>0;
-					} catch (XPathExpressionException e) {
-						WebKbPlugin.getDefault().logError(e);
-					}
-				}
-			});
-		}
-		return result[0];
-	}
-	
 	/**
 	 * File is Angular template if it satisfies all of the following
 	 * 1. *.html

@@ -13,7 +13,6 @@ package org.jboss.tools.jst.web.kb.internal;
 import org.eclipse.core.resources.IFile;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.util.FileUtil;
-import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
@@ -27,8 +26,4 @@ public class HTML5Recognizer extends HTMLRecognizer {
 		return FileUtil.isDoctypeHTML(file);
 	}
 
-	@Override
-	public boolean isUsed(IHTMLLibraryVersion version, ELContext context) {
-		return FileUtil.isDoctypeHTML(context.getResource());
-	}
 }

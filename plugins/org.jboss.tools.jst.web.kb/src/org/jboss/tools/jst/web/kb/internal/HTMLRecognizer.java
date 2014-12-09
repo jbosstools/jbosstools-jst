@@ -34,6 +34,26 @@ public class HTMLRecognizer implements ITagLibRecognizer {
 	@Override
 	public boolean shouldBeLoaded(ITagLibrary lib, ELContext context) {
 		this.lib = lib;
+		return isUsedInternal(lib, context);
+	}
+
+	protected boolean recalculateResult(ITagLibrary lib, ELContext context, IFile file) {
+		return context instanceof JspContextImpl || FileUtil.isDoctypeHTML(file);
+	}
+
+	/**
+	 * This is the default implementation used by methods 
+	 * - shouldBeLoaded(ITagLibrary lib, ELContext context)
+	 * - isUsed(IHTMLLibraryVersion version, ELContext context)
+	 * - isUsed(IHTMLLibraryVersion version, IFile file)
+	 * When the last two methods were defined, there was no need in a separate implementation
+	 * for them in any of inherited classes. 
+	 * 
+	 * @param lib
+	 * @param context
+	 * @return
+	 */
+	protected final boolean isUsedInternal(ITagLibrary lib, ELContext context) {
 		if(lastUsedContext!=null && lastUsedContext==context) {
 			// The context has not been changed so we do not need to recalculate the result.
 			return lastResult;
@@ -45,17 +65,13 @@ public class HTMLRecognizer implements ITagLibRecognizer {
 		return lastResult;
 	}
 
-	protected boolean recalculateResult(ITagLibrary lib, ELContext context, IFile file) {
-		return context instanceof JspContextImpl || FileUtil.isDoctypeHTML(file);
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer#isUsed(org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion, org.jboss.tools.common.el.core.resolver.ELContext)
 	 */
 	@Override
 	public boolean isUsed(IHTMLLibraryVersion version, ELContext context) {
-		return true;
+		return isUsedInternal(null, context);
 	}
 
 	/*

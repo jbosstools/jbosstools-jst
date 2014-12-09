@@ -17,7 +17,6 @@ import org.jboss.tools.jst.web.kb.internal.AngularJSRecognizer;
 import org.jboss.tools.jst.web.kb.internal.HTMLRecognizer;
 import org.jboss.tools.jst.web.kb.internal.JSRecognizer;
 import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
-import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 
 /**
@@ -29,26 +28,11 @@ public class IonicRecognizer extends HTMLRecognizer {
 
 	@Override
 	protected boolean recalculateResult(ITagLibrary lib, ELContext context, IFile file) {
-		if(FileUtil.isDoctypeHTML(file)) {
-			// HTLM5
-			if(JSRecognizer.getJSReferenceVersion(file, JS_LIB_NAME)!=null) {
-				// Has Ionic JS links
-				return true;
-			}
-		} else if(context instanceof JspContextImpl && AngularJSRecognizer.isAngularTemplate(file)) {
-			// AngularJS template
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean isUsed(IHTMLLibraryVersion version, ELContext context) {
-		if(AngularJSRecognizer.isAngularTemplate(context.getResource())) {
+		if(context instanceof JspContextImpl && AngularJSRecognizer.isAngularTemplate(file)) {
 		    return true;
 		}
-		if(FileUtil.isDoctypeHTML(context.getResource())) {
-			return JSRecognizer.getJSReferenceVersion(context.getResource(), JS_LIB_NAME) != null;
+		if(FileUtil.isDoctypeHTML(file)) {
+			return (JSRecognizer.getJSReferenceVersion(file, JS_LIB_NAME)!=null);
 		}
 		return false;
 	}
