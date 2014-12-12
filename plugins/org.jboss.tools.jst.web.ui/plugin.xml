@@ -1174,7 +1174,7 @@
 			target="org.eclipse.wst.html.HTML_DEFAULT, org.eclipse.wst.html.HTML_DECLARATION" />
 	    <provisionalDefinition
 			type="preferencepages"
-			value="org.eclipse.wst.html.ui.preferences.html, org.eclipse.wst.html.ui.preferences.source, org.eclipse.wst.html.ui.preferences.templates, org.eclipse.wst.html.ui.preferences.styles,org.eclipse.wst.html.ui.preferences.validation, org.eclipse.wst.html.ui.preferences.contentassist"
+			value="org.eclipse.wst.html.ui.preferences.html, org.eclipse.wst.html.ui.preferences.source, org.eclipse.wst.html.ui.preferences.templates, org.eclipse.wst.html.ui.preferences.styles,org.eclipse.wst.html.ui.preferences.validation, org.jboss.tools.jst.web.ui.internal.html.ui.preferences.syntax.validation, org.eclipse.wst.html.ui.preferences.contentassist"
 			target="org.eclipse.wst.html.core.htmlsource" />
 		<provisionalDefinition
       		type="showintarget"
@@ -1225,6 +1225,10 @@
 			type="preferencepages"
 		 	value="org.eclipse.wst.html.ui.preferences.html, org.eclipse.wst.html.ui.preferences.source, org.eclipse.wst.html.ui.preferences.templates, org.eclipse.wst.html.ui.preferences.styles,org.eclipse.wst.html.ui.preferences.validation, org.eclipse.wst.html.ui.preferences.contentassist"
 			target="jsf.facelet" />
+  		<provisionalConfiguration
+			type="org.eclipse.jface.text.quickassist.IQuickAssistProcessor"
+			class="org.jboss.tools.jst.web.ui.internal.html.text.correction.HTMLSyntaxValidationQuickFixProcessor"
+			target="org.eclipse.wst.html.HTML_DEFAULT" />
 		<provisionalDefinition
       		type="showintarget"
             value="org.eclipse.jdt.ui.PackageExplorer"
@@ -1278,7 +1282,30 @@
 	  <documentationTextHover class="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.info.FaceletTagInfoHoverProcessor" target="org.eclipse.jst.jsp.SCRIPT.JSP_EL2" />
 	  
 	</extension>
-
+	
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			name="%HTML_SyntaxValidation"
+			category="org.eclipse.wst.html.ui.preferences.html"
+			class="org.jboss.tools.jst.web.ui.internal.html.preferences.HTMLSyntaxValidationPreferencePage"
+			id="org.jboss.tools.jst.web.ui.internal.html.ui.preferences.syntax.validation">
+		</page>
+	</extension>
+	
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			name="%HTML_Property_SyntaxValidation"
+			class="org.jboss.tools.jst.web.ui.internal.html.preferences.HTMLSyntaxValidationPreferencePage"
+			id="org.jboss.tools.jst.web.ui.internal.html.ui.propertyPage.project.syntax.validation"
+			category="ValidationPropertiesPage">
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject">
+					
+				</adapt>
+			</enabledWhen>
+		</page>
+	</extension>
+	
    <extension
          point="org.eclipse.jdt.ui.javaEditorTextHovers">
       <hover
