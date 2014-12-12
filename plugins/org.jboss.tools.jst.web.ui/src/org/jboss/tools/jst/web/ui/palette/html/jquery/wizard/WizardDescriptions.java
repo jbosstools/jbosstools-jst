@@ -29,6 +29,11 @@ public class WizardDescriptions extends NLS {
 	public static String buttonIcon;
 	public static String buttonIconOnly;
 
+	public static String canvasAddScriptTemplate;
+	public static String canvasHeight;
+	public static String canvasTitle;
+	public static String canvasWidth;
+
 	public static String checkboxesLegend;
 	public static String checkboxIsSelected;
 

@@ -55,6 +55,7 @@ public class JSTWebUIImages extends CommonUIImages{
 	public static final String AUDIO_IMAGE    = WIZARDS_PATH + "AudioWizBan.png"; //$NON-NLS-1$
 	public static final String LABEL_IMAGE    = WIZARDS_PATH + "LabelWizBan.png"; //$NON-NLS-1$
 	public static final String JS_CSS_IMAGE    = WIZARDS_PATH + "JS-CSSWizBan.png"; //$NON-NLS-1$
+	public static final String CANVAS_IMAGE    = WIZARDS_PATH + "CanvasWizBan.png"; //$NON-NLS-1$
 	
 	public static final String DROP_DOWN_LIST_IMAGE    = VIEWS_PATH + "list.png"; //$NON-NLS-1$
 	public static final String FILTER_IMAGE    = VIEWS_PATH + "filter.png"; //$NON-NLS-1$

@@ -106,7 +106,6 @@ public interface IonicConstants extends HTMLConstants {
 	public String ATTR_SIDE = "side";
 	public String ATTR_SLIDE_INTERVAL = "slide-interval";
 	public String ATTR_START_Y = "start-y";
-	public String ATTR_TITLE = TAG_TITLE;
 	public String ATTR_TOGGLE_CLASS = "toggle-class";
 	public String ATTR_ZOOMING = "zooming";
 

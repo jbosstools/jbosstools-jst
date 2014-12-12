@@ -44,6 +44,8 @@ import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteCategory;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteGroup;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteVersionGroup;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteModelImpl;
 
 /**
@@ -270,6 +272,34 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 
 		wizardPage.setEditorValue(EDITOR_ID_FORM, "formID");
 		assertAttrExists(wizard, ATTR_FORM, "formID");
+		
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewCanvasWizard() {
+		IWizardPage currentPage = runToolEntry("Canvas", true);
+
+		assertTrue(currentPage instanceof NewCanvasWizardPage);
+
+		NewCanvasWizardPage wizardPage = (NewCanvasWizardPage)currentPage;
+		NewCanvasWizard wizard = (NewCanvasWizard)wizardPage.getWizard();
+
+		wizardPage.setEditorValue(EDITOR_ID_ID, "myCanvas");
+		assertAttrExists(wizard, EDITOR_ID_ID, "myCanvas");
+
+		assertTextDoesNotExist(wizard, ATTR_WIDTH);
+		wizardPage.setEditorValue(ATTR_WIDTH, "149");
+		assertAttrExists(wizard, ATTR_WIDTH, "149");
+		
+		assertTextDoesNotExist(wizard, ATTR_HEIGHT);
+		wizardPage.setEditorValue(ATTR_HEIGHT, "151");
+		assertAttrExists(wizard, ATTR_HEIGHT, "151");
+
+		assertTextDoesNotExist(wizard, TAG_SCRIPT);
+		wizardPage.setEditorValue(EDITOR_ID_ADD_SCRIPT_TEMPLATE, TRUE);
+		assertTextExists(wizard, TAG_SCRIPT);
+		wizardPage.setEditorValue(EDITOR_ID_ADD_SCRIPT_TEMPLATE, FALSE);
+		assertTextDoesNotExist(wizard, TAG_SCRIPT);
 		
 		compareGeneratedAndInsertedText(wizard);
 	}

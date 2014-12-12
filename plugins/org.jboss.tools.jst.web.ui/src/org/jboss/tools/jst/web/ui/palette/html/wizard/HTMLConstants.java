@@ -21,4 +21,6 @@ public interface HTMLConstants extends org.jboss.tools.jst.web.html.HTMLConstant
 
 	public String EDITOR_ID_AUTOPLAY = ATTR_AUTOPLAY;
 	public String EDITOR_ID_PRELOAD = ATTR_PRELOAD;
+
+	public String EDITOR_ID_ADD_SCRIPT_TEMPLATE = "add-script-template";
 }

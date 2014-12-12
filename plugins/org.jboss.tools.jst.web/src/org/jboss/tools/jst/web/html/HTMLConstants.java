@@ -148,6 +148,7 @@ public interface HTMLConstants {
 	public String ATTR_START = "start";
 	public String ATTR_STEP = "step";
 	public String ATTR_STYLE = "style";
+	public String ATTR_TITLE = TAG_TITLE;
 	public String ATTR_TYPE = "type";
 	public String ATTR_USEMAP = "usemap";
 	public String ATTR_VALUE = "value";

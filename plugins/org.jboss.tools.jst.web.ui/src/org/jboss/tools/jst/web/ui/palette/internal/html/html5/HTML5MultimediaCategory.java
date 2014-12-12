@@ -14,6 +14,7 @@ import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewAudioWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewImageWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewVideoWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.AbstractPaletteCategory;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteItemImpl;
 /**
@@ -51,6 +52,16 @@ public class HTML5MultimediaCategory extends AbstractPaletteCategory {
 				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
 						"palette/Audio.png"), // image path
 				NewAudioWizard.class, // wizard class
+				null // corrector
+		);
+		add(item);
+		item = new PaletteItemImpl(
+				"Canvas", // label
+				"<html>\n<b>Canvas:</b><br>\n&lt;canvas id=\"\" width=\"\" height=\"\"></canvas><br>\n</html>", // tooltip
+				"canvas ", // keywords
+				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
+						"palette/Canvas.png"), // image path
+				NewCanvasWizard.class, // wizard class
 				null // corrector
 		);
 		add(item);
