@@ -42,6 +42,7 @@ public class JstWebKbAllTests {
 		suite.addTestSuite(JQueryIDTest.class);
 		suite.addTestSuite(JQueryRecognizerTest.class);
 		suite.addTestSuite(FileNamesCATest.class);
+		suite.addTestSuite(DatalistsCATest.class);
 		suite.addTestSuite(AngularJSTest.class);
 		suite.addTestSuite(KbModelWithSeveralJarCopiesTest.class);
 		suite.addTestSuite(CSSMediaRuleTest.class);

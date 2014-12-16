@@ -8,4 +8,5 @@
 	<component extended="false" name="audio" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.AudioAttributeProvider"/>
 	<component extended="false" name="source" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.VideoAttributeProvider, org.jboss.tools.jst.web.kb.internal.taglib.html.AudioAttributeProvider"/>
 	<component extended="false" name="a" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.AAttributeProvider"/>
+	<component extended="false" name="input" attributeProvider="org.jboss.tools.jst.web.kb.internal.taglib.html.DatalistsAttributeProvider"/>
 </tag-lib>
