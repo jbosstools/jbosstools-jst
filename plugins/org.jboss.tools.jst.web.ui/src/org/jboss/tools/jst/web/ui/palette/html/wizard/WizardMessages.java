@@ -31,6 +31,7 @@ public class WizardMessages extends NLS {
 	public static String actionBackLabel;
 	public static String actionCloseLabel;
 	public static String actionExternalLabel;
+	public static String addInput;
 	public static String addList;
 	public static String addReferencesToJSCSSLabel;
 	public static String addReferencesToJSCSSTooltip;
@@ -322,6 +323,9 @@ public class WizardMessages extends NLS {
 
 	public static String newCanvasWizardTitle;
 	public static String newCanvasWizardDescription;
+
+	public static String newDatalistwWizardTitle;
+	public static String newDatalistWizardDescription;
 
 	public static String newLabelWizardTitle;
 	public static String newLabelWizardDescription;

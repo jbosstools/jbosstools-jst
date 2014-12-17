@@ -37,6 +37,7 @@ public interface HTMLConstants {
 	public String TAG_BUTTON = "button";
 	public String TAG_CANVAS = "canvas";
 	public String TAG_COMMAND = "command";
+	public String TAG_DATALIST = "datalist";
 	public String TAG_DEL = "del";
 	public String TAG_DETAILS = "details";
 	public String TAG_DIALOG = "dialog";
@@ -116,6 +117,7 @@ public interface HTMLConstants {
 	public String ATTR_ISMAP = "ismap";
 	public String ATTR_KEYTYPE = "keytype";
 	public String ATTR_KIND = "kind";
+	public String ATTR_LIST = "list";
 	public String ATTR_LABEL = "label";
 	public String ATTR_LOOP = "loop";
 	public String ATTR_LOW = "low";

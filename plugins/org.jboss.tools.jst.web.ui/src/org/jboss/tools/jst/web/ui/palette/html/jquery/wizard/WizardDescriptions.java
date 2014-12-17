@@ -53,6 +53,8 @@ public class WizardDescriptions extends NLS {
 	public static String dataPlaceholder;
 	public static String dataURL;
 
+	public static String datalistAddInput;
+
 	public static String delCite;
 	public static String delDatetime;
 
@@ -163,6 +165,9 @@ public class WizardDescriptions extends NLS {
 	public static String olReversed;
 	public static String olStart;
 	public static String olType;
+
+	public static String optionLabel;
+	public static String optionValue;
 
 	public static String pageBackButton;
 	public static String pageFooter;

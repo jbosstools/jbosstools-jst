@@ -46,6 +46,8 @@ import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteVersionGroup;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWizardPage;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteModelImpl;
 
 /**
@@ -300,6 +302,27 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 		assertTextExists(wizard, TAG_SCRIPT);
 		wizardPage.setEditorValue(EDITOR_ID_ADD_SCRIPT_TEMPLATE, FALSE);
 		assertTextDoesNotExist(wizard, TAG_SCRIPT);
+		
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewDatalistWizard() {
+		IWizardPage currentPage = runToolEntry("Datalist", true);
+
+		assertTrue(currentPage instanceof NewDatalistWizardPage);
+
+		NewDatalistWizardPage wizardPage = (NewDatalistWizardPage)currentPage;
+		NewDatalistWizard wizard = (NewDatalistWizard)wizardPage.getWizard();
+
+		wizardPage.setEditorValue(EDITOR_ID_ID, "myDatalist");
+		assertAttrExists(wizard, EDITOR_ID_ID, "myDatalist");
+
+		assertTextDoesNotExist(wizard, TAG_INPUT);
+		wizardPage.setEditorValue(TAG_INPUT, TRUE);
+		assertTextExists(wizard, TAG_INPUT);
+		assertAttrExists(wizard, ATTR_LIST, "myDatalist");
+		wizardPage.setEditorValue(EDITOR_ID_ID, "");
+		assertAttrExists(wizard, ATTR_LIST, "datalist-1");
 		
 		compareGeneratedAndInsertedText(wizard);
 	}

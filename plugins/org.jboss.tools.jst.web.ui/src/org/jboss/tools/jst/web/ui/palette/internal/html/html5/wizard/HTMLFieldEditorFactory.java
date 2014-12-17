@@ -24,13 +24,41 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 public class HTMLFieldEditorFactory implements HTMLConstants {
 
 	/**
-	 * Used in Context.
+	 * Used in New Context context.
 	 * @return checkbox field editor unselected by default
 	 */
 	public static IFieldEditor createAddScriptTemplateEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_ADD_SCRIPT_TEMPLATE, 
 				WizardMessages.addScriptTemplate, false,
 				WizardDescriptions.canvasAddScriptTemplate);
+	}
+
+	/**
+	 * Used in New Datalist wizard.
+	 * @return text efield editor for option label
+	 */
+	public static IFieldEditor createLabelEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_LABEL, WizardMessages.labelLabel, "",
+				WizardDescriptions.optionLabel);
+	}
+
+	/**
+	 * Used in New Datalist wizard.
+	 * @return text efield editor for option value
+	 */
+	public static IFieldEditor createValueEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_VALUE, WizardMessages.valueLabel, "",
+				WizardDescriptions.optionValue);
+	}
+
+	/**
+	 * Used in New Datalist wizard.
+	 * @return checkbox field editor unselected by default
+	 */
+	public static IFieldEditor createAddInputEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(TAG_INPUT, 
+				WizardMessages.addInput, false,
+				WizardDescriptions.datalistAddInput);
 	}
 
 }

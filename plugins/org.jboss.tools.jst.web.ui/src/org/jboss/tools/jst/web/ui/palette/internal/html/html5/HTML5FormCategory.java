@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.palette.internal.html.html5;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.AbstractPaletteCategory;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteItemImpl;
 /**
@@ -40,6 +41,16 @@ public class HTML5FormCategory extends AbstractPaletteCategory {
 				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
 						"palette/Label.png"), // image path
 				NewLabelWizard.class, // wizard
+				null // corrector
+		);
+		add(item);
+		item = new PaletteItemImpl(
+				"Datalist", // label
+				"<html>\n<b>Datalist:</b><br>\n&lt;datalist><br>\n...<br>\n&lt;/datalist>\n</html>", // tooltip
+				"Datalist", // keywords
+				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
+						"palette/Datalist.png"), // image path
+				NewDatalistWizard.class, // wizard
 				null // corrector
 		);
 		add(item);

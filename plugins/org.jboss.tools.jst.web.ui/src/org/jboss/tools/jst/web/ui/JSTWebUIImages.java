@@ -59,6 +59,7 @@ public class JSTWebUIImages extends CommonUIImages{
 	
 	public static final String DROP_DOWN_LIST_IMAGE    = VIEWS_PATH + "list.png"; //$NON-NLS-1$
 	public static final String FILTER_IMAGE    = VIEWS_PATH + "filter.png"; //$NON-NLS-1$
+	public static final String DATALIST_IMAGE  = WIZARDS_PATH + "DatalistWizBan.png"; //$NON-NLS-1$
 
 	private static JSTWebUIImages INSTANCE;
 	
