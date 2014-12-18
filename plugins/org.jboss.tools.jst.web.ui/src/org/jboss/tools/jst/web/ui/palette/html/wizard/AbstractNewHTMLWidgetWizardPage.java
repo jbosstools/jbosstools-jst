@@ -14,7 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.SystemUtils;
 import org.eclipse.compare.Splitter;
@@ -549,6 +551,11 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 	static Color valueColor = new Color(null, 42, 0, 255);
 	static Color tagColor = new Color(null, 63, 127, 127);
 	static Color attrColor = new Color(null, 127, 0, 127);
+	static Color commentColor = new Color(null, 63, 127, 127);
+	static Color keywordColor = new Color(null, 127, 0, 85);
+
+	static String SCRIPT_OPEN = "<script";
+	static String SCRIPT_CLOSE = "</script>";
 
 	/**
 	 * Creates elementary coloring of xml.
@@ -559,6 +566,7 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 		ArrayList<StyleRange> regionList = new ArrayList<StyleRange>();
 		boolean inQuota = false;
 		boolean inTag = false;
+		boolean scriptDetected = false;
 		int offset = 0;
 		StringBuilder name = new StringBuilder();
 		for (int i = 0; i < text.length(); i++) {
@@ -575,12 +583,27 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 					offset = i;
 				}
 			} else if(ch == '>' && !inQuota) {
+				if(inTag && name.toString().equalsIgnoreCase(SCRIPT_OPEN)) {
+					scriptDetected = true;
+				}
 				inTag = false;
 				if(name.length() > 0) {
 					addRange(offset, name.length(), tagColor, false, regionList);
 					name.setLength(0);
 				}
 				addRange(i, 1, tagColor, false, regionList);
+				if(scriptDetected) {
+					int j = text.toLowerCase().indexOf(SCRIPT_CLOSE, i + 1);
+					if(j < 0) j = text.length();
+					addRangesInJavaScript(text, i + 1, j, regionList);
+					if(j < text.length()) {
+						addRange(j, SCRIPT_CLOSE.length(), tagColor, false, regionList);
+						i = j + SCRIPT_CLOSE.length() - 1;
+					} else {
+						i = text.length();
+					}
+					scriptDetected = false;
+				}
 			} else if(ch == '<' && !inQuota) {
 				inTag = true;
 				name.setLength(0);
@@ -594,6 +617,9 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 			} else if(name.length() > 0) {
 				Color c = name.charAt(0) == '<' ? tagColor : attrColor;
 				addRange(offset, name.length(), c, false, regionList);
+				if(inTag && name.toString().equalsIgnoreCase(SCRIPT_OPEN)) {
+					scriptDetected = true;
+				}
 				name.setLength(0);
 			}
 
@@ -601,9 +627,83 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 		return (StyleRange[])regionList.toArray(new StyleRange[0]);
 	}
 
+	static Set<String> keywords = new HashSet<String>();
+	static {
+		String _keywords = "abstract boolean break byte case catch char class const continue debugger default delete do double else enum export extends false final finally float for function goto if implements import in instanceof int interface long native new null package private protected public return short static super switch synchronized this throw throws transient true try typeof var void volatile while with ";
+		for (String keyword: _keywords.split(" ")) {
+			keywords.add(keyword);
+		}
+	}
+
+	static void addRangesInJavaScript(String text, int startOffset, int endOffset, ArrayList<StyleRange> regionList) {
+		boolean inLineComments = false;
+		boolean inBlockComments = false;
+		char quota = '\0';
+		boolean word = false;
+		StringBuilder name = new StringBuilder();
+		int offset = -1;
+		for (int i = startOffset; i < endOffset; i++) {
+			char ch = text.charAt(i);
+			if(inBlockComments) {
+				if(ch == '*' && i + 1 < endOffset && text.charAt(i + 1) == '/') {
+					addRange(offset, i + 2 - offset, commentColor, false, regionList);
+					inBlockComments = false;
+					i++;
+				}
+			} else if(inLineComments) {
+				if(ch == '\n' || ch == '\r') {
+					addRange(offset, i - offset, commentColor, false, regionList);
+					inLineComments = false;
+				}
+			} else if(quota != '\0') {
+				if(ch == quota) {
+					quota = '\0';
+					addRange(offset, i + 1 - offset, valueColor, false, regionList);
+				}
+			} else if(ch == '\'' || ch =='"') {
+				quota = ch;
+				offset = i;
+			} else {
+				if(Character.isLetterOrDigit(ch) || ch == '_') {
+					if(word) {
+						name.append(ch);
+					} else if(Character.isJavaIdentifierStart(ch)) {
+						word = true;
+						name.append(ch);
+						offset = i;
+					}
+				} else {
+					if(word && name.length() > 0) {
+						if(keywords.contains(name.toString())) {
+							addRange(offset, name.length(), keywordColor, false, true, regionList);
+						}
+						name.setLength(0);
+					}
+					word = false;
+				}
+				if(ch == '/' && i + 1 < endOffset) {
+					char ch1 = text.charAt(i + 1);
+					if(ch1 == '/') {
+						inLineComments = true;
+						offset = i;
+					} else if(ch1 == '*') {
+						inBlockComments = true;
+						offset = i;
+						i++;
+					}
+				}
+			}
+		}
+	}
+
 	static void addRange(int offset, int length, Color c, boolean italic, ArrayList<StyleRange> regionList) {
+		addRange(offset, length, c, italic, false, regionList);
+	}
+
+	static void addRange(int offset, int length, Color c, boolean italic, boolean bold, ArrayList<StyleRange> regionList) {
 		StyleRange region = new StyleRange(offset,length, c, null);
 		if(italic) region.fontStyle = SWT.ITALIC;
+		else if(bold) region.fontStyle = SWT.BOLD;
 		regionList.add(region);
 	}
 }

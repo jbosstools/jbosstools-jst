@@ -30,6 +30,7 @@ public class JstWebUiAllTests {
 		suite.addTestSuite(DefaultJSLibsText.class);
 
 		TestSuite s = new TestSuite("Palette content");
+		s.addTestSuite(StyleRangeInPaletteWizardPreviewTest.class);
 		s.addTestSuite(CAPaletteJQM14TemplatesTest.class);
 		s.addTestSuite(CAPaletteJQM13TemplatesTest.class);
 		s.addTestSuite(CAPaletteHTML5TemplatesTest.class);
