@@ -48,6 +48,8 @@ import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWi
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizardPage;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteModelImpl;
 
 /**
@@ -323,6 +325,46 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 		assertAttrExists(wizard, ATTR_LIST, "myDatalist");
 		wizardPage.setEditorValue(EDITOR_ID_ID, "");
 		assertAttrExists(wizard, ATTR_LIST, "datalist-1");
+		
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewTableWizard() {
+		IWizardPage currentPage = runToolEntry("Table", true);
+
+		assertTrue(currentPage instanceof NewTableWizardPage);
+
+		NewTableWizardPage wizardPage = (NewTableWizardPage)currentPage;
+		NewTableWizard wizard = (NewTableWizard)wizardPage.getWizard();
+	
+		assertTextDoesNotExist(wizard, TAG_CAPTION);
+		wizardPage.setEditorValue(TAG_CAPTION, "Some Table");
+		assertTextExists(wizard, TAG_CAPTION);
+		assertTextExists(wizard, "Some Table");
+		wizardPage.setEditorValue(TAG_CAPTION, "");
+		assertTextDoesNotExist(wizard, TAG_CAPTION);
+
+		wizardPage.setEditorValue(EDITOR_ID_ID, "myTable");
+		assertAttrExists(wizard, EDITOR_ID_ID, "myTable");
+
+		assertTextExists(wizard, TAG_THEAD);
+		assertTextExists(wizard, TAG_TFOOT);
+		wizardPage.setEditorValue(EDITOR_ID_TABLE_KIND, TABLE_KIND_SIMPLE);
+		assertTextDoesNotExist(wizard, TAG_THEAD);
+		assertTextDoesNotExist(wizard, TAG_TFOOT);
+		wizardPage.setEditorValue(EDITOR_ID_TABLE_KIND, TABLE_KIND_ADVANCED);
+		assertTextExists(wizard, TAG_THEAD);
+		assertTextExists(wizard, TAG_TFOOT);
+
+		wizardPage.setEditorValue(TAG_TFOOT, FALSE);
+		assertTextDoesNotExist(wizard, TAG_TFOOT);
+		wizardPage.setEditorValue(TAG_TFOOT, TRUE);
+		assertTextExists(wizard, TAG_TFOOT);
+		
+		wizardPage.setEditorValue(TAG_THEAD, FALSE);
+		assertTextDoesNotExist(wizard, TAG_THEAD);
+		wizardPage.setEditorValue(TAG_THEAD, TRUE);
+		assertTextExists(wizard, TAG_THEAD);
 		
 		compareGeneratedAndInsertedText(wizard);
 	}

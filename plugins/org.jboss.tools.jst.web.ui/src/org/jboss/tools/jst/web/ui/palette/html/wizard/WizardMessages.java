@@ -31,6 +31,8 @@ public class WizardMessages extends NLS {
 	public static String actionBackLabel;
 	public static String actionCloseLabel;
 	public static String actionExternalLabel;
+	public static String addFooter;
+	public static String addHeader;
 	public static String addInput;
 	public static String addList;
 	public static String addReferencesToJSCSSLabel;
@@ -48,6 +50,7 @@ public class WizardMessages extends NLS {
 	public static String barPositionLabel;
 	public static String borderLabel;
 	public static String buttonTypeLabel;
+	public static String captionLabel;
 	public static String challengeLabel;
 	public static String charsetLabel;
 	public static String checkedLabel;
@@ -90,6 +93,7 @@ public class WizardMessages extends NLS {
 	public static String expandedIconLabel;
 	public static String fieldSetLabel;
 	public static String fixedPositionLabel;
+	public static String footContentLabel;
 	public static String footerLabel;
 	public static String forLabel;
 	public static String formLabel;
@@ -187,6 +191,8 @@ public class WizardMessages extends NLS {
 	public static String stepLabel;
 	public static String stripesLabel;
 	public static String swipeCloseLabel;
+	public static String tableKindSimpleLabel;
+	public static String tableKindAdvancedLabel;
 	public static String tabsActivationLabel;
 	public static String tabsActivationClickLabel;
 	public static String tabsActivationHoverLabel;
@@ -299,6 +305,7 @@ public class WizardMessages extends NLS {
 
 	public static String newTableTitle;
 	public static String newTableDescription;
+	public static String newHTML5TableDescription;
 
 	public static String newTabsTitle;
 	public static String newTabsDescription;

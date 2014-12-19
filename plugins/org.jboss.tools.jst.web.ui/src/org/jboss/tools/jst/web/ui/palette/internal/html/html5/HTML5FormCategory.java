@@ -13,7 +13,9 @@ package org.jboss.tools.jst.web.ui.palette.internal.html.html5;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.AbstractPaletteCategory;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteItemImpl;
 /**
@@ -24,6 +26,16 @@ import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteItemImpl;
 public class HTML5FormCategory extends AbstractPaletteCategory {
 
 	public HTML5FormCategory() {
+		PaletteItemImpl table = new PaletteItemImpl(
+				"Table", // label
+				"<html>\n<b>Table:</b><br>\n&lt;table data-role=\"table\"><br>\n...<br>\n&lt;/table>\n</html>", // tooltip
+				"table ", // keywords
+				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
+						"palette/Table.png"), // image path
+				NewTableWizard.class, // wizard class
+				null // corrector
+		);
+		add(table);
 		PaletteItemImpl item = new PaletteItemImpl(
 				"Form", // label
 				"<html>\n<b>Form:</b><br>\n&lt;form><br>\n...<br>\n&lt;/form>\n</html>", // tooltip

@@ -10,6 +10,9 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.WizardDescriptions;
@@ -59,6 +62,67 @@ public class HTMLFieldEditorFactory implements HTMLConstants {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(TAG_INPUT, 
 				WizardMessages.addInput, false,
 				WizardDescriptions.datalistAddInput);
+	}
+
+	/**
+	 * Used in New Table wizard.
+	 * @return 
+	 */
+	public static IFieldEditor createCaptionEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(TAG_CAPTION, WizardMessages.captionLabel, "",
+				WizardDescriptions.tableCaption);
+	}
+
+	static String[] TABLE_KIND_LIST = {TABLE_KIND_SIMPLE, TABLE_KIND_ADVANCED};
+	static String[] TABLE_KIND_LABEL_LIST = {WizardMessages.tableKindSimpleLabel, WizardMessages.tableKindAdvancedLabel};
+
+	/**
+	 * Used in New Table wizard.
+	 * @return
+	 */
+	public static IFieldEditor createTableKindEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				EDITOR_ID_TABLE_KIND, 
+				WizardMessages.kindLabel, 
+				toList(TABLE_KIND_LABEL_LIST), 
+				toList(TABLE_KIND_LIST), 
+				TABLE_KIND_ADVANCED,
+				WizardDescriptions.tableKind);
+	}
+
+	/**
+	 * Used in New Table wizard.
+	 * @return 
+	 */
+	public static IFieldEditor createAddHeaderEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(TAG_THEAD, 
+				WizardMessages.addHeader, true,
+				WizardDescriptions.tableAddHeader);
+	}
+
+	/**
+	 * Used in New Table wizard.
+	 * @return 
+	 */
+	public static IFieldEditor createAddFooterEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(TAG_TFOOT, 
+				WizardMessages.addFooter, true,
+				WizardDescriptions.tableAddFooter);
+	}
+
+	/**
+	 * Used in New Table wizard.
+	 * @return 
+	 */
+	public static IFieldEditor createColumnFootContentEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(EDITOR_ID_FOOTER_CONTENT, WizardMessages.footContentLabel, "",
+				WizardDescriptions.tableFootContent);
+	}
+
+	static List<String> toList(String[] values) {
+		List<String> list = new ArrayList<String>();
+		for (String s: values) list.add(s);
+		return list;
 	}
 
 }

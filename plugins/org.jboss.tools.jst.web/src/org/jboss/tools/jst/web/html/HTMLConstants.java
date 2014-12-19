@@ -36,6 +36,7 @@ public interface HTMLConstants {
 	public String TAG_BODY = "body";
 	public String TAG_BUTTON = "button";
 	public String TAG_CANVAS = "canvas";
+	public String TAG_CAPTION = "caption";
 	public String TAG_COMMAND = "command";
 	public String TAG_DATALIST = "datalist";
 	public String TAG_DEL = "del";
@@ -74,6 +75,7 @@ public interface HTMLConstants {
 	public String TAG_TABLE = "table";
 	public String TAG_TBODY = "tbody";
 	public String TAG_TEXTAREA = "textarea";
+	public String TAG_TFOOT = "tfoot";
 	public String TAG_THEAD = "thead";
 	public String TAG_TD = "td";
 	public String TAG_TH = "th";

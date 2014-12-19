@@ -36,7 +36,7 @@ public class CAPaletteJQM13TemplatesTest extends CAHtml5PaletteTemplatesTest {
 	}
 
 	public void testTable() throws Exception {
-		doTestTemplate("", "table", decorateDisplay("Table"), 0);
+		doTestTemplate("", "table", decorateDisplay("Table"), 1); //First comes Table - HTML 5.0
 	}
 
 	public void testCollapsible() throws Exception {

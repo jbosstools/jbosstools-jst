@@ -23,4 +23,11 @@ public interface HTMLConstants extends org.jboss.tools.jst.web.html.HTMLConstant
 	public String EDITOR_ID_PRELOAD = ATTR_PRELOAD;
 
 	public String EDITOR_ID_ADD_SCRIPT_TEMPLATE = "add-script-template";
+
+	public String EDITOR_ID_TABLE_KIND = "table-kind";
+
+	public String TABLE_KIND_SIMPLE = "Simple";
+	public String TABLE_KIND_ADVANCED = "Advanced";
+
+	public String EDITOR_ID_FOOTER_CONTENT = "footer-content";
 }
