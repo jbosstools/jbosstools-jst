@@ -29,6 +29,8 @@ public class PaletteUIMessages extends NLS {
 	public static String IMPORT;
 	public static String PALETTE_FILTER_MESSAGE;
 	public static String PALETTE_FILTER_TOOLTIP;
+	public static String TYPE_MOST_POPULAR;
+	public static String TYPE_LAST_USED;
 	
 	private PaletteUIMessages() {
 	}

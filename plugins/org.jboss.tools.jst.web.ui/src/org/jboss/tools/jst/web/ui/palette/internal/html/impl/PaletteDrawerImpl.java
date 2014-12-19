@@ -34,6 +34,16 @@ public class PaletteDrawerImpl extends PaletteDrawer{
 		loadVersion(group.getSelectedVersionGroup().getVersion());
 	}
 	
+	public void loadVersion(String name){
+		IHTMLLibraryVersion version = getVersion(name);
+		loadVersion(version);
+	}
+	
+	public void setPreferredVersion(String name){
+		IHTMLLibraryVersion version = getVersion(name);
+		group.getPaletteModel().getPaletteContents().setPreferredVersion(getLabel(), version);
+	}
+	
 	@SuppressWarnings("rawtypes")
 	public void loadVersion(IHTMLLibraryVersion version){
 		group.setSelectedVersion(version);
@@ -49,8 +59,21 @@ public class PaletteDrawerImpl extends PaletteDrawer{
 		}
 	}
 	
-	public IHTMLLibraryVersion[] getVersions(){
-		return group.getVersions();
+	public String[] getVersions(){
+		String[] strings = new String[group.getVersions().length];
+		for(int i = 0; i < group.getVersions().length; i++){
+			strings[i] = group.getVersions()[i].toString();
+		}
+		return strings;
+	}
+	
+	private IHTMLLibraryVersion getVersion(String versionString){
+		for(IHTMLLibraryVersion version : group.getVersions()){
+			if(version.toString().equals(versionString)){
+				return version;
+			}
+		}
+		return null;
 	}
 	
 	public IHTMLLibraryVersion getVersion(){

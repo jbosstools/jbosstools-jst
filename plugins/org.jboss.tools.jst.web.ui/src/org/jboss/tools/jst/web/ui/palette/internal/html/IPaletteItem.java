@@ -22,6 +22,14 @@ import org.jboss.tools.common.model.ui.views.palette.IPositionCorrector;
  *
  */
 public interface IPaletteItem {
+	
+	/**
+	 * Returns id, format : /<groupName>/<version>/<itemName>
+	 * 
+	 * @return
+	 */
+	public String getId();
+	
 	/**
 	 * Returns parent palette element
 	 * 
@@ -123,4 +131,39 @@ public interface IPaletteItem {
 	 * @return IPositionCorrector
 	 */
 	public IPositionCorrector createPositionCorrector();
+	
+	/**
+	 * Returns Count Index
+	 * last called item has max count index
+	 * 
+	 * @return
+	 */
+	public long getCountIndex();
+	
+	/**
+	 * Sets Count Index, only for initialization
+	 * 
+	 * @param count
+	 */
+	public void setCountIndex(long count);
+	
+	/**
+	 * Returns number of calls
+	 * 
+	 * @return
+	 */
+	public long getNumberOfCalls();
+
+	/**
+	 * Sets number of calls, only for initialization
+	 * 
+	 * @param numberOfCalls
+	 */
+	public void setNumberOfCalls(long numberOfCalls);
+	
+	/**
+	 * This method is used to increment counts when item is used
+	 * 
+	 */
+	public void called();
 }

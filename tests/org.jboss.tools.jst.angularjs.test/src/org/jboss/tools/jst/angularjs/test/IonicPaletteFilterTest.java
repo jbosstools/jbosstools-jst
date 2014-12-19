@@ -17,23 +17,23 @@ public class IonicPaletteFilterTest extends PaletteFilterTest{
 		super();
 	}
 	public void testIonicRecognizer(){
-		checkRecognizer("recogn_ionic.html", new String[]{"Ionic", "HTML"}, true);
+		checkRecognizer("recogn_ionic.html", new String[]{"", "Ionic", "HTML"}, true);
 	}
 
 	public void testIonicRecognizer2(){
-		checkRecognizer("recogn_ionic.html", new String[]{"A Test", "Ionic", "jQuery Mobile", "HTML"}, false);
+		checkRecognizer("recogn_ionic.html", new String[]{"", "A Test", "Ionic", "jQuery Mobile", "HTML"}, false);
 	}
 	
 	public void testJQM13Recognizer2(){
-		checkRecognizer("recogn_jqm13.html", new String[]{"A Test", "Ionic", "jQuery Mobile", "HTML"}, false);
+		checkRecognizer("recogn_jqm13.html", new String[]{"", "A Test", "Ionic", "jQuery Mobile", "HTML"}, false);
 	}
 	
 	public void testJQM14Recognizer2(){
-		checkRecognizer("recogn_jqm14.html", new String[]{"A Test", "Ionic", "jQuery Mobile", "HTML"}, false);
+		checkRecognizer("recogn_jqm14.html", new String[]{"", "A Test", "Ionic", "jQuery Mobile", "HTML"}, false);
 	}
 	
 	public void testHTML5Recognizer2(){
-		checkRecognizer("recogn_html5.html", new String[]{"A Test", "Ionic", "jQuery Mobile", "HTML"}, false);
+		checkRecognizer("recogn_html5.html", new String[]{"", "A Test", "Ionic", "jQuery Mobile", "HTML"}, false);
 	}
 
 }

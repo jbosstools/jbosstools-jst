@@ -47,6 +47,7 @@ public class JstWebUiAllTests {
 		s.addTestSuite(FormPropertySheetPageTest.class);
 		s.addTestSuite(SwitchPaletteTest.class);
 		s.addTestSuite(PaletteFilterTest.class);
+		s.addTestSuite(DynamicPaletteGroupTest.class);
 		suite.addTest(
 				new ProjectImportTestSetup(s,
 				"org.jboss.tools.jst.web.ui.test",

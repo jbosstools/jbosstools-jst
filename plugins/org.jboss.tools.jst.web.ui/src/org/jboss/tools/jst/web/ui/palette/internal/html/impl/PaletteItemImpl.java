@@ -41,6 +41,8 @@ public class PaletteItemImpl implements IPaletteItem{
 	private String endText="";
 	private IPaletteCategory category;
 	private ArrayList<String> keywordList;
+	private long numberOfCalls, count;
+	private static long globalCount;
 
 	public PaletteItemImpl(String name, String toolTip, String keywords,
 			ImageDescriptor imageDescriptor, Class<? extends IPaletteItemWizard> wizardClass,
@@ -161,4 +163,51 @@ public class PaletteItemImpl implements IPaletteItem{
 	public void setCategory(IPaletteCategory category) {
 		this.category = category;
 	}
+
+	@Override
+	public String getId() {
+		return "/"+category.getVersionGroup().getGroup().getName()+
+				"/"+category.getVersionGroup().getVersion().toString()+
+				"/"+getName();
+	}
+
+	@Override
+	public long getCountIndex() {
+		return count;
+	}
+	
+	@Override
+	public void setCountIndex(long count) {
+		this.count = count;
+		if(count > globalCount){
+			globalCount = count;
+		}
+	}
+	
+	public static void setStaticCountIndex(long count) {
+			globalCount = count;
+	}
+
+	@Override
+	public long getNumberOfCalls() {
+		return numberOfCalls;
+	}
+
+	@Override
+	public void setNumberOfCalls(long numberOfCalls) {
+		this.numberOfCalls = numberOfCalls;
+	}
+	
+	@Override
+	public void called() {
+		numberOfCalls++;
+		globalCount++;
+		count = globalCount;
+		if(numberOfCalls == Long.MAX_VALUE || globalCount == Long.MAX_VALUE){
+			((PaletteModelImpl)getCategory().getVersionGroup().getGroup().getPaletteModel()).savePaletteItems();
+		}else{
+			((PaletteModelImpl)getCategory().getVersionGroup().getGroup().getPaletteModel()).savePaletteItem(this);
+		}
+	}
+	
 }

@@ -14,8 +14,9 @@ import org.eclipse.draw2d.FocusEvent;
 import org.eclipse.draw2d.FocusListener;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.gef.palette.PaletteDrawer;
+import org.jboss.tools.jst.web.ui.palette.internal.HTML5DynamicDrawerFigure;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.HTML5DynamicPaletteGroup;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteDrawerImpl;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteCategory;
 
 public class MobileDrawerEditPart extends CustomDrawerEditPart {
 
@@ -30,7 +31,25 @@ public class MobileDrawerEditPart extends CustomDrawerEditPart {
         
         public IFigure createFigure() {
         		PaletteDrawerImpl category = (PaletteDrawerImpl)getModel();
-
+        		if(category.getPaletteGroup() instanceof HTML5DynamicPaletteGroup){
+        			HTML5DynamicDrawerFigure fig = new HTML5DynamicDrawerFigure(category, getViewer().getControl()) {
+                        public IFigure getToolTip() {
+                                return createToolTip();
+                        }
+                };
+                fig.setExpanded(getDrawer().isInitiallyOpen());
+                fig.setPinned(getDrawer().isInitiallyPinned());
+                fig.getCollapseToggle().setRequestFocusEnabled(true);
+                fig.getCollapseToggle().addFocusListener(new FocusListener() {
+                        public void focusGained(FocusEvent fe) {
+                                getViewer().select(MobileDrawerEditPart.this);
+                        }
+                        public void focusLost(FocusEvent fe) {
+                        }
+                });
+                return fig;
+  			
+        		}else{
                 MobileDrawerFigure fig = new MobileDrawerFigure(category, getViewer().getControl()) {
                         public IFigure getToolTip() {
                                 return createToolTip();
@@ -47,5 +66,6 @@ public class MobileDrawerEditPart extends CustomDrawerEditPart {
                         }
                 });
                 return fig;
+        		}
         }
 }

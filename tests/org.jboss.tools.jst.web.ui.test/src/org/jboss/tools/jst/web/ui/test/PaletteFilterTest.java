@@ -40,27 +40,27 @@ public class PaletteFilterTest extends AbstractPaletteEntryTest {
 	}
 	
 	public void testJQM13Recognizer(){
-		checkRecognizer("recogn_jqm13.html", new String[]{"jQuery Mobile", "HTML"}, true);
+		checkRecognizer("recogn_jqm13.html", new String[]{"", "jQuery Mobile", "HTML"}, true);
 	}
 
 	public void testJQM13Recognizer2(){
-		checkRecognizer("recogn_jqm13.html", new String[]{"A Test", "jQuery Mobile", "HTML"}, false);
+		checkRecognizer("recogn_jqm13.html", new String[]{"", "A Test", "jQuery Mobile", "HTML"}, false);
 	}
 
 	public void testJQM14Recognizer(){
-		checkRecognizer("recogn_jqm14.html", new String[]{"jQuery Mobile", "HTML"}, true);
+		checkRecognizer("recogn_jqm14.html", new String[]{"", "jQuery Mobile", "HTML"}, true);
 	}
 
 	public void testJQM14Recognizer2(){
-		checkRecognizer("recogn_jqm14.html", new String[]{"A Test", "jQuery Mobile", "HTML"}, false);
+		checkRecognizer("recogn_jqm14.html", new String[]{"", "A Test", "jQuery Mobile", "HTML"}, false);
 	}
 	
 	public void testHTML5Recognizer(){
-		checkRecognizer("recogn_html5.html", new String[]{"HTML"}, true);
+		checkRecognizer("recogn_html5.html", new String[]{"", "HTML"}, true);
 	}
 
 	public void testHTML5Recognizer2(){
-		checkRecognizer("recogn_html5.html", new String[]{"A Test", "jQuery Mobile", "HTML"}, false);
+		checkRecognizer("recogn_html5.html", new String[]{"", "A Test", "jQuery Mobile", "HTML"}, false);
 	}
 
 	protected void checkRecognizer(String fileName, String[] recognizedGroups, boolean showOnlyRecognizedGroups){

@@ -88,6 +88,7 @@ public class PaletteItemDropCommand extends FileDropCommand  {
 				getDefaultModel().getDropData().getSourceViewer(),
 				properties, this
 		);
+		paletteItem.called();
 	}
 
 	static String[] PROPERTIES_FOR_RUN = new String[]{

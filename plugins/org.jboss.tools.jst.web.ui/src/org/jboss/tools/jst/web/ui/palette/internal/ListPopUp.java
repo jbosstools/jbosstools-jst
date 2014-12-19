@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2013 Red Hat, Inc. 
+ * Copyright (c) 2013-2014 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.ui.palette;
+package org.jboss.tools.jst.web.ui.palette.internal;
 
 import org.eclipse.draw2d.ActionEvent;
 import org.eclipse.draw2d.ActionListener;
@@ -31,13 +31,11 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Control;
-import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
-import org.jboss.tools.jst.web.ui.palette.MobileDrawerFigure.VersionFigure;
 
-class JQueryMobileVersionPopUp extends PopUpHelper {
-        private VersionFigure figureToShowNear;
+class ListPopUp extends PopUpHelper {
+        private IListFigure figureToShowNear;
 
-        public JQueryMobileVersionPopUp(Control c, VersionFigure figureToShowNear) {
+        public ListPopUp(Control c, IListFigure figureToShowNear) {
                 super(c, SWT.TOOL | SWT.ON_TOP);
                 this.figureToShowNear = figureToShowNear;
                 getShell().setBackground(ColorConstants.menuBackground);
@@ -102,14 +100,14 @@ class JQueryMobileVersionPopUp extends PopUpHelper {
                 getShell().forceFocus();
         }
         
-        public void show(IHTMLLibraryVersion[] versions){
-                String currentVersion = figureToShowNear.getVersion();
+        public void show(String[] values){
+                String currentVersion = figureToShowNear.getSelected();
                 Panel panel = new Panel();
                 panel.setLayoutManager(new GridLayout(1, false));
-                for(IHTMLLibraryVersion version : versions){
-                        ItemFigure label = new ItemFigure(version);
+                for(String value : values){
+                        ItemFigure label = new ItemFigure(value);
                         panel.add(label);
-                        if(version.equals(currentVersion)){
+                        if(value.equals(currentVersion)){
                                 label.setSelected(true);
                         }
                 }
@@ -124,17 +122,16 @@ class JQueryMobileVersionPopUp extends PopUpHelper {
                 private Color backColor = ColorConstants.menuBackgroundSelected;
                 private Color foreColor = ColorConstants.menuForegroundSelected;
                 
-                public ItemFigure(final IHTMLLibraryVersion version){
-                        super(new Label(version.toString()));
+                public ItemFigure(final String value){
+                        super(new Label(value));
                         setRolloverEnabled(true);
                         setRequestFocusEnabled(false);
                         setFocusTraversable(false);
-                        //setBorder(new MarginBorder(2));
                         addActionListener(new ActionListener(){
                                 @Override
                                 public void actionPerformed(ActionEvent event) {
-                                        JQueryMobileVersionPopUp.this.hide();
-                                        figureToShowNear.setVersion(version);
+                                        ListPopUp.this.hide();
+                                        figureToShowNear.setSelected(value);
                                 }
                         });
                 }

@@ -10,35 +10,22 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette;
 
-import org.eclipse.draw2d.ActionEvent;
-import org.eclipse.draw2d.ActionListener;
 import org.eclipse.draw2d.ButtonModel;
-import org.eclipse.draw2d.Clickable;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
-import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
-import org.jboss.tools.jst.web.ui.JSTWebUIImages;
+import org.jboss.tools.jst.web.ui.palette.internal.ListFigure;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteDrawerImpl;
 
 class MobileDrawerFigure extends CustomDrawerFigure {
-	private Control control;
-	private static JQueryMobileVersionPopUp popup;
-
 	private PaletteDrawerImpl category;
         
 	public MobileDrawerFigure(PaletteDrawerImpl category, Control control) {
 		super(control);
 
 		this.category = category;
-		this.control = control;
 
 		Figure collapseToggle = (Figure)getChildren().get(0);
 		Figure title = (Figure)collapseToggle.getChildren().get(0);
@@ -46,12 +33,14 @@ class MobileDrawerFigure extends CustomDrawerFigure {
 		Figure drawerFigure = (Figure)title.getChildren().get(1);
 
 		if(category.getVersions().length > 0) {
-			VersionFigure label = new VersionFigure(category.getVersion().toString());
+			VersionFigure label = new VersionFigure(category.getVersion().toString(), control);
+			
 			GridLayout layout = new GridLayout(4, false);
+			layout.horizontalSpacing=4;
 			title.setLayoutManager(layout);
-               
-			layout.setConstraint(drawerFigure, new GridData(GridData.FILL_HORIZONTAL));
-				title.add(drawerFigure);
+			layout.setConstraint(drawerFigure, new GridData(SWT.FILL, 0, true, false));
+			
+			title.add(drawerFigure);
 			title.add(label);
 			title.add(pinFigure);
 		}
@@ -78,49 +67,23 @@ class MobileDrawerFigure extends CustomDrawerFigure {
 		
 	}
 	
-	private Label label = new Label("", JSTWebUIImages.getImage(JSTWebUIImages.getInstance().createImageDescriptor(JSTWebUIImages.DROP_DOWN_LIST_IMAGE)));
+	public class VersionFigure extends ListFigure{
 
-	public class VersionFigure extends Clickable{
-		private Color backColor = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
-		private Color foreColor = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
-
-		public VersionFigure(String text){
-			super(label);
-			label.setText(text);
-			label.setTextPlacement(Label.WEST);
-			setRolloverEnabled(true);
-			setBorder(new MarginBorder(2));
-			addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent event) {
-					popup = new JQueryMobileVersionPopUp(control, VersionFigure.this);
-					popup.show(category.getVersions());
-				}
-			});
-		}
-
-		public void setVersion(IHTMLLibraryVersion newVersion) {
-			((Label)getChildren().get(0)).setText(newVersion.toString());
-			category.getPaletteGroup().getPaletteModel().getPaletteContents().setPreferredVersion(category.getLabel(), newVersion);
-			category.loadVersion(newVersion);
-		}
-                
-		public String getVersion() {
-			return ((Label)getChildren().get(0)).getText();
+		public VersionFigure(String text, Control control){
+			super(text, control);
 		}
 
 		@Override
-		protected void paintFigure(Graphics graphics) {
-			super.paintFigure(graphics);
-
-			ButtonModel model = getModel();
-			if (isRolloverEnabled() && model.isMouseOver()) {
-				graphics.setBackgroundColor(backColor);
-				graphics.fillRoundRectangle(getClientArea().getCopy().getExpanded(1, 1), 7, 7);
-
-				graphics.setForegroundColor(foreColor);
-				graphics.drawRoundRectangle(getClientArea().getCopy().getExpanded(1, 1), 7, 7);
-			}
+		public String[] getValues() {
+			return category.getVersions();
 		}
+
+		@Override
+		public void setSelected(String value) {
+			getLabel().setText(value);
+			category.setPreferredVersion(value);
+			category.loadVersion(value);
+		}
+
 	}
 }

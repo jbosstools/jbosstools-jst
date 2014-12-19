@@ -44,6 +44,7 @@ import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
+import org.jboss.tools.jst.web.ui.palette.internal.HTML5DynamicDrawerFigure;
 import org.jboss.tools.jst.web.ui.palette.internal.PaletteSettings;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteDrawerImpl;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteTool;
@@ -94,6 +95,7 @@ public class PaletteAdapter implements IPaletteAdapter {
 			filterTool.setSelection(PaletteSettings.getInstance().isRecognizedGroupsOnly());
 			filter();
 		}
+		refreshDynamicDrawer();
 	}
 	
 	private boolean isJSF(){
@@ -113,6 +115,19 @@ public class PaletteAdapter implements IPaletteAdapter {
 	public void filter(String text){
 		pattern.setPattern("*"+text);
 		filter(model.getPaletteRoot());
+	}
+	
+	private void refreshDynamicDrawer(){
+		for(Object child : model.getPaletteRoot().getChildren()) {
+			if(child instanceof PaletteDrawerImpl) {
+				PaletteDrawerImpl c = (PaletteDrawerImpl)child;
+				if(c.getLabel().isEmpty()){
+					MobileDrawerEditPart part = (MobileDrawerEditPart)getViewer().getEditPartRegistry().get(c);
+					HTML5DynamicDrawerFigure figure = (HTML5DynamicDrawerFigure)part.getFigure();
+					figure.refresh();
+				}
+			}
+		}
 	}
 	
 	private void filter(PaletteContainer container){
