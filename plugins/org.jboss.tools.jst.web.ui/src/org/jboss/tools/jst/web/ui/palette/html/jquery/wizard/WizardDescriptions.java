@@ -123,6 +123,8 @@ public class WizardDescriptions extends NLS {
 	public static String iconPosition;
 	public static String iconShadow;
 
+	public static String inputCreateDatalist;
+	public static String inputList;
 	public static String inputMultiple;
 
 	public static String insCite;

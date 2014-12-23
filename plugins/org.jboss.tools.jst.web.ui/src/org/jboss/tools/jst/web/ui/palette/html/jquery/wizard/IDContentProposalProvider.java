@@ -27,10 +27,15 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractContentProposalPro
  */
 public class IDContentProposalProvider extends AbstractContentProposalProvider {
 	List<ElementID> ids;
+	boolean sharp = true;
 
 	public IDContentProposalProvider(List<ElementID> ids, IFieldEditor editor) {
 		this.ids = ids;
 		registerContentAssist(editor);
+	}
+
+	public void setSharp(boolean b) {
+		sharp = b;
 	}
 
 	@Override
@@ -38,7 +43,7 @@ public class IDContentProposalProvider extends AbstractContentProposalProvider {
 		List<IContentProposal> result = new ArrayList<IContentProposal>();
 		String prefix = contents.substring(0, position);
 		for (ElementID id: ids) {
-			String v = "#" + id.getId();
+			String v = (sharp) ? "#" + id.getId() : id.getId();
 			if(v.startsWith(prefix)) {
 				IContentProposal cp = AttributeContentProposalProviderFactory.makeContentProposal(v, v, id.getDescription());
 				result.add(cp);

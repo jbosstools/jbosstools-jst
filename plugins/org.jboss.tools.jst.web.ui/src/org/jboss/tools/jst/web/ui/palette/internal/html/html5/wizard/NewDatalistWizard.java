@@ -22,6 +22,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizard;
  *
  */
 public class NewDatalistWizard extends NewHTMLWidgetWizard<NewDatalistWizardPage> implements HTMLConstants {
+	protected static String prefix = "datalist-";
 
 	public NewDatalistWizard() {
 		setWindowTitle(DropWizardMessages.Wizard_Window_Title);
@@ -37,13 +38,13 @@ public class NewDatalistWizard extends NewHTMLWidgetWizard<NewDatalistWizardPage
 	@Override
 	protected void addContent(ElementNode parent) {
 		if(isTrue(TAG_INPUT)) {
-			String id = getID("datalist-");
+			String id = getID(prefix);
 			ElementNode input = parent.addChild(TAG_INPUT);
 			input.addAttribute(ATTR_LIST, id);
 		}
 		ElementNode listRoot = parent.addChild(TAG_DATALIST);
 
-		addID("datalist-", listRoot);
+		addID(prefix, listRoot);
 
 		for (int i = 0; i < page.items.getNumber(); i++) {
 			String text = page.items.getLabel(i);

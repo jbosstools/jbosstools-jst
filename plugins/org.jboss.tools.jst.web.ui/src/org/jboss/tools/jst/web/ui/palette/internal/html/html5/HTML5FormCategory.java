@@ -16,6 +16,7 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTextInputWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.AbstractPaletteCategory;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteItemImpl;
 /**
@@ -63,6 +64,16 @@ public class HTML5FormCategory extends AbstractPaletteCategory {
 				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
 						"palette/Datalist.png"), // image path
 				NewDatalistWizard.class, // wizard
+				null // corrector
+		);
+		add(item);
+		item = new PaletteItemImpl(
+				"Text Input", // label
+				"<html>\n<b>Text Input:</b><br>\n&lt;input><br>\n...<br>\n&lt;/input>\n</html>", // tooltip
+				"text input button ", // keywords
+				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
+						"palette/TextInput.png"), // image path
+				NewTextInputWizard.class, // wizard class
 				null // corrector
 		);
 		add(item);
