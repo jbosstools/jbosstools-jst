@@ -1,0 +1,65 @@
+=== Install Tern.java Integration
+
+=== Install angular-eclipse supported version
+
+=== Install angular-eclipse early-access version
+
+=== Import None Eclipse JavaScript project into Eclipse and enable JavaScript module
+
+	Requirements:
+		install Tern Java Integration
+
+. Open Git Repositories View by pressing Ctrl+3, type 'Git' and select 'Git Repositories' from the list
+. Press 'Clone Git Repository' in the View
+. Paste 'https://github.com/requirejs/example-multipage.git' into URI field and press 'Next' button
+. Press 'Next' button in 'Branch Selection' step
+. Press 'Finish' button in 'Local Destination' step
+. In 'Git Repositories' view select 'Import Projects...' item from pop-up menu on cloned repository
+. In 'Import Projects from Git' dialog select 'Import as general project' option and press 'Next' button
+. Leave default project name and press 'Finish' button
+. Select created project 'example-multipage' in 'Projects Explorer' and prss Alt+Enter to open 'Properties for example-multipage' dialog
+. Select 'Project Facets' category
+. Select 'Convert to Faceted Form...' link
+. Select 'JavaScript' facet from Project Facet list
+. Press 'OK' Button
+. Press Alt-Enter to open 'Properties for example-multipage' dialog
+. Select 'JavaScript-Modules' category
+. Select 'requirejs' module and press 'OK' button.
+. See https://github.com/angelozerr/tern.java/wiki/Tern-&-RequireJS-support for further step (currently doesn't work in JBT 4.2.1.Final)
+. See https://github.com/angelozerr/tern.java/wiki/Tern-Eclipse-IDE for other modules configuration
+
+=== Create JavaScript Faceted Projects with browser and ecma5 tern.java modules enabled 
+
+. Open New Project Wizard (Ctrl+N)
+. Type 'JavaScript', select 'JavaScript Project' from Wizards list and press Next button
+. Enter 'jsprj1' in project name and press 'Finish'
+. Answer 'Yes' to 'Open Associater Perspective?' request
+. Select 'jsprj1' in Project Explorer View
+. Press Alt+Enter to request Project Properties dialog
+. Select 'JavaScript->Modules' category
+. Check that browser and ecma5 modules are enabled
+. Create JavaScript .js file and press Ctrl+Space three times to see tern content assist proposals  
+   
+=== Install tern.java and angular-eclipse early access and enable features for existing JavaScript Faceted projects
+
+=== Import none Eclipse JavaScript Project into Eclipse and enable AngularTooling
+
+Requirements: 
+	install tern.java integration and angular-eclipse early access
+
+Steps:
+	
+. Step1
+. Step2
+. Step3
+
+			
+	
+		
+
+
+
+
+
+
+

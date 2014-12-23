@@ -1,0 +1,190 @@
+target "JST Target Platform"
+with source
+
+location "http://download.jboss.org/jbosstools/builds/staging/jbosstools-base_master/all/repo" {
+	org.jboss.tools.usage.feature.feature.group
+	org.jboss.tools.common.core.feature.feature.group
+	org.jboss.tools.foundation.feature.feature.group
+	org.jboss.tools.test.feature.feature.group
+	org.jboss.tools.stacks.core.feature.feature.group
+	org.jboss.tools.runtime.core.feature.feature.group
+	org.jboss.tools.common.ui.feature.feature.group
+	org.jboss.tools.common.text.ext.feature.feature.group
+	org.jboss.tools.common.verification.feature.feature.group
+	org.jboss.tools.common.feature.feature.group
+	org.jboss.tools.common.mylyn.feature.feature.group
+	org.jboss.tools.common.all.test.feature.feature.group
+}
+
+location "http://download.jboss.org/jbosstools/updates/requirements/tern/0.6.0.201409231610-SNAPSHOT/" {
+	tern-feature.feature.group
+	tern-jsdt-feature.feature.group
+	tern-server-nodejs-feature.feature.group
+	tern.eclipse.ide.tools.core
+	tern.eclipse.ide.tools.ui 
+	tern.eclipse.ide.server.nodejs.embed.feature.group
+	minimal-json
+	tern.eclipse.ide.tools.feature.feature.group
+}
+
+location "http://download.jboss.org/jbosstools/updates/requirements/mars/201411121001-M3/" {
+	org.eclipse.platform.feature.group
+	org.eclipse.jdt.feature.group
+		// EMF, XSD -->
+	org.eclipse.emf.workspace.feature.group 1.9.0.201409241440
+	org.eclipse.emf.validation.feature.group 1.9.0.201409241438
+	org.eclipse.emf.transaction.feature.group 1.9.0.201409241440
+	org.eclipse.emf.feature.group 2.11.0.v20141110-0530
+	org.eclipse.emf.ecore.feature.group 2.11.0.v20141027-0406
+	org.eclipse.emf.codegen.feature.group 2.10.0.v20141110-0530
+	org.eclipse.emf.common.feature.group 2.11.0.v20141027-0406
+	org.eclipse.emf.databinding.feature.group 1.4.0.v20141110-0530
+	org.eclipse.emf.codegen.ecore.feature.group 2.11.0.v20141110-0530
+	org.eclipse.emf.ecore.edit.feature.group 2.9.0.v20141110-0530
+	org.eclipse.emf.ecore.editor.feature.group 2.10.0.v20141110-0530
+	org.eclipse.emf.edit.feature.group 2.11.0.v20141110-0530
+	org.eclipse.xsd.edit.feature.group 2.8.0.v20141110-0530
+	org.eclipse.xsd.ecore.converter.feature.group 2.9.0.v20141110-0530
+	org.eclipse.xsd.editor.feature.group 2.8.0.v20141110-0530
+	org.eclipse.xsd.mapping.editor.feature.group 2.9.0.v20141110-0530
+	org.eclipse.xsd.mapping.feature.group 2.8.0.v20141110-0530
+	org.eclipse.xsd.feature.group 2.10.0.v20141110-0530
+	
+	org.eclipse.gef.feature.group
+	
+		// mylyn -->
+	org.eclipse.mylyn_feature.feature.group 3.13.0.v20140826-1734
+	org.eclipse.mylyn.commons.feature.group 3.13.0.v20140704-2323
+	org.eclipse.mylyn.commons.identity.feature.group 1.5.0.v20140702-2248
+	org.eclipse.mylyn.commons.net 3.13.0.v20140702-2155
+	org.eclipse.mylyn.commons.notifications.feature.group 1.5.0.v20140702-2248
+	org.eclipse.mylyn.commons.repositories.feature.group 1.5.0.v20140905-0008
+	org.eclipse.mylyn.context_feature.feature.group 3.13.0.v20140819-2236
+	org.eclipse.mylyn.discovery.feature.group 3.13.0.v20140820-1854
+	org.eclipse.mylyn.monitor.feature.group 3.13.0.v20140702-2155
+	org.eclipse.mylyn.tasks.core 3.13.0.v20140704-0050
+	org.eclipse.mylyn.tasks.ui 3.13.0.v20140826-1734
+	org.eclipse.mylyn.tasks.bugs 3.13.0.v20140704-0050
+	// Those Mylyn/Bugzilla IUs are only necessary for tests -->
+	org.eclipse.mylyn.bugzilla_feature.feature.group 3.13.0.v20140830-0030
+	org.eclipse.mylyn.bugzilla.ide 3.13.0.v20140702-2225
+	org.eclipse.mylyn.commons.xmlrpc 3.13.0.v20140702-2155
+		
+	// DTP -->
+	org.eclipse.datatools.modelbase.feature.feature.group 1.12.0.v201406061321-7707GCcNBHLDaKTEcRi
+	org.eclipse.datatools.connectivity.feature.feature.group 1.12.0.v201406061321-7C7n9DEsxcwtN5odeWrQrgwYHq8
+	org.eclipse.datatools.connectivity.oda.feature.feature.group 1.12.0.v201406061321-7E7C7YBgJ9ET9OHLDfLZ
+	org.eclipse.datatools.connectivity.oda.designer.feature.feature.group 1.12.0.v201406061321-4147w312514242925
+	org.eclipse.datatools.connectivity.oda.designer.core.feature.feature.group 1.12.0.v201406061321-787B7PBgJ9DUBNCVAaSZ
+	org.eclipse.datatools.enablement.feature.feature.group 1.12.0.v201406061321-7J9t0B_0haN-EchrvGIyEh2M8j8a
+	org.eclipse.datatools.enablement.apache.derby.feature.feature.group 1.12.0.v201406061321-777B8gBmKFQ3NjRaMjbx8GDI
+	org.eclipse.datatools.enablement.hsqldb.feature.feature.group 1.12.0.v201406061321-67G0AqGDM7KfNWJjJS8GDI
+	org.eclipse.datatools.enablement.ibm.feature.feature.group 1.12.0.v201406061321-7G-7cFD3wThz-VTq2cpq3
+	org.eclipse.datatools.enablement.jdbc.feature.feature.group 1.12.0.v201406061321-4-49oB58B7DAF7FCH
+	org.eclipse.datatools.enablement.jdt.feature.feature.group 1.12.0.v201406061321-2-07w312218332612
+	org.eclipse.datatools.enablement.msft.feature.feature.group 1.12.0.v201406061321-5478AkF7AO7UBQAK8M
+	org.eclipse.datatools.enablement.mysql.feature.feature.group 1.12.0.v201406061321-5478AkF7AK8X9JCREG
+	org.eclipse.datatools.enablement.oda.feature.feature.group 1.12.0.v201406061321-7D7U7OEVVFNSGfJoIz0Of
+	org.eclipse.datatools.enablement.oda.designer.feature.feature.group 1.12.0.v201406061321-647L9oB58H5E8E8TBK
+	org.eclipse.datatools.enablement.oracle.feature.feature.group 1.12.0.v201406061321-548fAkF7AL7RBJANAI
+	org.eclipse.datatools.enablement.postgresql.feature.feature.group 1.12.0.v201406061321-553AkF7AK8PCRBQBP
+	org.eclipse.datatools.enablement.sap.feature.feature.group 1.12.0.v201406061321-540AkF7AJ7YEJBU7S
+	org.eclipse.datatools.enablement.sybase.feature.feature.group 1.12.0.v201406061321-7E478F9NiNc2S7fxRCTD
+	org.eclipse.datatools.enablement.ingres.feature.feature.group 1.12.0.v201406061321-540AkF78Z7UCRAQDB
+	org.eclipse.datatools.enablement.sqlite.feature.feature.group 1.12.0.v201406061321-542AkF7AJ7SAKAPBF
+	org.eclipse.datatools.sqldevtools.feature.feature.group 1.12.0.v201406061321-7N8P7IFDri6qjCyg6Q61VhVsihvO
+	org.eclipse.datatools.sqldevtools.results.feature.feature.group 1.12.0.v201406061321-427H9oB58F6A8I5KGJ
+	org.eclipse.datatools.sqldevtools.ddlgen.feature.feature.group 1.12.0.v201406061321-7A-7DF7RZHQUMdThK5_t
+	org.eclipse.datatools.sqldevtools.ddl.feature.feature.group 1.12.0.v201406061321-27B-78B08EG8S_IRVNeUiL6au
+	org.eclipse.datatools.sqldevtools.data.feature.feature.group 1.12.0.v201406061321-647ABgJ9EKDJDNAdHO
+	org.eclipse.datatools.sqldevtools.parsers.feature.feature.group 1.12.0.v201406061321-623BgJ9EE9ZJRDZLA
+	org.eclipse.datatools.sqldevtools.sqlbuilder.feature.feature.group 1.12.0.v201406061321-79-7FEVVFNSI_QiI-Sd
+	org.eclipse.datatools.sqldevtools.schemaobjecteditor.feature.feature.group 1.12.0.v201406061321-4218375LG5BJ93413
+	org.eclipse.datatools.intro.feature.group 1.12.0.v201405281819-26-7w312116392911
+	org.eclipse.datatools.doc.user.feature.group 1.12.0.v201405281819-47C18w95FHAM87EJJD7
+	org.eclipse.datatools.common.doc.user.feature.group 1.12.0.v201405281819-26-311A16321A3557
+	org.eclipse.datatools.connectivity.doc.user.feature.group 1.12.0.v201405281819-37D-7733L3D753L7BBF
+	org.eclipse.datatools.sqltools.doc.user.feature.group 1.12.0.v201405281819-37D-7733L3D753L7BBF
+
+	// ECF -->
+	org.eclipse.ecf.core.feature.feature.group 1.1.0.v20140922-1625
+	org.eclipse.ecf.core.ssl.feature.feature.group 1.0.0.v20140922-1625
+	org.eclipse.ecf.filetransfer.feature.feature.group 3.9.1.v20140922-1625
+	org.eclipse.ecf.filetransfer.httpclient4.feature.feature.group 3.9.1.v20140922-1625
+	org.eclipse.ecf.filetransfer.httpclient4.ssl.feature.feature.group 1.0.0.v20140922-1625
+	org.eclipse.ecf.filetransfer.ssl.feature.feature.group 1.0.0.v20140922-1625
+	org.eclipse.equinox.concurrent 1.1.0.v20130327-1442
+	
+	// PDE 
+	org.eclipse.pde.feature.group
+	
+	org.eclipse.jgit.feature.group
+	org.eclipse.egit.feature.group
+}
+
+location "http://download.jboss.org/jbosstools/updates/requirements/webtools/S-3.7.0M3-20141111153131/" {
+	org.eclipse.jst.jee 1.0.700.v201404092004
+	org.eclipse.jst.jee.web 1.0.500.v201404021628
+	org.eclipse.jpt.common.feature.feature.group 1.4.1.v201410241959
+	org.eclipse.jpt.common.eclipselink.feature.feature.group 1.3.101.v201410241959
+	org.eclipse.jpt.jpa.eclipselink.feature.feature.group 3.4.1.v201409111648
+	org.eclipse.jpt.jpa.feature.feature.group 3.4.1.v201410241959
+	org.eclipse.jpt.jaxb.feature.feature.group 1.5.1.v201410241959
+	org.eclipse.jsf.feature.feature.group 3.8.0.v201410101748
+	org.eclipse.jst.common.fproj.enablement.jdt.feature.group 3.6.1.v201409111458
+	org.eclipse.jst.enterprise_core.feature.feature.group 3.6.0.v201405070205
+	org.eclipse.jst.enterprise_ui.feature.feature.group 3.6.1.v201409042158
+	org.eclipse.jst.enterprise_userdoc.feature.feature.group 3.6.0.v201405070205
+	org.eclipse.jst.jsf.apache.trinidad.tagsupport.feature.feature.group 2.6.0.v201410101748
+	org.eclipse.jst.server_adapters.ext.feature.feature.group 3.3.300.v201405251701
+	org.eclipse.jst.server_adapters.feature.feature.group 3.2.301.v201410241740
+	org.eclipse.jst.server_core.feature.feature.group 3.4.101.v201410241740
+	org.eclipse.jst.server_ui.feature.feature.group 3.4.101.v201410241740
+	org.eclipse.jst.server_userdoc.feature.feature.group 3.3.201.v201410241740
+	org.eclipse.jst.web_core.feature.feature.group 3.6.1.v201410030101
+	org.eclipse.jst.webpageeditor.feature.feature.group 2.7.0.v201409302053
+	org.eclipse.jst.web_ui.feature.feature.group 3.6.1.v201410030101
+	org.eclipse.jst.web_userdoc.feature.feature.group 3.6.0.v201405070205
+	org.eclipse.jst.ws.axis2tools.feature.feature.group 1.1.301.v201410160332
+	org.eclipse.jst.ws.cxf.feature.feature.group 1.1.202.v201410230753
+	org.eclipse.jst.ws.jaxws.dom.feature.feature.group 1.0.301.v201410230753
+	org.eclipse.jst.ws.jaxws.feature.feature.group 1.2.201.v201410230753
+	org.eclipse.jst.ws.jaxws_userdoc.feature.feature.group 1.0.401.v201410230753
+	org.eclipse.wst.common.frameworks 1.2.200.v201304241450
+	org.eclipse.wst.common.project.facet.ui 1.4.500.v201409111446
+	org.eclipse.wst.common_core.feature.feature.group 3.6.1.v201408132036
+	org.eclipse.wst.common.fproj.feature.group 3.6.1.v201409111446
+	org.eclipse.wst.common_ui.feature.feature.group 3.6.1.v201409111444
+	org.eclipse.wst.jsdt.feature.feature.group 1.6.100.v201410221502
+	org.eclipse.wst.server_adapters.feature.feature.group 3.2.402.v201411112027
+	org.eclipse.wst.server_core.feature.feature.group 3.3.500.v201409302036
+	org.eclipse.wst.server_ui.feature.feature.group 3.3.400.v201410301904
+	org.eclipse.wst.server_userdoc.feature.feature.group 3.3.300.v201405011426
+	org.eclipse.wst.web_core.feature.feature.group 3.6.1.v201410221502
+	org.eclipse.wst.web_ui.feature.feature.group 3.6.1.v201410301904
+	org.eclipse.wst.web_userdoc.feature.feature.group 3.6.0.v201405062147
+	org.eclipse.wst.ws_core.feature.feature.group 3.6.0.v201405061938
+	org.eclipse.wst.ws_ui.feature.feature.group 3.6.1.v201410030012
+	org.eclipse.wst.ws_userdoc.feature.feature.group 3.1.400.v201405061938
+	org.eclipse.wst.ws_wsdl15.feature.feature.group 1.5.400.v201405061938
+	org.eclipse.wst.xml_core.feature.feature.group 3.6.1.v201410030001
+	org.eclipse.wst.xml_ui.feature.feature.group 3.6.1.v201410030012
+	org.eclipse.wst.xml_userdoc.feature.feature.group 3.6.0.v201405062147
+	org.eclipse.wst.xml.xpath2.processor.feature.feature.group 2.0.301.v201409111854
+	org.eclipse.wst.xsl.feature.feature.group 1.3.401.v201409111855
+}
+
+location orbit "http://download.jboss.org/jbosstools/updates/requirements/orbit/R20140525021250/" {
+	org.jdom
+	org.apache.commons.lang
+	org.apache.commons.io
+	org.apache.commons.httpclient
+	com.google.guava
+	org.apache.xmlrpc
+	org.apache.ws.commons.util
+}
+
+location "http://download.jboss.org/jbosstools/updates/requirements/angularjs/0.6.0.201409251425-SNAPSHOT/" {
+		angularjs-eclipse-feature.feature.group
+}
+
