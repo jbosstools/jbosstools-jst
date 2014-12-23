@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jboss.tools.common.ui.widget.editor.ButtonFieldEditor;
+import org.jboss.tools.common.ui.widget.editor.CheckBoxFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.LabelFieldEditor;
@@ -63,10 +64,13 @@ public class HTMLFieldEditorFactory implements HTMLConstants {
 	 * Used in New Datalist wizard.
 	 * @return checkbox field editor unselected by default
 	 */
-	public static IFieldEditor createAddInputEditor() {
-		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(TAG_INPUT, 
-				WizardMessages.addInput, false,
-				WizardDescriptions.datalistAddInput);
+	public static IFieldEditor createAddInputEditor(ButtonPressedAction action) {
+		CompositeEditor editor = new CompositeEditor(TAG_INPUT, WizardMessages.addInput, false);
+		ButtonFieldEditor b = new ButtonFieldEditor(TAG_INPUT, action, false);
+		editor.addFieldEditors(new IFieldEditor[]{new LabelFieldEditor(TAG_INPUT, WizardMessages.addInput, WizardDescriptions.datalistAddInput),
+				new CheckBoxFieldEditor(TAG_INPUT, WizardMessages.addInput,Boolean.valueOf(false)),
+				b});
+		return editor;
 	}
 
 	/**

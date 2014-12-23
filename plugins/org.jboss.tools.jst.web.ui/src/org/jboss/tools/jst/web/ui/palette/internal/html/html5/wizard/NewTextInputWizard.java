@@ -23,6 +23,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizard;
  *
  */
 public class NewTextInputWizard extends NewHTMLWidgetWizard<NewTextInputWizardPage> implements HTMLConstants {
+	static String prefix = "input-";
 
 	public NewTextInputWizard() {
 		setWindowTitle(DropWizardMessages.Wizard_Window_Title);
@@ -35,12 +36,16 @@ public class NewTextInputWizard extends NewHTMLWidgetWizard<NewTextInputWizardPa
 		return new NewTextInputWizardPage();
 	}
 
+	String getTextInputID() {
+		return getID(prefix);
+	}
+
 	@Override
 	protected void addContent(ElementNode parent) {
 		String type = page.getEditorValue(JQueryConstants.EDITOR_ID_TEXT_TYPE);
 		boolean isTextArea = JQueryConstants.TYPE_TEXTAREA.equals(type);
 		
-		String id = getID("input-");
+		String id = getID(prefix);
 		
 		String labelText = page.getEditorValue(JQueryConstants.EDITOR_ID_LABEL);
 		if(labelText.length() > 0) {

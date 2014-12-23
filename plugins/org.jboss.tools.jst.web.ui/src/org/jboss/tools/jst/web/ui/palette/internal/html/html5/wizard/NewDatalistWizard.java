@@ -35,12 +35,22 @@ public class NewDatalistWizard extends NewHTMLWidgetWizard<NewDatalistWizardPage
 		return new NewDatalistWizardPage();
 	}
 
+	String getDatalistID() {
+		return getID(prefix);
+	}
+
 	@Override
 	protected void addContent(ElementNode parent) {
 		if(isTrue(TAG_INPUT)) {
 			String id = getID(prefix);
-			ElementNode input = parent.addChild(TAG_INPUT);
-			input.addAttribute(ATTR_LIST, id);
+			ElementNode input = page.getTextInputNode();
+			if(input == null) {
+				input = parent.addChild(TAG_INPUT);
+				input.addAttribute(ATTR_LIST, id);
+				input.addAttribute(ATTR_ID, getID(NewTextInputWizard.prefix));
+			} else {
+				parent.getChildren().addAll(input.getChildren());
+			}
 		}
 		ElementNode listRoot = parent.addChild(TAG_DATALIST);
 

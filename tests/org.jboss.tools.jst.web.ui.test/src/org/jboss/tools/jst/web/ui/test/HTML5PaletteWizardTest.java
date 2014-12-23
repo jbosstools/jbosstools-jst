@@ -40,7 +40,6 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizar
 import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizardPage;
-import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteCategory;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteGroup;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
@@ -328,6 +327,13 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 		assertAttrExists(wizard, ATTR_LIST, "myDatalist");
 		wizardPage.setEditorValue(EDITOR_ID_ID, "");
 		assertAttrExists(wizard, ATTR_LIST, "datalist-1");
+		
+		wizardPage.setTextInputProperty(ATTR_NAME, "name1");
+		wizardPage.editTextInput(false);
+		assertAttrExists(wizard, ATTR_NAME, "name1");
+		wizardPage.setTextInputProperty(JQueryConstants.EDITOR_ID_TEXT_TYPE, "search");
+		wizardPage.editTextInput(false);
+		assertAttrExists(wizard, ATTR_TYPE, "search");
 		
 		compareGeneratedAndInsertedText(wizard);
 	}

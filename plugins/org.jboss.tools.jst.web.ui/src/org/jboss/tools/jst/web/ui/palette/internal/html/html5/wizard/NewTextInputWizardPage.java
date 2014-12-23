@@ -63,16 +63,54 @@ import org.w3c.dom.NodeList;
  *
  */
 public class NewTextInputWizardPage extends NewHTMLWidgetWizardPage {
+	static String[] PROPERTIES = {
+		JQueryConstants.EDITOR_ID_TEXT_TYPE,
+		JQueryConstants.EDITOR_ID_LABEL,
+		EDITOR_ID_ID,
+		ATTR_NAME,
+		ATTR_LIST,
+		JQueryConstants.EDITOR_ID_DISABLED,
+		JQueryConstants.EDITOR_ID_VALUE,
+		JQueryConstants.EDITOR_ID_PLACEHOLDER,
+		JQueryConstants.EDITOR_ID_MIN,
+		JQueryConstants.EDITOR_ID_MAX,
+		JQueryConstants.EDITOR_ID_STEP,
+		JQueryConstants.ATTR_PATTERN,
+		JQueryConstants.EDITOR_ID_MAXLENGTH,
+		JQueryConstants.EDITOR_ID_AUTOFOCUS,
+		JQueryConstants.EDITOR_ID_REQUIRED,
+	};
+
 	static String DATALIST_NODE_EVENT = "datalistNode";
 	Set<String> datalists = new HashSet<String>();
 	ElementNode datalistNode = null;
 	Button createDatalistButton = null;
+	boolean listEnabled = true;
 
 	public NewTextInputWizardPage() {
 		super("newText", WizardMessages.newTextInputWizardTitle);
 		setDescription(WizardMessages.newHTML5TextInputWizardDescription);
 	}
 
+	public void setListEnabled(boolean b) {
+		listEnabled = b;
+		setEnabled(ATTR_LIST, b);
+	}
+
+	/**
+	 * Call to sub-wizard creating new datalist element.
+	 * If showDialog is false wizard generates element with default content.
+	 * 
+	 * @param showDialog
+	 */
+	public void createDatalist(boolean showDialog) {
+		new NewDatalistWizardEx(getWizard().getPaletteItem(), showDialog);
+	}
+
+	/**
+	 * Returns result of sub-wizard creating new datalist element.
+	 * @return
+	 */
 	public ElementNode getDatalistNode() {
 		return datalistNode;
 	}
@@ -98,6 +136,9 @@ public class NewTextInputWizardPage extends NewHTMLWidgetWizardPage {
 
 		IFieldEditor list = HTMLFieldEditorFactory.createInputListEditor(new CreateDatalistAction());
 		addEditor(list, parent);
+		if(!listEnabled) {
+			list.setEnabled(false);
+		}
 		if(parent != null) {
 			IDContentProposalProvider p = new IDContentProposalProvider(getDatalistIDs("", true), list);
 			p.setSharp(false);
@@ -179,7 +220,7 @@ public class NewTextInputWizardPage extends NewHTMLWidgetWizardPage {
 	}
 
 	void updateListButtonEnablement() {
-		if(createDatalistButton != null && !createDatalistButton.isDisposed()) {
+		if(listEnabled && createDatalistButton != null && !createDatalistButton.isDisposed()) {
 			boolean enabled = !datalists.contains(getEditorValue(ATTR_LIST)) && datalistNode == null;
 			createDatalistButton.setEnabled(enabled);
 		}		
@@ -209,11 +250,6 @@ public class NewTextInputWizardPage extends NewHTMLWidgetWizardPage {
 			createDatalist(getControl() != null);
 		}
 	}
-
-	public void createDatalist(boolean showDialog) {
-		new NewDatalistWizardEx(getWizard().getPaletteItem(), showDialog);
-	}
-
 
 	public List<ElementID> getDatalistIDs(final String mask, final boolean escapeHTML) {
 		final List<ElementID> ids = new ArrayList<ElementID>();

@@ -90,6 +90,7 @@ public class WizardMessages extends NLS {
 	public static String dividerThemeLabel;
 	public static String domCacheLabel;
 	public static String downloadLabel;
+	public static String editLabel;
 	public static String enhanceLabel;
 	public static String expandedIconLabel;
 	public static String fieldSetLabel;
