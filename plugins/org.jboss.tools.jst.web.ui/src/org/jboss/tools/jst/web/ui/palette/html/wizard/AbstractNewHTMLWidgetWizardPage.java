@@ -564,27 +564,29 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 	 */
 	public static StyleRange[] getRanges(String text) {
 		ArrayList<StyleRange> regionList = new ArrayList<StyleRange>();
-		boolean inQuota = false;
+		char quota = '\0';
 		boolean inTag = false;
 		boolean scriptDetected = false;
 		int offset = 0;
 		StringBuilder name = new StringBuilder();
 		for (int i = 0; i < text.length(); i++) {
 			char ch = text.charAt(i);
-			if(inTag && ch == '"') {
-				inQuota = !inQuota;
-				if(!inQuota) {
-					addRange(offset, 1, valueColor, false, regionList);
-					if(i - offset > 1) {
-						addRange(offset + 1, i - offset - 1, valueColor, true, regionList);
-					}
-					addRange(i, 1, valueColor, false, regionList);
-				} else {
-					offset = i;
+			if(inTag && (quota != '\0' && quota == ch)) {
+				quota = '\0'; 
+				addRange(offset, 1, valueColor, false, regionList);
+				if(i - offset > 1) {
+					addRange(offset + 1, i - offset - 1, valueColor, true, regionList);
 				}
-			} else if(ch == '>' && !inQuota) {
+				addRange(i, 1, valueColor, false, regionList);
+			} else if(inTag && quota == '\0' && (ch == '"' || ch == '\'')) {
+				quota = ch;
+				offset = i;
+			} else if(ch == '>' && quota == '\0') {
 				if(inTag && name.toString().equalsIgnoreCase(SCRIPT_OPEN)) {
 					scriptDetected = true;
+				}
+				if(scriptDetected && text.charAt(i - 1) == '/') {
+					scriptDetected = false;
 				}
 				inTag = false;
 				if(name.length() > 0) {
@@ -604,12 +606,12 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 					}
 					scriptDetected = false;
 				}
-			} else if(ch == '<' && !inQuota) {
+			} else if(ch == '<' && quota == '\0') {
 				inTag = true;
 				name.setLength(0);
 				name.append(ch);
 				offset = i;
-			} else if(!inQuota && inTag && (Character.isLetterOrDigit(ch) || ch == '-' || ch == '/')) {
+			} else if(quota == '\0' && inTag && (Character.isLetterOrDigit(ch) || ch == '-' || ch == '/')) {
 				if(name.length() == 0) {
 					offset = i;
 				}

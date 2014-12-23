@@ -66,6 +66,23 @@ public class StyleRangeInPaletteWizardPreviewTest extends TestCase {
 		assertRange(ranges[5], 62, 9, false, false);	/*</script>*/
 	}
 
+	public void testScript4() {
+		String text = "<head><script src='aaa' /></head>";
+		StyleRange[] ranges = AbstractNewHTMLWidgetWizardPage.getRanges(text);
+		assertEquals(11, ranges.length);
+		assertRange(ranges[0], 0, 5, false, false);		/*<head*/
+		assertRange(ranges[1], 5, 1, false, false);		/*>*/
+		assertRange(ranges[2], 6, 7, false, false);		/*<script*/
+		assertRange(ranges[3], 14, 3, false, false);	/*src*/
+		assertRange(ranges[4], 18, 1, false, false);	/*'*/
+		assertRange(ranges[5], 19, 3, true, false);	    /*aaa*/
+		assertRange(ranges[6], 22, 1, false, false);	/*'*/
+		assertRange(ranges[7], 24, 1, false, false);	/*/*/
+		assertRange(ranges[8], 25, 1, false, false);	/*>*/
+		assertRange(ranges[9], 26, 6, false, false);	/*</head*/
+		assertRange(ranges[10], 32, 1, false, false);	/*>*/
+	}
+
 	void assertRange(StyleRange range, int start, int length, boolean italic, boolean bold) {
 		assertEquals(start, range.start);
 		assertEquals(length, range.length);
