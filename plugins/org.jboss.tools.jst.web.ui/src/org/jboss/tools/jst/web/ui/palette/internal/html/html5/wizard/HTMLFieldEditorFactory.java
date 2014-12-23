@@ -13,8 +13,13 @@ package org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.tools.common.ui.widget.editor.ButtonFieldEditor;
+import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.common.ui.widget.editor.LabelFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
+import org.jboss.tools.common.ui.widget.editor.TextFieldEditor;
+import org.jboss.tools.common.ui.widget.editor.ButtonFieldEditor.ButtonPressedAction;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.WizardDescriptions;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -123,6 +128,16 @@ public class HTMLFieldEditorFactory implements HTMLConstants {
 		List<String> list = new ArrayList<String>();
 		for (String s: values) list.add(s);
 		return list;
+	}
+
+	public static IFieldEditor createInputListEditor(ButtonPressedAction action) {
+		CompositeEditor editor = new CompositeEditor(ATTR_LIST, WizardMessages.listLabel, "");
+		ButtonFieldEditor b = new ButtonFieldEditor(ATTR_LIST, action, "");
+		b.setDescription(WizardDescriptions.inputCreateDatalist);
+		editor.addFieldEditors(new IFieldEditor[]{new LabelFieldEditor(ATTR_LIST, WizardMessages.listLabel, WizardDescriptions.inputList),
+				new TextFieldEditor(ATTR_LIST, WizardMessages.listLabel, ""),
+				b});
+		return editor;
 	}
 
 }

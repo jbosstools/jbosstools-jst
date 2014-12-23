@@ -73,6 +73,7 @@ public class WizardMessages extends NLS {
 	public static String coordsLabel;
 	public static String cornersLabel;
 	public static String countThemeLabel;
+	public static String createLabel;
 	public static String crossoriginLabel;
 	public static String dataIDLabel;
 	public static String dataTypeHorizontalLabel;
@@ -120,6 +121,7 @@ public class WizardMessages extends NLS {
 	public static String idLabel;
 	public static String infoStyledLabel;
 	public static String inlineLabel;
+	public static String inputTypeNumberLabel;
 	public static String insetLabel;
 	public static String ismapLabel;
 	public static String keytypeLabel;
@@ -128,6 +130,7 @@ public class WizardMessages extends NLS {
 	public static String layoutLabel;
 	public static String leftButtonLabel;
 	public static String legendLabel;
+	public static String listLabel;
 	public static String loopLabel;
 	public static String lowLabel;
 	public static String manifestLabel;
@@ -266,6 +269,7 @@ public class WizardMessages extends NLS {
 
 	public static String newTextInputWizardTitle;
 	public static String newTextInputWizardDescription;
+	public static String newHTML5TextInputWizardDescription;
 
 	public static String newHeaderWizardTitle;
 	public static String newHeaderWizardDescription;

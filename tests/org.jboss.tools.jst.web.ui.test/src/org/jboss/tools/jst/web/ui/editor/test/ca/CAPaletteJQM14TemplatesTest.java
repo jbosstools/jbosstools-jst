@@ -124,11 +124,11 @@ public class CAPaletteJQM14TemplatesTest extends CAHtml5PaletteTemplatesTest {
 	}
 
 	public void testText() throws Exception {
-		doTestTemplate("", "text", decorateDisplay("Text Input"), 0);
+		doTestTemplate("", "text", decorateDisplay("Text Input"), 1);  //first is HTML5 item
 	}
 
 	public void testInput() throws Exception {
-		doTestTemplate("", "input", decorateDisplay("Text Input"), 5);
+		doTestTemplate("", "input", decorateDisplay("Text Input"), 6);  //first is HTML5 item
 	}
 
 	@Override

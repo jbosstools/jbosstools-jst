@@ -68,7 +68,7 @@ public class NewTextInputWizardPage extends NewJQueryWidgetWizardPage {
 		Group panel = null;
 		if(parent != null) {
 			panel = new Group(parent,SWT.BORDER);
-			panel.setText("Number");
+			panel.setText(WizardMessages.inputTypeNumberLabel);
 			GridData d = new GridData(GridData.FILL_HORIZONTAL);
 			d.horizontalSpan = 3;
 			panel.setLayoutData(d);		

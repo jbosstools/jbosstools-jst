@@ -40,6 +40,7 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizar
 import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteCategory;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteGroup;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
@@ -50,6 +51,8 @@ import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalist
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizardPage;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTextInputWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTextInputWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteModelImpl;
 
 /**
@@ -326,6 +329,58 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 		wizardPage.setEditorValue(EDITOR_ID_ID, "");
 		assertAttrExists(wizard, ATTR_LIST, "datalist-1");
 		
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewInputWizard() {
+		IWizardPage currentPage = runToolEntry("Text Input", true);
+
+		assertTrue(currentPage instanceof NewTextInputWizardPage);
+
+		NewTextInputWizardPage wizardPage = (NewTextInputWizardPage)currentPage;
+		NewTextInputWizard wizard = (NewTextInputWizard)wizardPage.getWizard();
+
+		wizardPage.setEditorValue(EDITOR_ID_ID, "myInput");
+		assertAttrExists(wizard, EDITOR_ID_ID, "myInput");
+
+
+		assertTextDoesNotExist(wizard, TAG_DATALIST);
+		wizardPage.createDatalist(false);
+		assertTextExists(wizard, TAG_DATALIST);
+		wizardPage.setEditorValue(ATTR_LIST, "11");
+		assertTextDoesNotExist(wizard, TAG_DATALIST);
+		wizardPage.createDatalist(false);
+		assertTextExists(wizard, TAG_DATALIST);
+		wizardPage.setEditorValue(ATTR_LIST, "");
+		assertTextDoesNotExist(wizard, TAG_DATALIST);
+		
+		wizardPage.setEditorValue(EDITOR_ID_PLACEHOLDER, "abcdef");
+		assertAttrExists(wizard, ATTR_PLACEHOLDER, "abcdef");
+
+		assertTextDoesNotExist(wizard, ATTR_AUTOFOCUS);
+		wizardPage.setEditorValue(EDITOR_ID_AUTOFOCUS, TRUE);
+		assertAttrExists(wizard, ATTR_AUTOFOCUS, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_AUTOFOCUS, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_AUTOFOCUS);
+
+		assertTextDoesNotExist(wizard, ATTR_REQUIRED);
+		wizardPage.setEditorValue(EDITOR_ID_REQUIRED, TRUE);
+		assertAttrExists(wizard, ATTR_REQUIRED, TRUE);
+		wizardPage.setEditorValue(EDITOR_ID_REQUIRED, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_REQUIRED);
+
+		assertTextDoesNotExist(wizard, ATTR_PATTERN);
+		wizardPage.setEditorValue(EDITOR_ID_PATTERN, "(");
+		assertAttrExists(wizard, ATTR_PATTERN, "(");
+		assertNotNull(wizardPage.getMessage());
+		assertTrue(wizardPage.getMessage().toLowerCase().indexOf("unclosed") >= 0);
+		wizardPage.setEditorValue(EDITOR_ID_PATTERN, ".*");
+		assertAttrExists(wizard, ATTR_PATTERN, ".*");
+//		assertEquals(WizardMessages.noPlaceForWidgetWarning, wizardPage.getMessage());
+		assertNull(wizardPage.getMessage());
+		wizardPage.setEditorValue(EDITOR_ID_PATTERN, "");
+		assertTextDoesNotExist(wizard, ATTR_PATTERN);
+
 		compareGeneratedAndInsertedText(wizard);
 	}
 
