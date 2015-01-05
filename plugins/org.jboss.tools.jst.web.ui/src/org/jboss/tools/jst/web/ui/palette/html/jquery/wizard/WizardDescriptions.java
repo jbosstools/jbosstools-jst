@@ -26,6 +26,8 @@ public class WizardDescriptions extends NLS {
 
 	public static String blockquoteCite;
 
+	public static String buttonFormAction;
+	public static String buttonFormMethod;
 	public static String buttonIcon;
 	public static String buttonIconOnly;
 

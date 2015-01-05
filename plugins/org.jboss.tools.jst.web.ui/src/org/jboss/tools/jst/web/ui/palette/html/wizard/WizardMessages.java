@@ -323,6 +323,7 @@ public class WizardMessages extends NLS {
 
 	public static String newFormButtonWizardTitle;
 	public static String newFormButtonWizardDescription;
+	public static String newHTMLFormButtonWizardDescription;
 
 	public static String newImageWizardTitle;
 	public static String newImageWizardDescription;

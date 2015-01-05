@@ -13,7 +13,7 @@ package org.jboss.tools.jst.web.ui.palette.internal.html.html5;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewWidgetPositionCorrector;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTextInputWizard;
@@ -74,6 +74,16 @@ public class HTML5FormCategory extends AbstractPaletteCategory {
 				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
 						"palette/TextInput.png"), // image path
 				NewTextInputWizard.class, // wizard class
+				null // corrector
+		);
+		add(item);
+		item = new PaletteItemImpl(
+				"Form Button", // label
+				"<html>\n<b>Button:</b><br>\n&lt;input type=\"submit\" value=\"Submit\">...&lt;/input>\n</html>", // tooltip
+				"button input ", // keywords
+				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
+						"palette/FormButton.png"), // image path
+				NewButtonWizard.class, // wizard class
 				null // corrector
 		);
 		add(item);

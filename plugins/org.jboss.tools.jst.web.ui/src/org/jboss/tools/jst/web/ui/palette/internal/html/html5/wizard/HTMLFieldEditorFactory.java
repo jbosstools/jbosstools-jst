@@ -144,4 +144,31 @@ public class HTMLFieldEditorFactory implements HTMLConstants {
 		return editor;
 	}
 
+	/**
+	 * Used in New Button wizard.
+	 * @return
+	 */
+	public static IFieldEditor createButtonFormActionEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_FORM_ACTION, WizardMessages.actionLabel, "",
+				WizardDescriptions.buttonFormAction);
+	}
+
+	static String INHERITED_FROM_FORM = "default";
+
+	static String[] METHOD_LIST = {INHERITED_FROM_FORM, METHOD_GET, METHOD_POST};
+
+	/**
+	 * Used in New Button wizard.
+	 * @return
+	 */
+	public static IFieldEditor createButtonFormMethodEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				ATTR_FORM_METHOD, 
+				WizardMessages.methodLabel, 
+				toList(METHOD_LIST), 
+				toList(METHOD_LIST), 
+				INHERITED_FROM_FORM,
+				WizardDescriptions.buttonFormMethod);
+	}
+
 }

@@ -109,6 +109,8 @@ public interface HTMLConstants {
 	public String ATTR_DOWNLOAD = "download";
 	public String ATTR_FOR = "for";
 	public String ATTR_FORM = "form";
+	public String ATTR_FORM_ACTION = "formaction";
+	public String ATTR_FORM_METHOD = "formmethod";
 	public String ATTR_HEADERS = "headers";
 	public String ATTR_HEIGHT = "height";
 	public String ATTR_HIGH = "high";

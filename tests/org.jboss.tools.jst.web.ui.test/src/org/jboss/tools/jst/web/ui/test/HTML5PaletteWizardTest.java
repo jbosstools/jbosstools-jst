@@ -40,10 +40,13 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizar
 import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizardPage;
+import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteCategory;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteGroup;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteVersionGroup;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewButtonWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewButtonWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizard;
@@ -386,6 +389,47 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 		assertNull(wizardPage.getMessage());
 		wizardPage.setEditorValue(EDITOR_ID_PATTERN, "");
 		assertTextDoesNotExist(wizard, ATTR_PATTERN);
+
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewButtonWizard() {
+		IWizardPage currentPage = runToolEntry("Form Button", true);
+
+		assertTrue(currentPage instanceof NewButtonWizardPage);
+
+		NewButtonWizardPage wizardPage = (NewButtonWizardPage)currentPage;
+		NewButtonWizard wizard = (NewButtonWizard)wizardPage.getWizard();
+
+		assertAttrExists(wizard, ATTR_VALUE, WizardMessages.buttonTypeSubmitLabel);
+		assertAttrExists(wizard, ATTR_TYPE, BUTTON_TYPE_SUBMIT);
+		wizardPage.setEditorValue(EDITOR_ID_FORM_BUTTON_TYPE, BUTTON_TYPE_RESET);
+		assertAttrExists(wizard, ATTR_TYPE, BUTTON_TYPE_RESET);
+		assertAttrExists(wizard, ATTR_VALUE, WizardMessages.buttonTypeResetLabel);
+		wizardPage.setEditorValue(EDITOR_ID_FORM_BUTTON_TYPE, BUTTON_TYPE_BUTTON);
+		assertAttrExists(wizard, ATTR_VALUE, "Input");
+		assertAttrExists(wizard, ATTR_TYPE, BUTTON_TYPE_BUTTON);
+
+		wizardPage.setEditorValue(EDITOR_ID_ID, "myButton");
+		assertAttrExists(wizard, EDITOR_ID_ID, "myButton");
+
+		assertTextDoesNotExist(wizard, ATTR_FORM);
+		wizardPage.setEditorValue(ATTR_FORM, "myForm");
+		assertAttrExists(wizard, ATTR_FORM, "myForm");
+		wizardPage.setEditorValue(ATTR_FORM, "");
+		assertTextDoesNotExist(wizard, ATTR_FORM);
+
+		assertTextDoesNotExist(wizard, ATTR_AUTOFOCUS);
+		wizardPage.setEditorValue(EDITOR_ID_AUTOFOCUS, TRUE);
+		assertAttrExists(wizard, ATTR_AUTOFOCUS, ATTR_AUTOFOCUS);
+		wizardPage.setEditorValue(EDITOR_ID_AUTOFOCUS, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_AUTOFOCUS);
+
+		assertTextDoesNotExist(wizard, ATTR_DISABLED);
+		wizardPage.setEditorValue(ATTR_DISABLED, TRUE);
+		assertAttrExists(wizard, ATTR_DISABLED, ATTR_DISABLED);
+		wizardPage.setEditorValue(ATTR_DISABLED, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DISABLED);
 
 		compareGeneratedAndInsertedText(wizard);
 	}
