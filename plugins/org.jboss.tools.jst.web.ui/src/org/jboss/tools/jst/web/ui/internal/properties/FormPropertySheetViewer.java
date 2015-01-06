@@ -53,7 +53,7 @@ public class FormPropertySheetViewer extends Viewer implements SelectionListener
 	EditedDescriptor editedDescriptor = new EditedDescriptor(this);
 
 	IPropertySetViewer selectedViewer;
-	Map<String, Class<?>> setViewerClassesByCategory = new HashMap<String, Class<?>>();
+	Map<String, Class<? extends IPropertySetViewer>> setViewerClassesByCategory = new HashMap<String, Class<? extends IPropertySetViewer>>();
 	Map<String, IPropertySetViewer> setViewersByCategory = new HashMap<String, IPropertySetViewer>();
 
 	public FormPropertySheetViewer(Composite parent) {

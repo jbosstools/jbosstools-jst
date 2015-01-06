@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2015 Red Hat, Inc. 
+ * Copyright (c) 2013 - 2015 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -8,13 +8,37 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/ 
-package org.jboss.tools.jst.web.ui.internal.editor.outline;
+package org.jboss.tools.jst.angularjs.internal.taglib.html;
 
-import org.jboss.tools.jst.web.ui.internal.properties.IPropertySetViewer;
+import org.jboss.tools.jst.web.kb.KbQuery;
 
-public interface IFormCategoryDescriptor {
+/**
+ * @author Alexey Kazakov
+ */
+public interface IDirective {
 
-	public String getName();
-	
-	public Class<? extends IPropertySetViewer> getUIClass();
+	/**
+	 * 
+	 * @param query
+	 * @return
+	 */
+	boolean checkAttribute(KbQuery query);
+
+	/**
+	 * 
+	 * @return
+	 */
+	String getStartText();
+
+	/**
+	 * 
+	 * @return
+	 */
+	String getEndText();
+
+	/**
+	 * 
+	 * @return
+	 */
+	String getDescription();
 }

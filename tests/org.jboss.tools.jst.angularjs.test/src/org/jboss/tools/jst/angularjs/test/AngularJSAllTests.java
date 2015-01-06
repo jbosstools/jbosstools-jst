@@ -37,6 +37,7 @@ public class AngularJSAllTests {
 		s = new TestSuite("Ionic project tests");
 		s.addTestSuite(IonicRecognizerTest.class);
 		s.addTestSuite(IonicTagLibTest.class);
+		s.addTestSuite(AngularJSTest.class);
 		suite.addTest(
 				new ProjectImportTestSetup(s,
 				"org.jboss.tools.jst.angularjs.test",

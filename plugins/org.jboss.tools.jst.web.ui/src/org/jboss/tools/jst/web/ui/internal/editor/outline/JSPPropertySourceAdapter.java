@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007-2011 Red Hat, Inc.
+ * Copyright (c) 2007-2015 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -79,7 +79,7 @@ public class JSPPropertySourceAdapter implements INodeAdapter, IPropertySource, 
 		public boolean isAvailable(String attributeName);
 	}
 
-	static interface ICategoryFilter {
+	public static interface ICategoryFilter {
 		public void setAttributes(IAttribute[] attributes);
 
 		public String getCategory(String attributeName);

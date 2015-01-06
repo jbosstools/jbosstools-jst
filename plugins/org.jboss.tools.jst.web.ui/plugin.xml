@@ -1974,6 +1974,7 @@
 	<extension-point id="openWithEditorExtension" name="Open With Editor Extension" schema="schema/openWithEditorExtension.exsd"/>
  <extension-point id="jscssLibs" name="JS/CSS libraries" schema="schema/jscssLibs.exsd"/>
  <extension-point id="PaletteGroup" name="PaletteGroup" schema="schema/PaletteGroup.exsd"/>
+ <extension-point id="CategoryDescriptor" name="CategoryDescriptor" schema="schema/CategoryDescriptor.exsd"/>
  	
 	<extension 
 		point="org.jboss.tools.common.text.ext.hyperlinkPartitioner"
@@ -2435,4 +2436,18 @@
           orderId="z">
     </group>
  </extension> 
+ <extension
+ 	point="org.jboss.tools.jst.web.ui.CategoryDescriptor">
+    <category-descriptor
+          name="jQuery"
+          uri="jQueryMobile"
+          property-set-viewer-class="org.jboss.tools.jst.web.ui.internal.properties.jquery.JQueryPropertySetViewer"
+          category-filter-class="org.jboss.tools.jst.web.ui.internal.editor.outline.JQueryCategoryFilter">
+    </category-descriptor>
+    <category-descriptor
+          name="HTML"
+          uri="htmlFile"
+          property-set-viewer-class="org.jboss.tools.jst.web.ui.internal.properties.html.HTMLPropertySetViewer">
+    </category-descriptor>
+ </extension>
 </plugin>

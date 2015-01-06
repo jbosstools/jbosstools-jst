@@ -10,6 +10,7 @@ Export-Package: org.jboss.tools.jst.angularjs,
  org.jboss.tools.jst.angularjs.internal.ionic;x-friends:="org.jboss.tools.jst.angularjs.test",
  org.jboss.tools.jst.angularjs.internal.ionic.palette;x-friends:="org.jboss.tools.jst.angularjs.test",
  org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;x-friends:="org.jboss.tools.jst.angularjs.test",
+ org.jboss.tools.jst.angularjs.internal.taglib.html,
  org.jboss.tools.jst.angularjs.internal.ui;x-friends:="org.jboss.tools.jst.angularjs.test"
 Require-Bundle: org.eclipse.ui.ide;bundle-version="3.7.0",
  org.jboss.tools.common.model.ui,

@@ -151,11 +151,16 @@ public class PaletteModelImpl implements IPaletteModel{
 	
 	private static IPaletteGroup createPaletteGroupInstance(IConfigurationElement element) {
 		try {
-			return (IPaletteGroup)element.createExecutableExtension("class"); //$NON-NLS-1$
+			Object o = element.createExecutableExtension("class"); //$NON-NLS-1$
+			if(o instanceof IPaletteGroup) {
+				return (IPaletteGroup)o;
+			} else {
+				WebUiPlugin.getDefault().logError("Palette Group " + element.getAttribute("class") + " should implement IPaletteGroup.");
+			}
 		} catch(CoreException e) {
 			WebUiPlugin.getDefault().logError(e);
-			return null;
 		}
+		return null;
 	}
 
 	@Override

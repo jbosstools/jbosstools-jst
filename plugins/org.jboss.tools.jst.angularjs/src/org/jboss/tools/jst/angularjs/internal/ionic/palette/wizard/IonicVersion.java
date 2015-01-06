@@ -11,8 +11,8 @@
 package org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;
 
 import org.eclipse.core.resources.IFile;
+import org.jboss.tools.jst.angularjs.internal.AngularJSRecognizer;
 import org.jboss.tools.jst.angularjs.internal.ionic.IonicRecognizer;
-import org.jboss.tools.jst.web.kb.internal.AngularJSRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 
 /**

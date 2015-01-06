@@ -11,6 +11,11 @@
             name="Ionic"
             uri="ionic"
             recognizer="org.jboss.tools.jst.angularjs.internal.ionic.IonicRecognizer"/>
+      <tag-lib
+            location="platform:/plugin/org.jboss.tools.jst.angularjs/taglibs/AngularJS.xml"
+            name="AngularJS"
+            uri="angularJS"
+            recognizer="org.jboss.tools.jst.angularjs.internal.AngularJSRecognizer"/>
    	</extension>
 
 	<extension point="org.jboss.tools.jst.web.ui.jscssLibs">
@@ -22,4 +27,14 @@
           class="org.jboss.tools.jst.angularjs.internal.ionic.palette.model.IonicPaletteGroup">
     </group>
  </extension> 
+   <extension
+ 	point="org.jboss.tools.jst.web.ui.CategoryDescriptor">
+    <category-descriptor
+          name="AngularJS"
+          uri="angularJS"
+          property-set-viewer-class="org.jboss.tools.jst.angularjs.internal.ui.AngularJSPropertySetViewer"
+          category-filter-class="org.jboss.tools.jst.angularjs.internal.ui.AngularCategoryFilter">
+    </category-descriptor>
+ </extension>
+ 
 </plugin>
