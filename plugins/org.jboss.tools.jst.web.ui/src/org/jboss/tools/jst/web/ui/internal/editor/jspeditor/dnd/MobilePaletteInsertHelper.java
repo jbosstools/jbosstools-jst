@@ -180,6 +180,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 				globalPosition = 0;
 				goobalLength = 0;
 				newLineBefore = false;
+				newLineAfter = true;
 			}
 		}else if(mode == INSERT_AFTER_OPEN_NODE){
 			if(globalPosition == -1 && relatedNode != null){

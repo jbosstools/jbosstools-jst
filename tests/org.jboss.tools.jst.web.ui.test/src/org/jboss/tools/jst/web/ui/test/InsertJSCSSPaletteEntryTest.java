@@ -153,7 +153,13 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			button(),
 			"|abcde|"
 	};
-
+	
+	protected String[] test_result_0002_2={
+			"<html>",
+			"\t"+button(),
+			"|abcde|",
+			"</html>"
+	};
 	protected String[] test_result_12={
 			"<!DOCTYPE html>",
 			"<html>",
@@ -191,6 +197,12 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 
 	protected String[] test_result_0003={
 			button()+"abcde|"
+	};
+
+	protected String[] test_result_0003_2={
+			"<html>",
+			"\t"+button()+"abcde|",
+			"</html>"
 	};
 
 	protected String[] test_result_13={
@@ -292,6 +304,22 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"</div>",
 			"|abcde|"
 	};
+	protected String[] test_result_0006_2={
+			"<html>",
+			"\t<div data-role=\"page\" id=\"page-1\">",
+			"\t\t<div data-role=\"header\">",
+			"\t\t\t<h1>Page Title</h1>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"content\">",
+			"\t\t\t<p>Page content goes here.</p>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"footer\">",
+			"\t\t\t<h4>Page Footer</h4>",
+			"\t\t</div>",
+			"\t</div>",
+			"|abcde|",
+			"</html>"
+	};
 
 	protected String[] test_result_16={
 			"<!DOCTYPE html>",
@@ -383,6 +411,23 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 			"\t\t<h4>Page Footer</h4>",
 			"\t</div>",
 			"</div>"
+	};
+
+	protected String[] test_result_0007_2={
+			"<html>",
+			"\t<div data-role=\"page\" id=\"page-1\">",
+			"\t\t<div data-role=\"header\">",
+			"\t\t\t<h1>Page Title</h1>",
+			"\t\t</div>",
+			"\t\t<div data-role=\"content\">",
+			"\t\t\t<p>Page content goes here.</p>",
+			"\t\t\tabcde|",
+			"\t\t</div>",
+			"\t\t<div data-role=\"footer\">",
+			"\t\t\t<h4>Page Footer</h4>",
+			"\t\t</div>",
+			"\t</div>",
+			"</html>"
 	};
 
 	protected String[] test_result_17={
@@ -677,6 +722,42 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 
 	public void testInsertMultiTagWithJcCssNoDoctypeFileWithSelection(){
 		doTestWithMultipleParameters("no_doctype.html", false, false, true, test_result_08);
+	}
+	
+	// to tags file
+	// single tag (Button)
+	public void testInsertSingleTagWithJcCssHTMLNoDoctypeFileWithNoSelection(){
+		doTestWithMultipleParameters("html_no_doctype.html", true, true, true, test_result_01);
+	}
+
+	public void testInsertSingleTagWithNoJcCssHTMLNoDoctypeFileWithNoSelection(){
+		doTestWithMultipleParameters("html_no_doctype.html", true, true, false, test_result_0002_2);
+	}
+
+	public void testInsertSingleTagWithNoJcCssHTMLNoDoctypeFileWithSelection(){
+		doTestWithMultipleParameters("html_no_doctype.html", true, false, false, test_result_0003_2);
+	}
+
+	public void testInsertSingleTagWithJcCssHTMLNoDoctypeFileWithSelection(){
+		doTestWithMultipleParameters("html_no_doctype.html", true, false, true, test_result_04);
+	}
+
+	// to tags file
+	// multiple tag (Page)
+	public void testInsertMultiTagWithJcCssHTMLNoDoctypeFileWithNoSelection(){
+		doTestWithMultipleParameters("html_no_doctype.html", false, true, true, test_result_05);
+	}
+
+	public void testInsertMultiTagWithNoJcCssHTMLNoDoctypeFileWithNoSelection(){
+		doTestWithMultipleParameters("html_no_doctype.html", false, true, false, test_result_0006_2);
+	}
+
+	public void testInsertMultiTagWithNoJcCssHTMLNoDoctypeFileWithSelection(){
+		doTestWithMultipleParameters("html_no_doctype.html", false, false, false, test_result_0007_2);
+	}
+
+	public void testInsertMultiTagWithJcCssHTMLNoDoctypeFileWithSelection(){
+		doTestWithMultipleParameters("html_no_doctype.html", false, false, true, test_result_08);
 	}
 	
 	// to tags file
