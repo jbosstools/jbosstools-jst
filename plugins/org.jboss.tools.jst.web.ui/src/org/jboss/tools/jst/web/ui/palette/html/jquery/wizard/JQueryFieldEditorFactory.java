@@ -390,7 +390,7 @@ public class JQueryFieldEditorFactory implements JQueryConstants, HTMLConstants 
 		return createBrowseWorkspaceAudioEditor(EDITOR_ID_SRC, WizardMessages.srcLabel, context);
 	}
 
-	private static IFieldEditor createBrowseWorkspaceImageEditor(String name, String label, IFile context, String description) {
+	public static IFieldEditor createBrowseWorkspaceImageEditor(String name, String label, IFile context, String description) {
 		ButtonFieldEditor.ButtonPressedAction action = createSelectWorkspaceImageAction(CommonUIMessages.SWT_FIELD_EDITOR_FACTORY_BROWS, context);
 		CompositeEditor editor = new CompositeEditor(name, label, "");
 		editor.addFieldEditors(new IFieldEditor[]{new LabelFieldEditor(name,label, description),

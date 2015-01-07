@@ -58,6 +58,7 @@ public interface HTMLConstants {
 	public String TAG_LI = "li";
 	public String TAG_MAP = "map";
 	public String TAG_MENU = "menu";
+	public String TAG_MENUITEM = "menuitem";
 	public String TAG_META = "meta";
 	public String TAG_METER = "meter";
 	public String TAG_OBJECT = "object";
@@ -97,6 +98,7 @@ public interface HTMLConstants {
 	public String ATTR_CITE = "cite";
 	public String ATTR_COLS = "cols";
 	public String ATTR_COLSPAN = "colspan";
+	public String ATTR_COMMAND = "command";
 	public String ATTR_CONTENT = "content";
 	public String ATTR_CONTROLS = "controls";
 	public String ATTR_COORDS = "coords";
@@ -201,6 +203,10 @@ public interface HTMLConstants {
 	public String INPUT_TYPE_WEEK = "week";
 	public String INPUT_TYPE_TIME = "time";
 	public String INPUT_TYPE_DATETIME = "datetime";
+
+	public String MENUITEM_TYPE_CHECKBOX = "checkbox";
+	public String MENUITEM_TYPE_COMMAND = "command";
+	public String MENUITEM_TYPE_RADIO = "radio";
 
 	public String[] TEXT_TYPES = {
 		INPUT_TYPE_TEXT, INPUT_TYPE_TEXTAREA, INPUT_TYPE_SEARCH, 

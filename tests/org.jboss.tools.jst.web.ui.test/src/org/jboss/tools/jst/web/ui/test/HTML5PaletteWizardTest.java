@@ -51,6 +51,8 @@ import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWi
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizardPage;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuitemWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuitemWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTextInputWizard;
@@ -471,6 +473,49 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 		wizardPage.setEditorValue(TAG_THEAD, TRUE);
 		assertTextExists(wizard, TAG_THEAD);
 		
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewMenuitemWizard() {
+		IWizardPage currentPage = runToolEntry("Menuitem", true);
+
+		assertTrue(currentPage instanceof NewMenuitemWizardPage);
+
+		NewMenuitemWizardPage wizardPage = (NewMenuitemWizardPage)currentPage;
+		NewMenuitemWizard wizard = (NewMenuitemWizard)wizardPage.getWizard();
+
+		wizardPage.setEditorValue(EDITOR_ID_ID, "myItem");
+		assertAttrExists(wizard, EDITOR_ID_ID, "myItem");
+
+		wizardPage.setEditorValue(ATTR_LABEL, "Item 01");
+		assertAttrExists(wizard, ATTR_LABEL, "Item 01");
+
+		assertTextDoesNotExist(wizard, ATTR_ICON);
+		wizardPage.setEditorValue(ATTR_ICON, "icon.gif");
+		assertAttrExists(wizard, ATTR_ICON, "icon.gif");
+		wizardPage.setEditorValue(ATTR_ICON, "");
+		assertTextDoesNotExist(wizard, ATTR_ICON);
+
+		assertTextDoesNotExist(wizard, ATTR_DEFAULT);
+		wizardPage.setEditorValue(ATTR_DEFAULT, TRUE);
+		assertAttrExists(wizard, ATTR_DEFAULT, ATTR_DEFAULT);
+		wizardPage.setEditorValue(ATTR_DEFAULT, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DEFAULT);
+
+		assertTextDoesNotExist(wizard, ATTR_DISABLED);
+		wizardPage.setEditorValue(ATTR_DISABLED, TRUE);
+		assertAttrExists(wizard, ATTR_DISABLED, ATTR_DISABLED);
+		wizardPage.setEditorValue(ATTR_DISABLED, FALSE);
+		assertTextDoesNotExist(wizard, ATTR_DISABLED);
+
+		wizardPage.setEditorValue(ATTR_TYPE, MENUITEM_TYPE_CHECKBOX);
+		assertAttrExists(wizard, ATTR_TYPE, MENUITEM_TYPE_CHECKBOX);
+		assertTextDoesNotExist(wizard, CHECKED);
+		wizardPage.setEditorValue(CHECKED, TRUE);
+		assertAttrExists(wizard, CHECKED, CHECKED);
+		wizardPage.setEditorValue(ATTR_TYPE, MENUITEM_TYPE_COMMAND);
+		assertTextDoesNotExist(wizard, CHECKED);
+
 		compareGeneratedAndInsertedText(wizard);
 	}
 

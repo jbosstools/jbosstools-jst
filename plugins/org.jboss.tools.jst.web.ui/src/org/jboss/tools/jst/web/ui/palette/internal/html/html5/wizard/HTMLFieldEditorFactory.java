@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.jboss.tools.common.ui.widget.editor.ButtonFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.CheckBoxFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.CompositeEditor;
@@ -21,6 +22,7 @@ import org.jboss.tools.common.ui.widget.editor.LabelFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.SwtFieldEditorFactory;
 import org.jboss.tools.common.ui.widget.editor.TextFieldEditor;
 import org.jboss.tools.common.ui.widget.editor.ButtonFieldEditor.ButtonPressedAction;
+import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryFieldEditorFactory;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.WizardDescriptions;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.HTMLConstants;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -44,11 +46,19 @@ public class HTMLFieldEditorFactory implements HTMLConstants {
 
 	/**
 	 * Used in New Datalist wizard.
-	 * @return text efield editor for option label
+	 * @return text field editor for option label
 	 */
 	public static IFieldEditor createLabelEditor() {
+		return createLabelEditor(WizardDescriptions.optionLabel);
+	}
+
+	/**
+	 * Used in New Datalist and new Menuitem wizard.
+	 * @return text field editor for option label
+	 */
+	public static IFieldEditor createLabelEditor(String description) {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_LABEL, WizardMessages.labelLabel, "",
-				WizardDescriptions.optionLabel);
+				description);
 	}
 
 	/**
@@ -169,6 +179,49 @@ public class HTMLFieldEditorFactory implements HTMLConstants {
 				toList(METHOD_LIST), 
 				INHERITED_FROM_FORM,
 				WizardDescriptions.buttonFormMethod);
+	}
+
+	static String[] MENUITEM_TYPE_LIST = {MENUITEM_TYPE_CHECKBOX, MENUITEM_TYPE_COMMAND, MENUITEM_TYPE_RADIO};
+
+	/**
+	 * Used in New Menuitem wizard.
+	 * @return
+	 */
+	public static IFieldEditor createMenuitemTypeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(
+				ATTR_TYPE, 
+				WizardMessages.typeLabel, 
+				toList(MENUITEM_TYPE_LIST), 
+				toList(MENUITEM_TYPE_LIST), 
+				MENUITEM_TYPE_COMMAND,
+				WizardDescriptions.menuitemType);
+	}
+
+	/**
+	 * Used in New Menuitem wizard.
+	 * @return
+	 */
+	public static IFieldEditor createDefaultEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_DEFAULT, 
+				WizardMessages.defaultLabel, false,
+				WizardDescriptions.menuitemDefault);
+	}
+
+	/**
+	 * Used in New Menuitem wizard.
+	 * @return
+	 */
+	public static IFieldEditor createIconEditor(IFile context) {
+		return JQueryFieldEditorFactory.createBrowseWorkspaceImageEditor(ATTR_ICON, WizardMessages.iconLabel, context, WizardDescriptions.menuitemIcon);
+	}
+
+	/**
+	 * Used in New Menuitem wizard.
+	 * @return text field editor for option label
+	 */
+	public static IFieldEditor createRadiogroupEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_RADIOGROUP, WizardMessages.radiogroupLabel, "",
+				WizardDescriptions.menuitemRadiogroup);
 	}
 
 }
