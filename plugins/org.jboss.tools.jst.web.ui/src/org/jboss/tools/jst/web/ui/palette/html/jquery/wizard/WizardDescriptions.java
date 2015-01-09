@@ -151,6 +151,8 @@ public class WizardDescriptions extends NLS {
 	public static String listviewReadonly;
 	public static String listviewSearchFilter;
 
+	public static String menuLabel;
+
 	public static String menuitemDefault;
 	public static String menuitemIcon;
 	public static String menuitemLabel;

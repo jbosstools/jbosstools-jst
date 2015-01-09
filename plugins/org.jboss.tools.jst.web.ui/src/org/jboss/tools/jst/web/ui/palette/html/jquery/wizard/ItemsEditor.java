@@ -205,7 +205,10 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 	protected void fillEditorValues() {
 		ItemData s = getSelected();
 		for (String editorID: s.values.keySet()) {
-			page.getEditor(editorID).setValue(s.getValue(editorID));
+			IFieldEditor editor = page.getEditor(editorID);
+			if(editor != null) {
+				editor.setValue(s.getValue(editorID));
+			}
 		}
 		if(page.getLeftPanel() != null) {
 			updateEnablement();

@@ -45,12 +45,15 @@ import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteCategory;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteGroup;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteVersionGroup;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.HTMLFieldEditorFactory;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewButtonWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizardPage;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuitemWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuitemWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizard;
@@ -473,6 +476,30 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 		wizardPage.setEditorValue(TAG_THEAD, TRUE);
 		assertTextExists(wizard, TAG_THEAD);
 		
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewMenuWizard() {
+		IWizardPage currentPage = runToolEntry("Menu", true);
+
+		assertTrue(currentPage instanceof NewMenuWizardPage);
+
+		NewMenuWizardPage wizardPage = (NewMenuWizardPage)currentPage;
+		NewMenuWizard wizard = (NewMenuWizard)wizardPage.getWizard();
+
+		wizardPage.setEditorValue(EDITOR_ID_ID, "myMenu");
+		assertAttrExists(wizard, EDITOR_ID_ID, "myMenu");
+
+		wizardPage.setEditorValue(ATTR_LABEL, "Menu A");
+		assertAttrExists(wizard, ATTR_LABEL, "Menu A");
+
+		wizardPage.setEditorValue(HTMLFieldEditorFactory.EDITOR_ID_MENU_TYPE, MENU_TYPE_CONTEXT);
+		assertAttrExists(wizard, ATTR_TYPE, MENU_TYPE_CONTEXT);
+
+		wizardPage.setMenuitemProperty(0, ATTR_TYPE, MENUITEM_TYPE_CHECKBOX);
+		assertAttrExists(wizard, ATTR_TYPE, MENUITEM_TYPE_CHECKBOX);
+		wizardPage.editMenuItem(0, false);
+
 		compareGeneratedAndInsertedText(wizard);
 	}
 

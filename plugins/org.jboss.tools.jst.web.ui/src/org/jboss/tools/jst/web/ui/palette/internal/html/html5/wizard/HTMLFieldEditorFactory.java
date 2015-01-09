@@ -61,6 +61,16 @@ public class HTMLFieldEditorFactory implements HTMLConstants {
 				description);
 	}
 
+	public static final String EDITOR_ID_MENU_LABEL = "menu-label";
+	/**
+	 * Used in New Datalist, New Menu and New Menuitem wizard.
+	 * @return text field editor for option label
+	 */
+	public static IFieldEditor createLabelEditor(String editorID, String description) {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(editorID, WizardMessages.labelLabel, "",
+				description);
+	}
+
 	/**
 	 * Used in New Datalist wizard.
 	 * @return text efield editor for option value
@@ -154,6 +164,16 @@ public class HTMLFieldEditorFactory implements HTMLConstants {
 		return editor;
 	}
 
+	public static IFieldEditor createEditSelectedMenuitemEditor(ButtonPressedAction action) {
+		CompositeEditor editor = new CompositeEditor("EditMenuitem", WizardMessages.listLabel, "");
+		ButtonFieldEditor b = new ButtonFieldEditor("EditMenuitem", action, "");
+		b.setDescription(WizardDescriptions.inputCreateDatalist);
+		editor.addFieldEditors(new IFieldEditor[]{new LabelFieldEditor("EditMenuitem", "", ""),
+				new LabelFieldEditor("EditMenuitem", "", ""),
+				b});
+		return editor;
+	}
+
 	/**
 	 * Used in New Button wizard.
 	 * @return
@@ -222,6 +242,21 @@ public class HTMLFieldEditorFactory implements HTMLConstants {
 	public static IFieldEditor createRadiogroupEditor() {
 		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_RADIOGROUP, WizardMessages.radiogroupLabel, "",
 				WizardDescriptions.menuitemRadiogroup);
+	}
+
+	public static final String EDITOR_ID_MENU_TYPE = "menu-type";
+
+	static String[] MENU_TYPES = {
+		"", MENU_TYPE_CONTEXT, MENU_TYPE_LIST, MENU_TYPE_TOOLBAR
+	};
+	/**
+	 * Used in New Menu wizard.
+	 * @return text field editor for option label
+	 */
+	public static IFieldEditor createMenuTypeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(EDITOR_ID_MENU_TYPE, 
+				WizardMessages.typeLabel, toList(MENU_TYPES), "", false,
+				WizardDescriptions.menuType);
 	}
 
 }

@@ -55,7 +55,7 @@ import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItemWizard;
  */
 public class AbstractNewHTMLWidgetWizard extends Wizard implements PropertyChangeListener, IPaletteItemWizard, IDropWizardExtension, IWorkbenchWizard, HTMLConstants {
 	protected IDropCommand command;
-	Set<String> ids = new HashSet<String>();
+	protected Set<String> ids = new HashSet<String>();
 	protected IPaletteItem paletteItem;
 
 	/**

@@ -23,6 +23,7 @@ public class HTML50VersionGroup extends AbstractPaletteVersionGroup {
 	public HTML50VersionGroup(){
 		add(new HTML5FormCategory());
 		add(new HTML5MultimediaCategory());
+		add(new HTML5MenuCategory());
 	}
 
 	@Override

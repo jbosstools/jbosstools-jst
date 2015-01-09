@@ -10,6 +10,9 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jboss.tools.common.model.ui.editors.dnd.DropWizardMessages;
 import org.jboss.tools.common.model.ui.editors.dnd.IElementGenerator.ElementNode;
 import org.jboss.tools.jst.web.ui.JSTWebUIImages;
@@ -39,20 +42,40 @@ public class NewMenuitemWizard extends NewHTMLWidgetWizard<NewMenuitemWizardPage
 	protected void addContent(ElementNode parent) {
 		ElementNode menuitem = parent.addChild(TAG_MENUITEM);
 		addID(prefix, menuitem);
-		addAttributeIfNotEmpty(menuitem, ATTR_TYPE, ATTR_TYPE);
-		menuitem.addAttribute(ATTR_LABEL, page.getEditorValue(ATTR_LABEL));
-		if(isTrue(ATTR_DEFAULT)) {
+		Map<String, String> values = new HashMap<String, String>();
+		for (String name: MenuitemsEditor.DIALOG_PROPERTIES) {
+			values.put(name, page.getEditorValue(name));
+		}
+		fillMenuItem(menuitem, values);
+	}
+
+	static void fillMenuItem(ElementNode menuitem, Map<String, String> values) {
+		String type = values.get(ATTR_TYPE);
+		if(type != null && type.length() > 0) {
+			menuitem.addAttribute(ATTR_TYPE, type);
+		}
+		String label = values.get(ATTR_LABEL);
+		if(label != null) {
+			menuitem.addAttribute(ATTR_LABEL, label);
+		}
+		if(TRUE.equals(values.get(ATTR_DEFAULT))) {
 			menuitem.addAttribute(ATTR_DEFAULT, ATTR_DEFAULT);
 		}
-		if(isTrue(ATTR_DISABLED)) {
+		if(TRUE.equals(values.get(ATTR_DISABLED))) {
 			menuitem.addAttribute(ATTR_DISABLED, ATTR_DISABLED);
 		}
-		if(!MENUITEM_TYPE_COMMAND.equals(page.getEditorValue(ATTR_TYPE)) && isTrue(CHECKED)) {
+		if(!MENUITEM_TYPE_COMMAND.equals(type) && TRUE.equals(values.get(CHECKED))) {
 			menuitem.addAttribute(CHECKED, CHECKED);
 		}
-		addAttributeIfNotEmpty(menuitem, ATTR_ICON, ATTR_ICON);
-		if(MENUITEM_TYPE_RADIO.equals(page.getEditorValue(ATTR_TYPE))) {
-			addAttributeIfNotEmpty(menuitem, ATTR_RADIOGROUP, ATTR_RADIOGROUP);
+		String icon = values.get(ATTR_ICON);
+		if(icon != null && icon.length() > 0) {
+			menuitem.addAttribute(ATTR_ICON, icon);
+		}
+		if(MENUITEM_TYPE_RADIO.equals(type)) {
+			String radiogroup = values.get(ATTR_RADIOGROUP);
+			if(radiogroup != null && radiogroup.length() > 0) {
+				menuitem.addAttribute(ATTR_RADIOGROUP, radiogroup);
+			}
 		}
 	}
 

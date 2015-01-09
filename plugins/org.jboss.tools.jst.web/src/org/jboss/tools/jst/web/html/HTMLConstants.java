@@ -204,6 +204,10 @@ public interface HTMLConstants {
 	public String INPUT_TYPE_TIME = "time";
 	public String INPUT_TYPE_DATETIME = "datetime";
 
+	public String MENU_TYPE_CONTEXT = "context";
+	public String MENU_TYPE_LIST = "list";
+	public String MENU_TYPE_TOOLBAR = "toolbar";
+	
 	public String MENUITEM_TYPE_CHECKBOX = "checkbox";
 	public String MENUITEM_TYPE_COMMAND = "command";
 	public String MENUITEM_TYPE_RADIO = "radio";

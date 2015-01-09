@@ -15,7 +15,6 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizard;
-import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuitemWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTextInputWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.AbstractPaletteCategory;
@@ -85,16 +84,6 @@ public class HTML5FormCategory extends AbstractPaletteCategory {
 				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
 						"palette/FormButton.png"), // image path
 				NewButtonWizard.class, // wizard class
-				null // corrector
-		);
-		add(item);
-		item = new PaletteItemImpl(
-				"Menuitem", // label
-				"<html>\n<b>Menuitem:</b><br>\n&lt;menuitem type=\"command\">...&lt;/menuitem>\n</html>", // tooltip
-				"menu item ", // keywords
-				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
-						"palette/Menuitem.png"), // image path
-				NewMenuitemWizard.class, // wizard class
 				null // corrector
 		);
 		add(item);
