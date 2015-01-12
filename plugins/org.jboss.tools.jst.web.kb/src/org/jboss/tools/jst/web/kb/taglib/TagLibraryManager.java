@@ -172,6 +172,9 @@ public class TagLibraryManager {
 					prefix = name.substring(0, i);
 					sufix = name.substring(i);
 				}
+				while(prefix.length() < 3) {
+					prefix += "_";
+				}
 
 				WebKbPlugin plugin = WebKbPlugin.getDefault();
 				if(plugin != null) {
