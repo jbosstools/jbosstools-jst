@@ -2408,6 +2408,12 @@
             name="Create Nonexisting File Hyperlink"
             targetId="org.eclipse.ui.DefaultTextEditor">
       </hyperlinkDetector>
+      <hyperlinkDetector
+            class="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.internal.DatalistHyperlinkDetector"
+            id="org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink.internal.DatalistHyperlinkDetector"
+            name="Go to datalist"
+            targetId="org.eclipse.wst.html.core.htmlsource">
+      </hyperlinkDetector>
    	</extension>
 
    <extension

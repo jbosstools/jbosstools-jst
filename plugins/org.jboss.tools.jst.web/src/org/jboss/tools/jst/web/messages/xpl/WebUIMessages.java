@@ -182,4 +182,6 @@ public class WebUIMessages extends NLS {
 	public static String Question;
 	public static String UseWizard;
 	public static String WizardNotFound;
+	
+	public static String ShowDatalist;
 }

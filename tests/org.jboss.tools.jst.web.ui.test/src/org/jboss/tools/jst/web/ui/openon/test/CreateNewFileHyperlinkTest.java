@@ -67,7 +67,7 @@ public class CreateNewFileHyperlinkTest extends TestCase{
 	private void checkHyperlinkDetector(String pageName) throws Exception{
 		ArrayList<TestRegion> regionList = new ArrayList<TestRegion>();
 		
-		regionList.add(new TestRegion("\"anyfile.css\"", new TestHyperlink[]{ //$NON-NLS-1$
+		regionList.add(new TestRegion("anyfile.css", new TestHyperlink[]{ //$NON-NLS-1$
 			new TestHyperlink(CreateNewFileHyperlink.class, "File 'anyfile.css' does not exist. Click here to create.") //$NON-NLS-1$
 		}));
 		regionList.add(new TestRegion("anyfile.js", new TestHyperlink[]{ //$NON-NLS-1$
@@ -77,7 +77,7 @@ public class CreateNewFileHyperlinkTest extends TestCase{
 		regionList.add(new TestRegion("anyfolder/anyfile.jsp", new TestHyperlink[]{ //$NON-NLS-1$
 			new TestHyperlink(CreateNewFileHyperlink.class, "File 'anyfolder/anyfile.jsp' does not exist. Click here to create.") //$NON-NLS-1$
 		}));
-		regionList.add(new TestRegion("\"./anyfile.htm\"", new TestHyperlink[]{ //$NON-NLS-1$
+		regionList.add(new TestRegion("./anyfile.htm", new TestHyperlink[]{ //$NON-NLS-1$
 			new TestHyperlink(CreateNewFileHyperlink.class, "File './anyfile.htm' does not exist. Click here to create.") //$NON-NLS-1$
 		}));
 
@@ -128,7 +128,7 @@ public class CreateNewFileHyperlinkTest extends TestCase{
 		regionList.add(new TestRegion("anyfolder/anyfile.jsp", new TestHyperlink[]{ //$NON-NLS-1$
 			new TestHyperlink(CreateNewFileHyperlink.class, "File 'anyfolder/anyfile.jsp' does not exist. Click here to create.") //$NON-NLS-1$
 		}));
-		regionList.add(new TestRegion("\"./anyfile.htm\"", new TestHyperlink[]{ //$NON-NLS-1$
+		regionList.add(new TestRegion("./anyfile.htm", new TestHyperlink[]{ //$NON-NLS-1$
 			new TestHyperlink(CreateNewFileHyperlink.class, "File './anyfile.htm' does not exist. Click here to create.") //$NON-NLS-1$
 		}));
 
