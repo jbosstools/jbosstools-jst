@@ -18,21 +18,20 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.hyperlink.AbstractHyperlinkDetector;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMText;
+import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
 import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
 import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.common.text.ext.util.Utils.AttrNodePair;
 import org.jboss.tools.common.web.WebUtils;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 
 public class CreateNewFileHyperlinkDetector extends AbstractHyperlinkDetector {
@@ -45,17 +44,17 @@ public class CreateNewFileHyperlinkDetector extends AbstractHyperlinkDetector {
 			IRegion region, boolean canShowMultipleHyperlinks) {
 		List<IHyperlink> links = new ArrayList<IHyperlink>();
 		
-		IFile file = getFile();
+		IFile file = MarkerResolutionUtils.getFile();
 		
 		if(file == null)
 			return null;
 		String extension = file.getFileExtension();
 		
-		if("xml".equals(extension) || //$NON-NLS-1$
-				"htm".equals(extension) || //$NON-NLS-1$
-				"html".equals(extension) || //$NON-NLS-1$
-				"jsp".equals(extension) || //$NON-NLS-1$
-				"xhtml".equals(extension)){ //$NON-NLS-1$
+		if("xml".equalsIgnoreCase(extension) || //$NON-NLS-1$
+				"htm".equalsIgnoreCase(extension) || //$NON-NLS-1$
+				"html".equalsIgnoreCase(extension) || //$NON-NLS-1$
+				"jsp".equalsIgnoreCase(extension) || //$NON-NLS-1$
+				"xhtml".equalsIgnoreCase(extension)){ //$NON-NLS-1$
 			StructuredModelWrapper smw = new StructuredModelWrapper();
 			smw.init(textViewer.getDocument());
 			try {
@@ -67,11 +66,16 @@ public class CreateNewFileHyperlinkDetector extends AbstractHyperlinkDetector {
 				
 				if(pair != null){
 					if(pair.getAttribute() != null){
-						ITextRegion textRegion = pair.getAttribute().getValueRegion();
-						if(textRegion != null && 
-								region.getOffset() >= (pair.getNode().getStartOffset() + textRegion.getStart()) && 
-								region.getOffset() <= (pair.getNode().getStartOffset() + textRegion.getEnd())){
-							Region nodeRegion = new Region(pair.getNode().getStartOffset() +textRegion.getStart()+1, textRegion.getLength()-2);
+						IRegion nodeRegion = null;
+						try {
+							nodeRegion = Utils.getAttributeValueRegion(textViewer.getDocument(), (Attr)pair.getAttribute());
+						} catch (BadLocationException e) {
+							WebUiPlugin.getDefault().logError(e);
+						}
+						
+						if(nodeRegion != null && 
+								region.getOffset() >= nodeRegion.getOffset() && 
+								region.getOffset() <= (nodeRegion.getOffset()+nodeRegion.getLength())){
 							String attrValue = pair.getAttribute().getNodeValue();
 							if(validateName(attrValue)){
 								IFile linkFile = getLinkFile(file, attrValue);
@@ -163,13 +167,4 @@ public class CreateNewFileHyperlinkDetector extends AbstractHyperlinkDetector {
 		return null;
 	}
 	
-	private static IFile getFile(){
-		IEditorPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
-		if(part != null){
-			IEditorInput input = part.getEditorInput();
-			if(input instanceof FileEditorInput)
-				return ((FileEditorInput)input).getFile();
-		}
-		return null;
-	}
 }

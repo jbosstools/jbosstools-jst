@@ -48,6 +48,10 @@ public class JstTextExtAllTests {
 				"org.jboss.tools.jst.web.ui.test",
 				new String[]{"projects/Test"},
 				new String[]{"Test"}));
+		suite.addTest(new ProjectImportTestSetup(new TestSuite(DatalistHyperlinkDetectorTest.class),
+				"org.jboss.tools.jst.web.ui.test",
+				new String[]{"projects/Test"},
+				new String[]{"Test"}));
 
 		//$JUnit-END$
 		return suite;
