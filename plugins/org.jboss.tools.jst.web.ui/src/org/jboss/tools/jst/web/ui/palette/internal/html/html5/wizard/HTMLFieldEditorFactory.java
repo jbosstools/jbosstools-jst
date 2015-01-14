@@ -259,4 +259,55 @@ public class HTMLFieldEditorFactory implements HTMLConstants {
 				WizardDescriptions.menuType);
 	}
 
+
+	/**
+	 * Used in New List wizard.
+	 * @return text efield editor for option value
+	 */
+	public static IFieldEditor createListValueEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_VALUE, WizardMessages.valueLabel, "",
+				WizardDescriptions.listValue);
+	}
+
+	public static final String EDITOR_ID_ORDERED = "ordered-list"; 
+
+	/**
+	 * Used in New List context.
+	 * @return checkbox field editor selected by default
+	 */
+	public static IFieldEditor createOrderedListEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(EDITOR_ID_ORDERED, 
+				WizardMessages.orderedLabel, true,
+				WizardDescriptions.listOrdered);
+	}
+
+	static String[] ORDERED_LIST_TYPE_LIST = {"", "1", "A", "a", "I", "i"};
+
+	/**
+	 * Used in New List wizard.
+	 * @return
+	 */
+	public static IFieldEditor createOrderedListTypeEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(ATTR_TYPE, WizardMessages.typeLabel, toList(ORDERED_LIST_TYPE_LIST), "", false,
+				WizardDescriptions.listType);
+	}
+
+	/**
+	 * Used in New List wizard.
+	 * @return
+	 */
+	public static IFieldEditor createOrderedListStartEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_START, WizardMessages.startLabel, "",
+				WizardDescriptions.listStart);
+	}
+
+	/**
+	 * Used in New List context.
+	 * @return checkbox field editor unselected by default
+	 */
+	public static IFieldEditor createOrderedListReversedEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(ATTR_REVERSED, 
+				WizardMessages.reversedLabel, false,
+				WizardDescriptions.listReversed);
+	}
 }

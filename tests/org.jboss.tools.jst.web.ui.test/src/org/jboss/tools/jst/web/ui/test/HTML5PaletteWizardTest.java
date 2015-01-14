@@ -52,6 +52,8 @@ import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWi
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewCanvasWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizardPage;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewListWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewListWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuitemWizard;
@@ -479,6 +481,41 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 		compareGeneratedAndInsertedText(wizard);
 	}
 
+	public void testNewListWizard() {
+		IWizardPage currentPage = runToolEntry("List", true);
+
+		assertTrue(currentPage instanceof NewListWizardPage);
+
+		NewListWizardPage wizardPage = (NewListWizardPage)currentPage;
+		NewListWizard wizard = (NewListWizard)wizardPage.getWizard();
+
+		wizardPage.setEditorValue(EDITOR_ID_ID, "myList");
+		assertTextDoesNotExist(wizard, "myList");
+		wizardPage.setEditorValue(EDITOR_ID_ADD_ID, TRUE);
+		assertAttrExists(wizard, EDITOR_ID_ID, "myList");
+
+		assertTextDoesNotExist(wizard, ATTR_REVERSED);
+		wizardPage.setEditorValue(ATTR_REVERSED, TRUE);
+		assertAttrExists(wizard, ATTR_REVERSED, ATTR_REVERSED);
+
+		assertTextDoesNotExist(wizard, ATTR_START);
+		wizardPage.setEditorValue(ATTR_START, "2");
+		assertAttrExists(wizard, ATTR_START, "2");
+
+		assertTextDoesNotExist(wizard, ATTR_TYPE);
+		wizardPage.setEditorValue(ATTR_TYPE, "A");
+		assertAttrExists(wizard, ATTR_TYPE, "A");
+
+		assertTextExists(wizard, "<" + TAG_OL);
+		wizardPage.setEditorValue(HTMLFieldEditorFactory.EDITOR_ID_ORDERED, FALSE);
+		assertTextExists(wizard, "<" + TAG_UL);
+		assertTextDoesNotExist(wizard, ATTR_REVERSED);
+		assertTextDoesNotExist(wizard, ATTR_START);
+		assertTextDoesNotExist(wizard, ATTR_TYPE);
+
+		compareGeneratedAndInsertedText(wizard);
+	}
+
 	public void testNewMenuWizard() {
 		IWizardPage currentPage = runToolEntry("Menu", true);
 
@@ -502,6 +539,7 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 
 		compareGeneratedAndInsertedText(wizard);
 	}
+
 
 	public void testNewMenuitemWizard() {
 		IWizardPage currentPage = runToolEntry("Menuitem", true);

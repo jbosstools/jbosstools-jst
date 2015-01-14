@@ -156,6 +156,7 @@ public class WizardMessages extends NLS {
 	public static String onLabelLabel;
 	public static String openLabel;
 	public static String optimumLabel;
+	public static String orderedLabel;
 	public static String overlayLabel;
 	public static String paddingLabel;
 	public static String panelPositionLabel;
@@ -342,6 +343,9 @@ public class WizardMessages extends NLS {
 
 	public static String newLabelWizardTitle;
 	public static String newLabelWizardDescription;
+
+	public static String newListWizardTitle;
+	public static String newListWizardDescription;
 
 	public static String newMenuWizardTitle;
 	public static String newMenuWizardDescription;

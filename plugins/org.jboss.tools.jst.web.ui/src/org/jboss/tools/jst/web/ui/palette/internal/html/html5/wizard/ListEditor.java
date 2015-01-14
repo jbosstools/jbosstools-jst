@@ -23,9 +23,13 @@ public class ListEditor extends ItemsEditor {
 	public ListEditor(AbstractNewHTMLWidgetWizardPage page, int minNumber, int maxNumber) {
 		super(page, minNumber, maxNumber);
 		for (int i = 0; i < maxNumber; i++) {
-			setLabel(i, "Option" + (i + 1));
-			setValue(i, "Value" + (i + 1));
+			setDefaultValues(i);
 		}
+	}
+
+	protected void setDefaultValues(int i) {
+		setLabel(i, "Option" + (i + 1));
+		setValue(i, "Value" + (i + 1));
 	}
 
 	@Override

@@ -26,7 +26,7 @@ public class HTML5MenuCategory extends AbstractPaletteCategory {
 	public HTML5MenuCategory() {
 		PaletteItemImpl item = new PaletteItemImpl(
 				"Menu", // label
-				"<html>\n<b>Menuitem:</b><br>\n&lt;menu>...&lt;/menu>\n</html>", // tooltip
+				"<html>\n<b>Menu:</b><br>\n&lt;menu>...&lt;/menu>\n</html>", // tooltip
 				"menu ", // keywords
 				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
 						"palette/Menu.png"), // image path

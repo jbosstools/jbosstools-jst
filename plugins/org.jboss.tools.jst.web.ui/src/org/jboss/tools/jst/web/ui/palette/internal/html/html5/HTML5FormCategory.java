@@ -15,6 +15,7 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewFormWizard;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewListWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTextInputWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.AbstractPaletteCategory;
@@ -38,6 +39,16 @@ public class HTML5FormCategory extends AbstractPaletteCategory {
 		);
 		add(table);
 		PaletteItemImpl item = new PaletteItemImpl(
+				"List", // label
+				"<html>\n<b>List:</b><br>\n&lt;ol><br>\n...<br>\n&lt;/ol>\n</html>", // tooltip
+				"List", // keywords
+				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
+						"palette/HTML5List.png"), // image path
+				NewListWizard.class, // wizard
+				null // corrector
+		);
+		add(item);
+		item = new PaletteItemImpl(
 				"Form", // label
 				"<html>\n<b>Form:</b><br>\n&lt;form><br>\n...<br>\n&lt;/form>\n</html>", // tooltip
 				"Form", // keywords

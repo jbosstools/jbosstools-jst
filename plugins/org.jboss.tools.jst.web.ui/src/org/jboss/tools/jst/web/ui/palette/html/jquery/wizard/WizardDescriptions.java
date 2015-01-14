@@ -143,6 +143,12 @@ public class WizardDescriptions extends NLS {
 	public static String linkRel;
 	public static String linkType;
 
+	public static String listOrdered;
+	public static String listReversed;
+	public static String listStart;
+	public static String listType;
+	public static String listValue;
+
 	public static String listviewAutodividers;
 	public static String listviewDivider;
 	public static String listviewDividerTheme;
