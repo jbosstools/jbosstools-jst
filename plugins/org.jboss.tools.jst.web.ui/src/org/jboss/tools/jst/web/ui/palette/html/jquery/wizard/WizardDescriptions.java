@@ -177,6 +177,7 @@ public class WizardDescriptions extends NLS {
 	public static String meterMax;
 	public static String meterMin;
 	public static String meterOptimum;
+	public static String meterValue;
 
 	public static String nativeMenu;
 

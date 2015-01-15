@@ -310,4 +310,59 @@ public class HTMLFieldEditorFactory implements HTMLConstants {
 				WizardMessages.reversedLabel, false,
 				WizardDescriptions.listReversed);
 	}
+
+	/**
+	 * Used in New Meter wizard.
+	 * @return text field editor for meter current value
+	 */
+	public static IFieldEditor createMeterValueEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_VALUE, WizardMessages.valueLabel, "0",
+				WizardDescriptions.meterValue);
+	}
+
+	/**
+	 * Used in New Meter wizard.
+	 * @return text field editor for meter current value
+	 */
+	public static IFieldEditor createMeterMaxEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_MAX, WizardMessages.maxLabel, "",
+				WizardDescriptions.meterMax);
+	}
+
+	/**
+	 * Used in New Meter wizard.
+	 * @return text field editor for meter current value
+	 */
+	public static IFieldEditor createMeterMinEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_MIN, WizardMessages.minLabel, "",
+				WizardDescriptions.meterMin);
+	}
+
+	/**
+	 * Used in New Meter wizard.
+	 * @return text field editor for meter current value
+	 */
+	public static IFieldEditor createMeterHighEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_HIGH, WizardMessages.highLabel, "",
+				WizardDescriptions.meterHigh);
+	}
+
+	/**
+	 * Used in New Meter wizard.
+	 * @return text field editor for meter current value
+	 */
+	public static IFieldEditor createMeterLowEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_LOW, WizardMessages.lowLabel, "",
+				WizardDescriptions.meterLow);
+	}
+
+	/**
+	 * Used in New Meter wizard.
+	 * @return text field editor for meter current value
+	 */
+	public static IFieldEditor createMeterOptimumEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createTextEditor(ATTR_OPTIMUM, WizardMessages.optimumLabel, "",
+				WizardDescriptions.meterOptimum);
+	}
+
 }
