@@ -63,6 +63,7 @@ public class JSTWebUIImages extends CommonUIImages{
 	public static final String MENUITEM_IMAGE  = WIZARDS_PATH + "MenuitemWizBan.png"; //$NON-NLS-1$
 	public static final String MENU_IMAGE  = WIZARDS_PATH + "MenuWizBan.png"; //$NON-NLS-1$
 	public static final String LIST_IMAGE    = WIZARDS_PATH + "HTML5ListWizBan.png"; //$NON-NLS-1$
+	public static final String METER_IMAGE    = WIZARDS_PATH + "MeterWizBan.png"; //$NON-NLS-1$
 
 	private static JSTWebUIImages INSTANCE;
 	

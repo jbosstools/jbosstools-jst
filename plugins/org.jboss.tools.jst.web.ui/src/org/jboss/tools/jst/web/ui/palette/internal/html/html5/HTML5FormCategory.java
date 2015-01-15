@@ -16,6 +16,8 @@ import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewLabelWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewButtonWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewDatalistWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewListWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMeterWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTextInputWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.AbstractPaletteCategory;
@@ -95,6 +97,16 @@ public class HTML5FormCategory extends AbstractPaletteCategory {
 				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
 						"palette/FormButton.png"), // image path
 				NewButtonWizard.class, // wizard class
+				null // corrector
+		);
+		add(item);
+		item = new PaletteItemImpl(
+				"Meter", // label
+				"<html>\n<b>Meter:</b><br>\n&lt;meter>...&lt;/meter>\n</html>", // tooltip
+				"meter ", // keywords
+				JSTWebUIImages.getInstance().getOrCreateImageDescriptor(
+						"palette/Meter.png"), // image path
+				NewMeterWizard.class, // wizard class
 				null // corrector
 		);
 		add(item);
