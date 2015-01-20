@@ -74,10 +74,21 @@
             name="Ionic"
             uri="ionic"
             recognizer="org.jboss.tools.jst.angularjs.internal.ionic.IonicRecognizer"/>
-   	</extension>
+   </extension>
 
-	<extension point="org.jboss.tools.jst.web.ui.jscssLibs">
-		<libs path="meta/js-css.xml"/>
-	</extension> 
-
+   <extension point="org.jboss.tools.jst.web.ui.jscssLibs">
+      <libs path="meta/js-css.xml"/>
+   </extension> 
+   <extension 
+      point="tern.eclipse.ide.core.ternNatureAdapters"
+      id="org.jboss.tools.jst.angularjs.ternNatureAdapters"
+      name="org.jboss.tools.jst.angularjs.ternNatureAdapters">
+      <ternAdaptToNature 
+         id = "org.eclipse.wst.jsdt.core.jsNature"
+         name = "JavaScript">
+         <defaultModules>
+	        <module name="angular" />
+         </defaultModules>
+      </ternAdaptToNature>
+   </extension> 
 </plugin>
