@@ -16,7 +16,6 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
-import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil.TwoColumns;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryFieldEditorFactory;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -35,13 +34,14 @@ public class NewMeterWizardPage extends NewHTMLWidgetWizardPage {
 
 	@Override
 	protected void createFieldPanel(Composite parent) {
-		TwoColumns columns = createTwoColumns(parent);
-		addEditor(HTMLFieldEditorFactory.createMeterValueEditor(), columns.left());
-		addEditor(HTMLFieldEditorFactory.createMeterOptimumEditor(), columns.right());
-		addEditor(HTMLFieldEditorFactory.createMeterMinEditor(), columns.left());
-		addEditor(HTMLFieldEditorFactory.createMeterMaxEditor(), columns.right());
-		addEditor(HTMLFieldEditorFactory.createMeterLowEditor(), columns.left());
-		addEditor(HTMLFieldEditorFactory.createMeterHighEditor(), columns.right());
+		addEditor(HTMLFieldEditorFactory.createMeterValueEditor(), parent);
+		addEditor(HTMLFieldEditorFactory.createMeterMinEditor(), parent);
+		addEditor(HTMLFieldEditorFactory.createMeterMaxEditor(), parent);
+		createSeparator(parent);
+		addEditor(HTMLFieldEditorFactory.createMeterLowEditor(), parent);
+		addEditor(HTMLFieldEditorFactory.createMeterOptimumEditor(), parent);
+		addEditor(HTMLFieldEditorFactory.createMeterHighEditor(), parent);
+		createSeparator(parent);
 		createIDEditor(parent, true);
 		addEditor(JQueryFieldEditorFactory.createFormReferenceEditor(), parent);
 
