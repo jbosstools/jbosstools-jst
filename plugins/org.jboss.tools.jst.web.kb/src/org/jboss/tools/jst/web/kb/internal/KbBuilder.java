@@ -10,7 +10,8 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.kb.internal;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
@@ -19,9 +20,10 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.osgi.util.NLS;
 import org.jboss.tools.common.el.core.resolver.TypeInfoCollector;
 import org.jboss.tools.common.util.TypeResolutionCache;
 import org.jboss.tools.jst.web.WebModelPlugin;
@@ -32,7 +34,6 @@ import org.jboss.tools.jst.web.kb.internal.scanner.IFileScanner;
 import org.jboss.tools.jst.web.kb.internal.scanner.LibraryScanner;
 import org.jboss.tools.jst.web.kb.internal.scanner.UsedJavaProjectCheck;
 import org.jboss.tools.jst.web.kb.internal.scanner.XMLScanner;
-import org.osgi.framework.Bundle;
 
 /**
  * 
@@ -173,25 +174,48 @@ public class KbBuilder extends IncrementalProjectBuilder {
 		PageContextFactory.getInstance().cleanUp(getProject());
 	}
 
-	static String[][] builders = {
-		{"org.jboss.tools.jsf", "org.jboss.tools.jsf.jsf2.bean.build.JSF2ProjectBuilder"}
-	};
+	static String ATTR_CLASS = "class";
+	static String COBUILDERS_POINT = "org.jboss.tools.jst.web.kb.cobuilders";
+	
+	static Class<?>[] cobuilders = null;
 
-	void buildExtensionModels(int kind, Map args, IProgressMonitor monitor) throws CoreException {
-		for (int i = 0; i < builders.length; i++) {
-			Bundle b = Platform.getBundle(builders[i][0]);
-			if(b != null) {
+	static Class<?>[] getCobuilders() {
+		if(cobuilders == null) {
+			IExtensionPoint p = Platform.getExtensionRegistry().getExtensionPoint(COBUILDERS_POINT);
+			IConfigurationElement[] es = p.getConfigurationElements();
+			List<Class<?>> list = new ArrayList<Class<?>>();
+			for (IConfigurationElement c: es) {
 				try {
-					IncrementalProjectBuilder builder = (IncrementalProjectBuilder)b.loadClass(builders[i][1]).newInstance();
-					KbProjectFactory.setProjectToBuilder(builder, getProject());
-					((IIncrementalProjectBuilderExtension)builder).build(kind, args, monitor);
-				} catch (InstantiationException e) {
+					String className = c.getAttribute(ATTR_CLASS);
+					if(className == null || className.length() == 0) {
+						continue; //ignore
+					}
+					IncrementalProjectBuilder builder = (IncrementalProjectBuilder)c.createExecutableExtension(ATTR_CLASS);
+					IIncrementalProjectBuilderExtension extension = (IIncrementalProjectBuilderExtension)builder;
+					list.add(extension.getClass());
+				} catch (CoreException e) {
 					WebKbPlugin.getDefault().logError(e);
-				} catch (IllegalAccessException e) {
-					WebKbPlugin.getDefault().logError(e);
-				} catch (ClassNotFoundException e) {
+				} catch (ClassCastException e) {
 					WebKbPlugin.getDefault().logError(e);
 				}
+			}
+			cobuilders = list.toArray(new Class<?>[list.size()]);
+		}
+		return cobuilders;
+	}
+	
+	void buildExtensionModels(int kind, Map<String,String> args, IProgressMonitor monitor) throws CoreException {
+		for (Class<?> c: getCobuilders()) {
+			try {
+				IncrementalProjectBuilder builder = (IncrementalProjectBuilder)c.newInstance();
+				KbProjectFactory.setProjectToBuilder(builder, getProject());
+				((IIncrementalProjectBuilderExtension)builder).build(kind, args, monitor);
+			} catch (CoreException e) {
+				WebKbPlugin.getDefault().logError(e);
+			} catch (InstantiationException e) {
+				WebKbPlugin.getDefault().logError(e);
+			} catch (IllegalAccessException e) {
+				WebKbPlugin.getDefault().logError(e);
 			}
 		}
 	}

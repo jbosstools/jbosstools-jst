@@ -27,4 +27,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %Bundle-Vendor.0
 Export-Package: org.jboss.tools.jst.web.kb.test,
- org.jboss.tools.jst.web.kb.test.validation
+ org.jboss.tools.jst.web.kb.test.validation,
+ org.jboss.tools.jst.web.kb.test.builder

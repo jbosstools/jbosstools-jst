@@ -43,4 +43,11 @@
 	</catalogContribution>
 
  </extension>
+
+    <extension
+          point="org.jboss.tools.jst.web.kb.cobuilders">
+       <builder
+             class="org.jboss.tools.jst.web.kb.test.builder.KbCobuilder">
+       </builder>
+    </extension>
 </plugin>

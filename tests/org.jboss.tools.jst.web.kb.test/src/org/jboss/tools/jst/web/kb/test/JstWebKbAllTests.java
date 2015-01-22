@@ -15,6 +15,7 @@ import junit.framework.TestSuite;
 
 import org.jboss.tools.common.base.test.model.XProjectImportTestSetUp;
 import org.jboss.tools.common.base.test.validation.ValidationProjectTestSetup;
+import org.jboss.tools.jst.web.kb.test.builder.KbCobuilderTest;
 import org.jboss.tools.jst.web.kb.test.validation.BuilderOrderMarkerResolutionTest;
 import org.jboss.tools.jst.web.kb.test.validation.BuilderOrderValidationTest;
 import org.jboss.tools.jst.web.kb.test.validation.KBValidationTest;
@@ -29,6 +30,7 @@ public class JstWebKbAllTests {
 		TestSuite suiteAll = new TestSuite("KB Tests");
 		TestSuite suite = new TestSuite(KbModelStorageTest.class.getName());
 		suite.addTestSuite(KbModelStorageTest.class);
+		suite.addTestSuite(KbCobuilderTest.class);
 		ProjectImportTestSetup testSetup = new XProjectImportTestSetUp(suite,
 				"org.jboss.tools.jst.web.kb.test",
 				new String[]{"projects/TestKbModel2"},
