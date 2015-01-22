@@ -17,6 +17,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IEditorPart;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.common.model.ui.views.palette.IPositionCorrector;
@@ -58,6 +59,8 @@ import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuWiza
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuitemWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMenuitemWizardPage;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMeterWizard;
+import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewMeterWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTableWizardPage;
 import org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard.NewTextInputWizard;
@@ -580,6 +583,56 @@ public class HTML5PaletteWizardTest extends AbstractPaletteEntryTest implements 
 		assertAttrExists(wizard, CHECKED, CHECKED);
 		wizardPage.setEditorValue(ATTR_TYPE, MENUITEM_TYPE_COMMAND);
 		assertTextDoesNotExist(wizard, CHECKED);
+
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewMeterWizard() {
+		IWizardPage currentPage = runToolEntry("Meter", true);
+
+		assertTrue(currentPage instanceof NewMeterWizardPage);
+
+		NewMeterWizardPage wizardPage = (NewMeterWizardPage)currentPage;
+		NewMeterWizard wizard = (NewMeterWizard)wizardPage.getWizard();
+
+		wizardPage.setEditorValue(EDITOR_ID_ID, "myMeter");
+		assertAttrExists(wizard, EDITOR_ID_ID, "myMeter");
+
+		
+		wizardPage.setEditorValue(ATTR_MIN, "2");
+		assertAttrExists(wizard, ATTR_MIN, "2");
+		assertEquals(NLS.bind(WizardMessages.errorShouldBeLessThan, ATTR_MIN, ATTR_MAX), wizardPage.getMessage());
+
+		wizardPage.setEditorValue(ATTR_MAX, "4");
+		assertAttrExists(wizard, ATTR_MAX, "4");
+		assertEquals(NLS.bind(WizardMessages.errorShouldBeLessThan, ATTR_MIN, ATTR_VALUE), wizardPage.getMessage());
+		wizardPage.setEditorValue(ATTR_VALUE, "3");
+		assertAttrExists(wizard, ATTR_VALUE, "3");
+		assertNull(wizardPage.getMessage());
+
+		wizardPage.setEditorValue(ATTR_LOW, "1");
+		wizardPage.setEditorValue(ATTR_LOW, "1");
+		assertEquals(NLS.bind(WizardMessages.errorShouldBeLessThan, ATTR_MIN, ATTR_LOW), wizardPage.getMessage());
+		wizardPage.setEditorValue(ATTR_LOW, "4.1");
+		assertEquals(NLS.bind(WizardMessages.errorShouldBeLessThan, ATTR_LOW, ATTR_MAX), wizardPage.getMessage());
+		wizardPage.setEditorValue(ATTR_LOW, "2.5");
+		assertNull(wizardPage.getMessage());
+		
+		wizardPage.setEditorValue(ATTR_HIGH, "5");
+		assertAttrExists(wizard, ATTR_HIGH, "5");
+		assertEquals(NLS.bind(WizardMessages.errorShouldBeLessThan, ATTR_HIGH, ATTR_MAX), wizardPage.getMessage());
+		wizardPage.setEditorValue(ATTR_HIGH, "2.4");
+		assertEquals(NLS.bind(WizardMessages.errorShouldBeLessThan, ATTR_LOW, ATTR_HIGH), wizardPage.getMessage());
+		wizardPage.setEditorValue(ATTR_HIGH, "3.5");
+		assertNull(wizardPage.getMessage());
+
+		wizardPage.setEditorValue(ATTR_OPTIMUM, "3.6");
+		wizardPage.setEditorValue(ATTR_OPTIMUM, "3.6");
+		assertEquals(NLS.bind(WizardMessages.errorShouldBeLessThan, ATTR_OPTIMUM, ATTR_HIGH), wizardPage.getMessage());
+		wizardPage.setEditorValue(ATTR_OPTIMUM, "2.4");
+		assertEquals(NLS.bind(WizardMessages.errorShouldBeLessThan, ATTR_LOW, ATTR_OPTIMUM), wizardPage.getMessage());
+		wizardPage.setEditorValue(ATTR_OPTIMUM, "2.9");
+		assertNull(wizardPage.getMessage());
 
 		compareGeneratedAndInsertedText(wizard);
 	}

@@ -353,7 +353,14 @@ public class WizardMessages extends NLS {
 	public static String newMenuitemWizardTitle;
 	public static String newMenuitemWizardDescription;
 
+	public static String newMeterWizardTitle;
+	public static String newMeterWizardDescription;
+
 	public static String errorIDisUsed;
+
+	public static String errorMeterValueRequired;
+	public static String errorValueNotNumber;
+	public static String errorShouldBeLessThan;
 
 	public static String removeActionLabel;
 	

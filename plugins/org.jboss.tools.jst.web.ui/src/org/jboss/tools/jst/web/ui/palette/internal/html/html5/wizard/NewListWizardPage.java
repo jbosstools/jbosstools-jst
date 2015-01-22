@@ -12,7 +12,6 @@ package org.jboss.tools.jst.web.ui.palette.internal.html.html5.wizard;
 
 import java.beans.PropertyChangeEvent;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.NewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
@@ -86,7 +85,4 @@ public class NewListWizardPage extends NewHTMLWidgetWizardPage {
 		setEnabled(ATTR_REVERSED, valueEnabled);
 	}
 
-	protected int getPreferredBrowser() {
-		return SWT.WEBKIT;
-	}
 }
