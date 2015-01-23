@@ -165,7 +165,6 @@ public class CSSClassProposalType extends CustomProposalType {
 				TextProposal proposal = new TextProposal();
 				proposal.setLabel(text);
 				proposal.setReplacementString(text);
-				proposal.setPosition(b + text.length() - predicateLength);
 				proposal.setStart(b - predicateLength);
 				proposal.setEnd(e - predicateLength);
 				proposal.setImageDescriptor(IMAGE);

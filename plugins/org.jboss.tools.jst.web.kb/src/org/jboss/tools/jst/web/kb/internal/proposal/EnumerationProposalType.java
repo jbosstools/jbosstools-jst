@@ -41,7 +41,6 @@ public class EnumerationProposalType extends CustomProposalType {
 				TextProposal proposal = new TextProposal();
 				proposal.setLabel(text);
 				proposal.setReplacementString(text);
-				proposal.setPosition(text.length());
 				proposal.setImageDescriptor(IMAGE);
 				proposal.setContextInfo(params[i].getDescription());
 				proposals.add(proposal);

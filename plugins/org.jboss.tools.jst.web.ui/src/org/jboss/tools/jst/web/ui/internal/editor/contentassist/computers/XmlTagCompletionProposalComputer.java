@@ -32,16 +32,12 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContextInformation;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.wst.dtd.core.internal.contentmodel.DTDImpl.DTDBaseAdapter;
 import org.eclipse.wst.dtd.core.internal.contentmodel.DTDImpl.DTDElementReferenceContentAdapter;
 import org.eclipse.wst.html.core.internal.contentmodel.HTMLPropertyDeclaration;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
-import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
@@ -71,11 +67,6 @@ import org.jboss.tools.common.model.ui.views.palette.PaletteInsertHelper;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.common.ui.CommonUIPlugin;
-import org.jboss.tools.jst.web.ui.WebUiPlugin;
-import org.jboss.tools.jst.web.ui.internal.editor.contentassist.AutoContentAssistantProposal;
-import org.jboss.tools.jst.web.ui.internal.editor.contentassist.ELPrefixUtils.ELTextRegion;
-import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPPaletteInsertHelper;
-import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteTaglibInserter;
 import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.IPageContext;
 import org.jboss.tools.jst.web.kb.IResourceBundle;
@@ -90,6 +81,11 @@ import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 import org.jboss.tools.jst.web.kb.taglib.INameSpaceExtended;
 import org.jboss.tools.jst.web.kb.taglib.INameSpaceStorage;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
+import org.jboss.tools.jst.web.ui.WebUiPlugin;
+import org.jboss.tools.jst.web.ui.internal.editor.contentassist.AutoContentAssistantProposal;
+import org.jboss.tools.jst.web.ui.internal.editor.contentassist.ELPrefixUtils.ELTextRegion;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.JSPPaletteInsertHelper;
+import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.dnd.PaletteTaglibInserter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
@@ -590,6 +586,16 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 //		query = matchString.endsWith(" ")?query + " ":query;
 
 		KbQuery kbQuery = createKbQuery(Type.ATTRIBUTE_VALUE, query, stringQuery);
+		
+		String text = contentAssistRequest.getDocumentRegion().getFullText(contentAssistRequest.getRegion());
+		String sufix = null;
+		if(text.length()>matchString.length()) {
+			sufix = Utils.trimQuotes(text.substring(matchString.length()));
+		} else {
+			sufix = "";
+		}
+		kbQuery.setRegionValueSufix(sufix);
+
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, getContext());
 
 		for (int i = 0; proposals != null && i < proposals.length; i++) {
@@ -934,6 +940,22 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		stringQuery.append(query);
 		
 		KbQuery kbQuery = createKbQuery(Type.TAG_NAME, stringQuery.toString(), '<' + stringQuery.toString(), prefix, uri);
+
+		IStructuredDocumentRegion docRegion = contentAssistRequest.getDocumentRegion();
+		if(docRegion!=null) {
+			ITextRegion region = contentAssistRequest.getRegion();
+			if(region!=null && DOMRegionContext.XML_CONTENT.equals(region.getType())) {
+				int offset = fCurrentContext.getInvocationOffset();
+				if ((docRegion.getText(region).length() > 0) && (docRegion.getStartOffset(region) < offset)) {
+					int offsetValue = offset - docRegion.getStartOffset(region);
+					String prefixValue = docRegion.getText(region).substring(0, offsetValue);
+					String sufixValue = docRegion.getText(region).substring(offsetValue);
+					kbQuery.setRegionValuePrefix(prefixValue);
+					kbQuery.setRegionValueSufix(sufixValue);
+				}
+			}
+		}
+
 		TextProposal[] proposals = PageProcessor.getInstance().getProposals(kbQuery, context, true);
 
 		ELContext originalContext = createContext();

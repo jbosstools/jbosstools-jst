@@ -84,7 +84,6 @@ public class FacetNameProposalType extends CustomProposalType {
 				TextProposal proposal = new TextProposal();
 				proposal.setLabel(facetName);
 				proposal.setReplacementString(facetName);
-				proposal.setPosition(facetName.length());
 				if(ICON==null) {
 					ICON = ImageDescriptor.createFromFile(WebKbPlugin.class, IMAGE_NAME);
 				}

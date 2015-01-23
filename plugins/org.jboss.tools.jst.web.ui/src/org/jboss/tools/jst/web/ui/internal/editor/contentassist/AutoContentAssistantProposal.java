@@ -141,13 +141,30 @@ public class AutoContentAssistantProposal extends
 		}
 		
 	    super.apply(viewer, trigger, stateMask, offset + diff);
-	    if(autoContentAssistant) {
+	    if(autoContentAssistant && (originalProposal==null || originalProposal.isAutoActivationContentAssistantAfterApplication())) {
 			Point selection = getSelection(viewer.getDocument());
 			viewer.setSelectedRange(selection.x, selection.y);
 			if(viewer instanceof ITextOperationTarget) {
 				((ITextOperationTarget)viewer).doOperation(ISourceViewer.CONTENTASSIST_PROPOSALS);
 			}
 	    }
+	}
+
+	@Override
+	public Point getSelection(IDocument document) {
+		Point selection = null;
+		if(originalProposal!=null && originalProposal.getPosition()>-1) {
+	    	int correction = originalProposal.getPosition();
+	    	String originalString = originalProposal.getReplacementString();
+	    	int index = getReplacementString().indexOf(originalString);
+	    	if(index>0) {
+	    		correction += index;
+	    	}
+	    	selection = new Point(getReplacementOffset() + correction, 0);
+	    } else {
+	    	selection = super.getSelection(document);
+	    }
+		return selection;
 	}
 
 	/**

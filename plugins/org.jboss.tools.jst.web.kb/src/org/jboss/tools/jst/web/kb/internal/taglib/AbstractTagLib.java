@@ -477,13 +477,6 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 
 		proposal.setReplacementString(label.toString());
 
-		int position = proposal.getReplacementString().indexOf('"');
-		if(position!=-1) {
-			position ++;
-		} else {
-			position = proposal.getReplacementString().length();
-		}
-		proposal.setPosition(position);
 		return proposal;
 	}
 

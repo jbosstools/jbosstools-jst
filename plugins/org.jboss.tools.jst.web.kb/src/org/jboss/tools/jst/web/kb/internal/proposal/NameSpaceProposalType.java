@@ -47,7 +47,6 @@ public class NameSpaceProposalType extends ModelProposalType {
 				proposal.setLabel(text);
 				proposal.setReplacementString(text);
 				proposals.add(proposal);
-				proposal.setPosition(proposal.getReplacementString().length());
 			}
 		}
 		return proposals.toArray(new TextProposal[0]);

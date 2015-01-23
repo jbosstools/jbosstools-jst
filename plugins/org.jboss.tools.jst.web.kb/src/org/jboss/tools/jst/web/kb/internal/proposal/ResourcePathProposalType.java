@@ -124,7 +124,6 @@ public class ResourcePathProposalType extends ModelProposalType {
 				proposal.setAutoActivationContentAssistantAfterApplication(true);
 			}
 			proposal.setReplacementString(replacementString);
-			proposal.setPosition(replacementString.length());
 			proposal.setImageDescriptor(IMAGE);
 			if(newValue == value) {
 				proposals.add(proposal);

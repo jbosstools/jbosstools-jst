@@ -35,6 +35,8 @@ public class KbQuery {
 	private String prefix;
 	private Type type;
 	private String parent;
+	private String regionValuePrefix;
+	private String regionValueSufix;
 
 	private Set<String> cachedAttributes = null;
 
@@ -290,5 +292,35 @@ public class KbQuery {
 	 */
 	public void setCachedAttributes(Set<String> s) {
 		cachedAttributes = s;
+	}
+
+	/**
+	 * Returns a substring of the text region content from its beginning to the cursor offset. May be null.
+	 * @return the regionValue
+	 */
+	public String getRegionValuePrefix() {
+		return regionValuePrefix;
+	}
+
+	/**
+	 * @param regionValue the regionValue to set
+	 */
+	public void setRegionValuePrefix(String regionValue) {
+		this.regionValuePrefix = regionValue;
+	}
+
+	/**
+	 * Returns a substring of the text region content from the cursor offset to the end of the region. May be null.
+	 * @return the regionValue
+	 */
+	public String getRegionValueSufix() {
+		return regionValueSufix;
+	}
+
+	/**
+	 * @param regionValue the regionValue to set
+	 */
+	public void setRegionValueSufix(String regionValue) {
+		this.regionValueSufix = regionValue;
 	}
 }

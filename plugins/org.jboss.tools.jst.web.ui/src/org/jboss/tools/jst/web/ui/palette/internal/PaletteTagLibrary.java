@@ -98,8 +98,6 @@ public abstract class PaletteTagLibrary extends CustomTagLibrary {
 		proposal.setContextInfo(fullText.replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br/>").replace(" ", "&nbsp;").replace("\t", "&nbsp;&nbsp;&nbsp;"));
 		proposal.setLabel(getLabel(item));
 		proposal.setReplacementString(fullText);
-		int position = proposal.getReplacementString().length();
-		proposal.setPosition(position);
 		proposal.setImageDescriptor(getImage());
 		proposal.setRelevance(getRelevance());
 		proposal.setAlternateMatch(trim(startText));

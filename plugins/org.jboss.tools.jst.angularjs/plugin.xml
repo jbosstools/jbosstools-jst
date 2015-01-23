@@ -48,4 +48,10 @@
                     </defaultModules>
                 </ternAdaptToNature>
  </extension> 
+   <extension
+         point="org.jboss.tools.jst.web.kb.proposalProcessor">
+      <proposal-processor
+            class="org.jboss.tools.jst.angularjs.internal.ExpressionsProposalProcessor">
+      </proposal-processor>
+   </extension>
 </plugin>

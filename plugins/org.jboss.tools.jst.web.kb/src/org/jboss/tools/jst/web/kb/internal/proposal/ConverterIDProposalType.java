@@ -49,7 +49,6 @@ public class ConverterIDProposalType extends ModelProposalType {
 				TextProposal proposal = new TextProposal();
 				proposal.setLabel(text);
 				proposal.setReplacementString(text);
-				proposal.setPosition(text.length());
 				proposal.setImageDescriptor(IMAGE);
 
 				proposals.add(proposal);

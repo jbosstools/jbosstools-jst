@@ -158,7 +158,6 @@ public class LinkAttributeProvider extends JQueryMobileAttrProvider {
 						TextProposal proposal = new TextProposal();
 						proposal.setLabel(proposaltext);
 						proposal.setReplacementString(proposaltext);
-						proposal.setPosition(proposaltext.length());
 						proposal.setImageDescriptor(IMAGE);
 						proposal.setContextInfo(id.getDescription());
 

@@ -96,8 +96,6 @@ public class FaceletsJsfCProposalType extends CustomProposalType {
 		label.append(component.getName());
 		proposal.setLabel(label.toString());
 		proposal.setReplacementString(proposal.getLabel());
-		int position = proposal.getReplacementString().length();
-		proposal.setPosition(position);
 		if (ICON == null) {
 			ICON = XMLEditorPluginImageHelper.getInstance().getImageDescriptor(XMLEditorPluginImages.IMG_OBJ_TAG_GENERIC);
 		}

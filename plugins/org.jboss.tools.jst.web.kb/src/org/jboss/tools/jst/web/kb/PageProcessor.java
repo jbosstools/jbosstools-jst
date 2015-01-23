@@ -25,6 +25,7 @@ import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.text.TextProposal;
+import org.jboss.tools.jst.web.kb.internal.CustomProposalProcessorManager;
 import org.jboss.tools.jst.web.kb.internal.XmlContextImpl;
 import org.jboss.tools.jst.web.kb.internal.taglib.CustomTagLibAttribute;
 import org.jboss.tools.jst.web.kb.taglib.CustomTagLibManager;
@@ -165,6 +166,10 @@ public class PageProcessor {
 				}
 				if(preferCustomComponentExtensions && query.getType() == KbQuery.Type.TAG_NAME) {
 					proposals = excludeExtendedComponents(proposals);
+				}
+				List<TextProposal> customProposals = CustomProposalProcessorManager.getInstance().getProposals(query, pageContext);
+				if(customProposals.size()>0) {
+					proposals.addAll(customProposals);
 				}
 			}
 		} else {

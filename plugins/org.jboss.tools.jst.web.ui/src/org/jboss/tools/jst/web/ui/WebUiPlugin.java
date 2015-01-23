@@ -264,6 +264,14 @@ public class WebUiPlugin extends BaseUIPlugin {
 		return editor;
 	}
 
+	public static JSPMultiPageEditor getActiveMultiPageEditor() {
+		ITextEditor textEditor = EclipseUIUtil.getActiveEditor();
+		if(textEditor instanceof JSPMultiPageEditor) {
+			return (JSPMultiPageEditor)textEditor;
+		}
+		return null;
+	}
+
 	/**
 	 * Returns an image descriptor for the image file at the given plug-in
 	 * relative path

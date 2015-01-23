@@ -25,6 +25,7 @@ public interface IVisualEditor extends IReusableEditor {
 	public Object getPreviewWebBrowser();
 	public void createPreviewBrowser();
 	public Object getVisualEditor();
+	public boolean initBrowser();
 	public void createVisualEditor();
 	public void maximizeSource();
 	public void maximizeVisual();

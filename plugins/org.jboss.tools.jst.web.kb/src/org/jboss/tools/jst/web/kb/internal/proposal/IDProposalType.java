@@ -88,7 +88,6 @@ public class IDProposalType extends CustomProposalType {
 				TextProposal proposal = new TextProposal();
 				proposal.setLabel(text);
 				proposal.setReplacementString(text);
-				proposal.setPosition(b + text.length());
 				proposal.setStart(b);
 				proposal.setEnd(e);
 				proposal.setImageDescriptor(IMAGE);
