@@ -27,6 +27,9 @@ public interface IVpePreferencesPage {
 	static final String SYNCHRONIZE_SCROLLING_BETWEEN_SOURCE_VISUAL_PANES = "Synchronize scrolling between source and visual panes"; //$NON-NLS-1$
 	static final String SHOW_VISUAL_TOOLBAR = "Show VPE Toolbar"; //$NON-NLS-1$
 	
+	static final String USE_VISUAL_EDITOR_FOR_HTML5 = "Use visual editor for html5 editing"; //$NON-NLS-1$
+	static final String REMEMBER_VISUAL_EDITOR_ENGINE = "Remember visual editor engine"; //$NON-NLS-1$
+	
 	static final String DEFAULT_VPE_TAB_VISUAL_SOURCE_VALUE = "0"; //$NON-NLS-1$
 	static final String DEFAULT_VPE_TAB_SOURCE_VALUE = "1"; //$NON-NLS-1$
 	static final String DEFAULT_VPE_TAB_PREVIEW_VALUE = "2"; //$NON-NLS-1$
