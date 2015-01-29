@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %bundleName
 Bundle-SymbolicName: org.jboss.tools.jst.jsdt;singleton:=true
 Bundle-Vendor: %providerName
-Bundle-Version: 3.6.1.qualifier
+Bundle-Version: 3.6.2.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: tern.core;bundle-version="[0.6.0.201409231610,0.6.0.201409231610]",
  tern.eclipse;bundle-version="[0.6.0.201409231610,0.6.0.201409231610]",
