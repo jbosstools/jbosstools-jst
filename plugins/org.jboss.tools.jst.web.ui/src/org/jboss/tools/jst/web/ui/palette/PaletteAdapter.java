@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.gef.palette.PaletteContainer;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -47,6 +48,7 @@ import org.jboss.tools.jst.web.ui.internal.editor.jspeditor.PagePaletteContents;
 import org.jboss.tools.jst.web.ui.palette.internal.HTML5DynamicDrawerFigure;
 import org.jboss.tools.jst.web.ui.palette.internal.PaletteSettings;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteDrawerImpl;
+import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteModelImpl;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteTool;
 import org.jboss.tools.jst.web.ui.palette.model.IPaletteModel;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
@@ -60,7 +62,7 @@ public class PaletteAdapter implements IPaletteAdapter {
 	private PaletteViewer viewer = null;
 	
 	private Text filterText = null;
-	private ToolItem filterTool=null;
+	private boolean isRecognizedGroupsOnly = PaletteSettings.getInstance().isRecognizedGroupsOnly();
 	private Control palette = null;
 	private DescriptionManager descriptionManager = null;
 	private DropTargetManager dropManager = null;
@@ -80,7 +82,9 @@ public class PaletteAdapter implements IPaletteAdapter {
 				bars.getToolBarManager().add(new ShowHideTabsAction());
 				bars.getToolBarManager().add(new ImportTLDAction());
 			} else if(isMobile()) {
-				//TODO 
+				bars.getToolBarManager().add(new PaletteFilterAction());
+
+				bars.getMenuManager().add(new ClearDynamicGroupAction());
 			}
 		}
 	}
@@ -91,8 +95,7 @@ public class PaletteAdapter implements IPaletteAdapter {
 			filterText.setText(filterString);
 			filter();
 		}
-		if(filterTool != null && filterTool.getSelection() != PaletteSettings.getInstance().isRecognizedGroupsOnly()){
-			filterTool.setSelection(PaletteSettings.getInstance().isRecognizedGroupsOnly());
+		if(isRecognizedGroupsOnly != PaletteSettings.getInstance().isRecognizedGroupsOnly()){
 			filter();
 		}
 		refreshDynamicDrawer();
@@ -109,7 +112,7 @@ public class PaletteAdapter implements IPaletteAdapter {
 	private SearchPattern pattern = new SearchPattern();
 	
 	public void filter() {
-		filter(filterText.getText());
+		filter(PaletteSettings.getInstance().getFilterString());
 	}
 	
 	public void filter(String text){
@@ -150,6 +153,9 @@ public class PaletteAdapter implements IPaletteAdapter {
 				filter((PaletteContainer)child);
 			}
 		}
+		if(container instanceof PaletteDrawerImpl){
+			((PaletteDrawerImpl) container).refresh();
+		}
 	}
 
 	public Control createControl(Composite root) {
@@ -160,12 +166,7 @@ public class PaletteAdapter implements IPaletteAdapter {
 			Composite container = new Composite(root, SWT.FILL);
 			container.setLayout(new GridLayout(1, false));
 
-			Composite header = new Composite(container, SWT.FILL);
-			header.setLayout(new GridLayout(2, false));
-			header.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL
-	                | GridData.GRAB_HORIZONTAL));
-
-			filterText = new Text(header, SWT.SINGLE|SWT.BORDER|SWT.FILL|SWT.SEARCH|SWT.ICON_SEARCH|SWT.ICON_CANCEL);
+			filterText = new Text(container, SWT.SINGLE|SWT.BORDER|SWT.FILL|SWT.SEARCH|SWT.ICON_SEARCH|SWT.ICON_CANCEL);
 			GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL
                 | GridData.GRAB_HORIZONTAL);
 			filterText.setLayoutData(data);
@@ -178,30 +179,9 @@ public class PaletteAdapter implements IPaletteAdapter {
 				}
 			});
 
-			ToolBar toolbar = new ToolBar(header, SWT.NONE);
-			toolbar.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
-
-			filterTool = new ToolItem(toolbar, SWT.CHECK);
-			filterTool.setImage(JSTWebUIImages.getInstance().getOrCreateImage(JSTWebUIImages.FILTER_IMAGE));
-			filterTool.setToolTipText(PaletteUIMessages.PALETTE_FILTER_TOOLTIP);
-			filterTool.addSelectionListener(new SelectionListener() {
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					PaletteSettings.getInstance().setRecognizedGroupsOnly(filterTool.getSelection());
-					filter();
-				}
-
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-				}
-			});
-
 			palette = viewer.createControl(container);
 			palette.setLayoutData(new GridData(GridData.FILL_BOTH));
 			result = container;
-			if(PaletteSettings.getInstance().isRecognizedGroupsOnly()) {
-				filterTool.setSelection(true);
-			}
 			String storedFilter = PaletteSettings.getInstance().getFilterString();
 			if(storedFilter != null && !storedFilter.isEmpty()){
 				filterText.setText(storedFilter);
@@ -317,6 +297,45 @@ public class PaletteAdapter implements IPaletteAdapter {
 			if(model instanceof PaletteModel){
 				((PaletteModel)model).runImportTLDDialog();
 			}
+		}
+	}
+	
+	private class ClearDynamicGroupAction extends Action {
+		public ClearDynamicGroupAction() {
+			super(PaletteUIMessages.CLEAR_LAST_USED_MOST_POPULAR, null);
+			setToolTipText(PaletteUIMessages.PALETTE_EDITOR);
+		}
+		
+		public void run() {
+			((PaletteModelImpl)model).clearDynamicGroup();
+		}
+	}
+
+	private class PaletteFilterAction extends ContributionItem implements SelectionListener{
+		private ToolItem filterTool;
+		
+		public PaletteFilterAction() {
+		}
+		@Override
+		public void fill(ToolBar parent, int index) {
+			filterTool = new ToolItem(parent, SWT.CHECK);
+			filterTool.setImage(JSTWebUIImages.getInstance().getOrCreateImage(JSTWebUIImages.FILTER_IMAGE));
+			filterTool.setToolTipText(PaletteUIMessages.PALETTE_FILTER_TOOLTIP);
+			filterTool.addSelectionListener(PaletteFilterAction.this);
+			if(PaletteSettings.getInstance().isRecognizedGroupsOnly()) {
+				filterTool.setSelection(true);
+			}
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			isRecognizedGroupsOnly = filterTool.getSelection();
+			PaletteSettings.getInstance().setRecognizedGroupsOnly(isRecognizedGroupsOnly);
+			filter();
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
 		}
 	}
 

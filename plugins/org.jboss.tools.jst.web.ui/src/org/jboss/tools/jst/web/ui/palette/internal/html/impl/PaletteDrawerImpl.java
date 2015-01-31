@@ -83,4 +83,8 @@ public class PaletteDrawerImpl extends PaletteDrawer{
 	public IPaletteGroup getPaletteGroup(){
 		return group;
 	}
+	
+	public void refresh(){
+		listeners.firePropertyChange(PROPERTY_DEFAULT, "old", "new");
+	}
 }

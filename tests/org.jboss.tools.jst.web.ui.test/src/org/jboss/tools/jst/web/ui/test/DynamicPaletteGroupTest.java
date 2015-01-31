@@ -31,6 +31,7 @@ public class DynamicPaletteGroupTest  extends AbstractPaletteEntryTest {
 			editor.getSite().getPage().closeEditor(editor, false);
 		}
 	}
+	
 	public void testMaxLongCounts(){
 		editor = openEditor("empty.html");
 		PaletteViewer viewer = getPaletteViewer();
@@ -50,6 +51,28 @@ public class DynamicPaletteGroupTest  extends AbstractPaletteEntryTest {
 		
 		assertEquals("Count is wromg", 6, item.getCountIndex());
 		assertEquals("Number Of Calls is wrong", 6, item.getNumberOfCalls());
+	}
+	
+	public void testClearDynamicGroup(){
+		editor = openEditor("empty.html");
+		PaletteViewer viewer = getPaletteViewer();
+		
+		IPaletteItem item = find(viewer.getPaletteRoot(), "Page");
+		assertNotNull("Palette Item \"Page\" not found", item);
+		
+		zeroAllCounts(item);
+		
+		item.setCountIndex(Long.MAX_VALUE-5);
+		PaletteItemImpl.setStaticCountIndex(Long.MAX_VALUE-5);
+		item.setNumberOfCalls(Long.MAX_VALUE-5);
+		
+		PaletteModelImpl model = (PaletteModelImpl)item.getCategory().getVersionGroup().getGroup().getPaletteModel();
+		
+		model.clearDynamicGroup();
+		
+		assertEquals("Count is wromg", 0, item.getCountIndex());
+		assertEquals("Number Of Calls is wrong", 0, item.getNumberOfCalls());
+		
 	}
 	
 	private IPaletteItem find(PaletteContainer container, String name){

@@ -31,6 +31,9 @@ public class PaletteUIMessages extends NLS {
 	public static String PALETTE_FILTER_TOOLTIP;
 	public static String TYPE_MOST_POPULAR;
 	public static String TYPE_LAST_USED;
+	public static String CLEAR_LAST_USED_MOST_POPULAR;
+	public static String NO_LAST_USED_OR_MOST_POPULAR_YET;
+	public static String NO_ITEMS_FOUND;
 	
 	private PaletteUIMessages() {
 	}

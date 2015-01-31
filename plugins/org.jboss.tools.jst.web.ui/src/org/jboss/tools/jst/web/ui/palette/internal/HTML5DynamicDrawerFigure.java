@@ -11,9 +11,13 @@
 package org.jboss.tools.jst.web.ui.palette.internal;
 
 import org.eclipse.draw2d.ButtonModel;
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.tools.jst.web.ui.palette.CustomDrawerFigure;
 import org.jboss.tools.jst.web.ui.palette.MobileDrawerEditPart;

@@ -271,6 +271,8 @@ public class PaletteModelImpl implements IPaletteModel{
 		}
 	}
 	
+	
+	
 	public void savePaletteItem(IPaletteItem paletteItem){
 		if(paletteContents != null) {
 			IProject project = paletteContents.getFile().getProject();
@@ -290,6 +292,19 @@ public class PaletteModelImpl implements IPaletteModel{
 					}
 				}
 			}
+		}
+	}
+	
+	public void clearDynamicGroup(){
+		HTML5DynamicPaletteGroup dynamicPaletteGroup = getDynamicPaletteGroup();
+		
+		for(IPaletteItem item : dynamicPaletteGroup.getAllItems()){
+			item.setCountIndex(0);
+			item.setNumberOfCalls(0);
+		}
+		PaletteItemImpl.setStaticCountIndex(0);
+		for(IPaletteItem item : dynamicPaletteGroup.getAllItems()){
+			savePaletteItem(item);
 		}
 	}
 }
