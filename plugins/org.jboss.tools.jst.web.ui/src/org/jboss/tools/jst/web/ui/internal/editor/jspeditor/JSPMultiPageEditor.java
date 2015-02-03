@@ -767,7 +767,7 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 			if (sourceEditor != null)
 				return sourceEditor.getAdapter(adapter);
 		} else if (adapter == EditorDescriptor.class)
-			return new EditorDescriptor(new String[] { "jsp", "html" }); //$NON-NLS-1$ //$NON-NLS-2$
+			return new EditorDescriptor(new String[] { "jsp", "html", "htm" }); //$NON-NLS-1$ //$NON-NLS-2$
 
 		if (sourceEditor != null) {
 			return sourceEditor.getAdapter(adapter);

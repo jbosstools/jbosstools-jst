@@ -52,6 +52,14 @@ public class PaletteContentsTest extends TestCase {
 		assertTrue(JSPMultiPageEditor.wasPaletteOpened());		
 	}
 
+	public void testHTMFileWithoutDoctype() {
+		openEditor("aa.htm");
+		PagePaletteContents p = new PagePaletteContents(editor);
+		String[] x = p.getNatureTypes();
+		assertEquals(1, x.length);
+		assertEquals(PaletteModel.TYPE_HTML5, x[0]);
+	}
+
 	public IEditorPart openEditor(String fileName) {
 		IFile testfile = project.getFile(fileName);
 		assertTrue("Test file doesn't exist: " + project.getName() + "/" + fileName, 

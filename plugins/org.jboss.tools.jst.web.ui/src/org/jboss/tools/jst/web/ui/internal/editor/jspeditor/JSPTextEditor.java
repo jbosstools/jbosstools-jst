@@ -126,6 +126,7 @@ import org.jboss.tools.common.model.util.XModelObjectLoaderUtil;
 import org.jboss.tools.common.text.xml.IOccurrencePreferenceProvider;
 import org.jboss.tools.common.text.xml.XmlEditorPlugin;
 import org.jboss.tools.common.text.xml.ui.FreeCaretStyledText;
+import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.internal.editor.HTMLTextViewerConfiguration;
 import org.jboss.tools.jst.web.ui.internal.editor.JSPTextViewerConfiguration;
@@ -309,7 +310,7 @@ public class JSPTextEditor extends StructuredTextEditor implements
 					boolean isHtml = false;
 					if(getEditorInput() instanceof IFileEditorInput) {
 						IFileEditorInput f = (IFileEditorInput)getEditorInput();
-						isHtml = "html".equals(f.getFile().getFileExtension());
+						isHtml = FileUtil.isHTMLFile(f.getFile());
 					}
 					if(isHtml) {
 						IFormPropertySheetPage propertySheetPage = createVisualPropertySheetPage();
