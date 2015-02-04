@@ -25,6 +25,11 @@
 			<layout>p2</layout>
 			<url>${jbosstools-base-site}</url>
 		</repository>
+		<repository>
+			<id>eclipse-tern</id>
+			<layout>p2</layout>
+			<url>http://download.jboss.org/jbosstools/updates/requirements/tern/0.7.0.201412012159/</url>
+		</repository>
 
 		<!-- To resolve parent artifact -->
 		<repository>
