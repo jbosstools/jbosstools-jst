@@ -12,6 +12,8 @@
 	<packaging>pom</packaging>
 	<properties>
 		<tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-jst.git</tycho.scmUrl>
+		<tern.reqs.url>http://download.jboss.org/jbosstools/updates/requirements/tern</tern.reqs.url>
+		<tern.version>0.7.0.201412012159</tern.version>
 	</properties>
 	<modules>
 		<module>plugins</module>
@@ -24,6 +26,11 @@
 			<id>jbosstools-base</id>
 			<layout>p2</layout>
 			<url>${jbosstools-base-site}</url>
+		</repository>
+		<repository>
+			<id>eclipse-tern</id>
+			<layout>p2</layout>
+			<url>${tern.reqs.url}/${tern.version}</url>
 		</repository>
 
 		<!-- To resolve parent artifact -->
