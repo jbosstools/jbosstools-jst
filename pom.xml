@@ -12,6 +12,10 @@
 	<packaging>pom</packaging>
 	<properties>
 		<tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-jst.git</tycho.scmUrl>
+		<tern.reqs.url>http://download.jboss.org/jbosstools/updates/requirements/tern</tern.reqs.url>
+		<tern.version>0.8.0.201501132311-SNAPSHOT</tern.version>
+		<angularjs.reqs.url>http://download.jboss.org/jbosstools/updates/requirements/angularjs</angularjs.reqs.url>
+		<angularjs.version>0.8.0.201501200034-SNAPSHOT</angularjs.version>
 	</properties>
 	<modules>
 		<module>plugins</module>
@@ -25,7 +29,16 @@
 			<layout>p2</layout>
 			<url>${jbosstools-base-site}</url>
 		</repository>
-
+		<repository>
+			<id>eclipse-tern</id>
+			<layout>p2</layout>
+			<url>${tern.reqs.url}/${tern.version}</url>
+		</repository>
+		<repository>
+			<id>eclipse-angularjs</id>
+			<layout>p2</layout>
+			<url>${angularjs.reqs.url}/${angularjs.version}</url>
+		</repository>
 		<!-- To resolve parent artifact -->
 		<repository>
 			<id>jboss-public-repository-group</id>
