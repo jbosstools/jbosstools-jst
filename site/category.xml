@@ -15,9 +15,9 @@
   <feature id="org.jboss.tools.jst.test.feature.source"><category name="JBoss Tools JST Nightly Site"/></feature>
 
   <bundle id="minimal-json"/>
-  <feature id="tern-feature" version="0.0.0"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="tern-jsdt-feature" version="0.0.0"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="tern-server-nodejs-feature" version="0.0.0"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="tern.eclipse.ide.server.nodejs.embed" version="0.0.0"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="tern.eclipse.ide.tools.feature" version="0.0.0"><category name="JBoss Tools JST Nightly Site"/></feature>
+  <feature id="tern-feature"><category name="JBoss Tools JST Nightly Site"/></feature>
+  <feature id="tern-jsdt-feature"><category name="JBoss Tools JST Nightly Site"/></feature>
+  <feature id="tern-server-nodejs-feature"><category name="JBoss Tools JST Nightly Site"/></feature>
+  <feature id="tern.eclipse.ide.server.nodejs.embed"><category name="JBoss Tools JST Nightly Site"/></feature>
+  <feature id="tern.eclipse.ide.tools.feature"><category name="JBoss Tools JST Nightly Site"/></feature>
 </site>
