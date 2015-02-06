@@ -1,23 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-  <description>To install these features, point Eclipse at this site.</description>
-  <category-def label="JBoss Tools JST Nightly Site" name="JBoss Tools JST Nightly Site"></category-def>
+	<description>To install these features, point Eclipse at this site.</description>
+	<category-def label="JBoss Tools JST Nightly Site" name="org.jboss.tools.jst.nightly.category" />
 
-  <feature id="org.jboss.tools.jst.feature"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="org.jboss.tools.jst.jsdt.feature"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="org.jboss.tools.jst.angularjs.feature"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="org.jboss.tools.jst.test.feature"><category name="JBoss Tools JST Nightly Site"/></feature>
+	<feature id="org.jboss.tools.jst.feature">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
+	<feature id="org.jboss.tools.jst.jsdt.feature">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
+	<feature id="org.jboss.tools.jst.angularjs.feature">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
+	<feature id="org.jboss.tools.jst.test.feature">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
 
-  <!-- Sources -->
-  <feature id="org.jboss.tools.jst.feature.source"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="org.jboss.tools.jst.jsdt.feature.source"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="org.jboss.tools.jst.angularjs.feature.source"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="org.jboss.tools.jst.test.feature.source"><category name="JBoss Tools JST Nightly Site"/></feature>
+	<!-- Sources -->
+	<feature id="org.jboss.tools.jst.feature.source">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
+	<feature id="org.jboss.tools.jst.jsdt.feature.source">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
+	<feature id="org.jboss.tools.jst.angularjs.feature.source">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
+	<feature id="org.jboss.tools.jst.test.feature.source">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
 
-  <bundle id="minimal-json"/>
-  <feature id="tern-feature" version="0.0.0"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="tern-jsdt-feature" version="0.0.0"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="tern-server-nodejs-feature" version="0.0.0"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="tern.eclipse.ide.server.nodejs.embed" version="0.0.0"><category name="JBoss Tools JST Nightly Site"/></feature>
-  <feature id="tern.eclipse.ide.tools.feature" version="0.0.0"><category name="JBoss Tools JST Nightly Site"/></feature>
+	<bundle id="minimal-json" />
+	<feature id="tern-feature">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
+	<feature id="tern-jsdt-feature">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
+	<feature id="tern-server-nodejs-feature">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
+	<feature id="tern.eclipse.ide.server.nodejs.embed">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
+	<feature id="tern.eclipse.ide.tools.feature">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
 </site>
