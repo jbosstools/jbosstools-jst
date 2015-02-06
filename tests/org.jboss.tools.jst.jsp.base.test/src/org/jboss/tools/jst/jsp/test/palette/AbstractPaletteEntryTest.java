@@ -61,6 +61,10 @@ public class AbstractPaletteEntryTest extends TestCase {
 	}
 
 	public IEditorPart openEditor(String fileName) {
+		return openEditor(project, fileName);
+	}
+	
+	public IEditorPart openEditor(IProject project, String fileName) {
 		IFile testfile = project.getFile(fileName);
 		assertTrue("Test file doesn't exist: " + project.getName() + "/" + fileName, 
 				(testfile.exists() && testfile.isAccessible()));

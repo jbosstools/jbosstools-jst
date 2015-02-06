@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007 - 2015 Exadel, Inc. and Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -125,6 +125,7 @@ public class PaletteAdapter implements IPaletteAdapter {
 			if(child instanceof PaletteDrawerImpl) {
 				PaletteDrawerImpl c = (PaletteDrawerImpl)child;
 				if(c.getLabel().isEmpty()){
+					c.loadVersion(c.getPaletteGroup().getSelectedVersionGroup().getVersion());
 					MobileDrawerEditPart part = (MobileDrawerEditPart)getViewer().getEditPartRegistry().get(c);
 					HTML5DynamicDrawerFigure figure = (HTML5DynamicDrawerFigure)part.getFigure();
 					figure.refresh();

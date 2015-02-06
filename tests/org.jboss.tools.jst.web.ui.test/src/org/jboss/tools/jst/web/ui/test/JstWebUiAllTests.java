@@ -51,15 +51,15 @@ public class JstWebUiAllTests {
 		suite.addTest(
 				new ProjectImportTestSetup(s,
 				"org.jboss.tools.jst.web.ui.test",
-				new String[] { "projects/SimpleProject", }, //$NON-NLS-1$
-				new String[] { "SimpleProject" })); //$NON-NLS-1$
+				new String[] { "projects/SimpleProject", "projects/WebProject" }, //$NON-NLS-1$
+				new String[] { "SimpleProject", "WebProject" })); //$NON-NLS-1$
 
 		s = new TestSuite("DnD");
 		s.addTestSuite(DnDImageTest.class);
 		suite.addTest(
 				new ProjectImportTestSetup(s,
 				"org.jboss.tools.jst.web.ui.test",
-				new String[] { "projects/WebProject", }, //$NON-NLS-1$
+				new String[] { "projects/WebProject" }, //$NON-NLS-1$
 				new String[] { "WebProject" })); //$NON-NLS-1$
 
 		suite.addTestSuite(ConfigurationBlockTest.class);

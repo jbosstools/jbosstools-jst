@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2014 Red Hat, Inc. 
+ * Copyright (c) 2014 - 2015 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -52,7 +52,7 @@ public class HTML5DynamicPaletteGroup extends AbstractPaletteGroup {
 	public void initCounts() {
 		Collections.sort(items, new LastUsedComparator());
 		long count = 1;
-		PaletteItemImpl.setStaticCountIndex(count);
+		((PaletteItemImpl)items.get(0)).setProjectCountIndex(count);
 		for(int index = items.size()-1; index >= 0; index--){
 			if(items.get(index).getCountIndex() > 0){
 				items.get(index).setCountIndex(count++);

@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2014 Red Hat, Inc. 
+ * Copyright (c) 2014 - 2015 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -12,16 +12,13 @@ package org.jboss.tools.jst.web.ui.palette.internal.html.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
@@ -72,26 +69,43 @@ public class PaletteModelImpl implements IPaletteModel{
 		String expandedCategory = getPreferredExpandedCategory();
 		
 		paletteRoot = new PaletteRootImpl(this);
+		HTML5DynamicPaletteGroup dynamicPaletteGroup = null;
 		for(IPaletteGroup paletteGroup : sortedPaletteGroups){
-			String groupName = paletteGroup.getName();
-			if(paletteGroup instanceof HTML5DynamicPaletteGroup){
-				groupName = DYNAMIC_PALETTE_GROUP;
-				calculateCounts((HTML5DynamicPaletteGroup)paletteGroup);
-			}
-			paletteGroupMap.put(groupName, paletteGroup);
-			
-			paletteGroup.setPaletteModel(this);
-			IHTMLLibraryVersion version = getSelectedVersion(paletteGroup);
-			paletteGroup.setSelectedVersion(version);
-			PaletteDrawerImpl drawer = new PaletteDrawerImpl(paletteGroup);
-			
-			if(expandedCategory != null && expandedCategory.equals(groupName)){
-				drawer.setInitialState(PaletteDrawerImpl.INITIAL_STATE_OPEN);
+			if(!(paletteGroup instanceof HTML5DynamicPaletteGroup)){
+				loadPaletteGroup(paletteGroup, expandedCategory);
 			}else{
-				drawer.setInitialState(PaletteDrawerImpl.INITIAL_STATE_CLOSED);
+				dynamicPaletteGroup = (HTML5DynamicPaletteGroup)paletteGroup;
 			}
+		}
+		if(dynamicPaletteGroup != null){
+			loadPaletteGroup(dynamicPaletteGroup, expandedCategory);
+		}
+	}
+	
+	private void loadPaletteGroup(IPaletteGroup paletteGroup, String expandedCategory){
+		paletteGroup.setPaletteModel(this);
+		String groupName = paletteGroup.getName();
+		if(paletteGroup instanceof HTML5DynamicPaletteGroup){
+			groupName = DYNAMIC_PALETTE_GROUP;
+			calculateCounts((HTML5DynamicPaletteGroup)paletteGroup);
+		}
+		paletteGroupMap.put(groupName, paletteGroup);
+		
+		IHTMLLibraryVersion version = getSelectedVersion(paletteGroup);
+		paletteGroup.setSelectedVersion(version);
+		PaletteDrawerImpl drawer = new PaletteDrawerImpl(paletteGroup);
+		
+		if(expandedCategory != null && expandedCategory.equals(groupName)){
+			drawer.setInitialState(PaletteDrawerImpl.INITIAL_STATE_OPEN);
+		}else{
+			drawer.setInitialState(PaletteDrawerImpl.INITIAL_STATE_CLOSED);
+		}
+		if(paletteGroup instanceof HTML5DynamicPaletteGroup){
+			paletteRoot.add(0, drawer);
+		}else{
 			paletteRoot.add(drawer);
 		}
+		
 	}
 	
 	private HTML5DynamicPaletteGroup getDynamicPaletteGroup(){
@@ -233,7 +247,7 @@ public class PaletteModelImpl implements IPaletteModel{
 				for(IPaletteVersionGroup versionGroup : paletteGroup.getPaletteVersionGroups()){
 					for(IPaletteCategory category: versionGroup.getCategories()){
 						for(IPaletteItem item : category.getItems()){
-							loadPaletteItemCounts(item);
+							loadItemCounts(item.getId());
 							dynamicPaletteGroup.add(item);
 						}
 					}
@@ -242,58 +256,6 @@ public class PaletteModelImpl implements IPaletteModel{
 		}
 	}
 	
-	private void loadPaletteItemCounts(IPaletteItem paletteItem){
-		if(paletteContents != null) {
-			IProject project = paletteContents.getFile().getProject();
-			try {
-				String countString = project.getPersistentProperty(new QualifiedName(WebUiPlugin.PLUGIN_ID, paletteItem.getId()));
-				if(countString != null){
-					StringTokenizer st = new StringTokenizer(countString," ");
-					
-					long count = new Long(st.nextToken());
-					long numberOfCalls = new Long(st.nextToken());
-					paletteItem.setCountIndex(count);
-					paletteItem.setNumberOfCalls(numberOfCalls);
-				}
-			} catch (CoreException e) {
-				WebUiPlugin.getDefault().logError(e);
-			}
-		}
-	}
-	
-	public void savePaletteItems(){
-		HTML5DynamicPaletteGroup dynamicPaletteGroup = getDynamicPaletteGroup();
-		
-		dynamicPaletteGroup.initCounts();
-		
-		for(IPaletteItem item : dynamicPaletteGroup.getAllItems()){
-			savePaletteItem(item);
-		}
-	}
-	
-	
-	
-	public void savePaletteItem(IPaletteItem paletteItem){
-		if(paletteContents != null) {
-			IProject project = paletteContents.getFile().getProject();
-			
-			try {
-				project.setPersistentProperty(new QualifiedName(WebUiPlugin.PLUGIN_ID, paletteItem.getId()), ""+paletteItem.getCountIndex()+" "+paletteItem.getNumberOfCalls());
-			} catch (CoreException e) {
-				WebUiPlugin.getDefault().logError(e);
-			}
-			
-			for(Object child : paletteRoot.getChildren()){
-				if(child instanceof PaletteDrawerImpl){
-					PaletteDrawerImpl drawer = (PaletteDrawerImpl)child;
-					if(drawer.getPaletteGroup() instanceof HTML5DynamicPaletteGroup){
-						drawer.loadVersion(drawer.getPaletteGroup().getSelectedVersionGroup().getVersion());
-						return;
-					}
-				}
-			}
-		}
-	}
 	
 	public void clearDynamicGroup(){
 		HTML5DynamicPaletteGroup dynamicPaletteGroup = getDynamicPaletteGroup();
@@ -302,9 +264,88 @@ public class PaletteModelImpl implements IPaletteModel{
 			item.setCountIndex(0);
 			item.setNumberOfCalls(0);
 		}
-		PaletteItemImpl.setStaticCountIndex(0);
-		for(IPaletteItem item : dynamicPaletteGroup.getAllItems()){
-			savePaletteItem(item);
+		setProjectCountIndex(0);
+		
+		saveAllItemsCount();
+		
+		refreshDynamicGroup();
+	}
+	
+	private void refreshDynamicGroup(){
+		for(Object child : paletteRoot.getChildren()){
+			if(child instanceof PaletteDrawerImpl){
+				PaletteDrawerImpl drawer = (PaletteDrawerImpl)child;
+				if(drawer.getPaletteGroup() instanceof HTML5DynamicPaletteGroup){
+					drawer.loadVersion(drawer.getPaletteGroup().getSelectedVersionGroup().getVersion());
+					return;
+				}
+			}
 		}
 	}
+	
+	public long getCountIndex(String id) {
+		if(paletteContents != null){
+			return PaletteCountManager.getInstance().getCountIndex(paletteContents.getFile().getProject(), id);
+		}
+		return 0;
+	}
+	
+	public void setCountIndex(String id, long countIndex) {
+		if(paletteContents != null){
+			PaletteCountManager.getInstance().setCountIndex(paletteContents.getFile().getProject(), id, countIndex);
+		}
+	}
+	
+	public void setProjectCountIndex(long countIndex) {
+		if(paletteContents != null){
+			PaletteCountManager.getInstance().setProjectCountIndex(paletteContents.getFile().getProject(), countIndex);
+		}
+	}
+
+	public long getNumberOfCalls(String id) {
+		if(paletteContents != null){
+			return PaletteCountManager.getInstance().getNumberOfCalls(paletteContents.getFile().getProject(), id);
+		}
+		return 0;
+	}
+
+	public void setNumberOfCalls(String id, long numberOfCalls) {
+		if(paletteContents != null){
+			PaletteCountManager.getInstance().setNumberOfCalls(paletteContents.getFile().getProject(), id, numberOfCalls);
+		}
+	}
+	
+	public void itemCalled(String id) {
+		if(paletteContents != null){
+			PaletteCountManager.getInstance().called(paletteContents.getFile().getProject(), id);
+			if(PaletteCountManager.getInstance().getNumberOfCalls(paletteContents.getFile().getProject(), id) == Long.MAX_VALUE || 
+					PaletteCountManager.getInstance().getCountIndex(paletteContents.getFile().getProject(), id) == Long.MAX_VALUE	){
+				HTML5DynamicPaletteGroup dynamicPaletteGroup = getDynamicPaletteGroup();
+				dynamicPaletteGroup.initCounts();
+				PaletteCountManager.getInstance().saveAll(paletteContents.getFile().getProject());
+			}else{
+				PaletteCountManager.getInstance().save(paletteContents.getFile().getProject(), id);
+			}
+			refreshDynamicGroup();
+		}
+	}
+	
+	public void loadItemCounts(String id) {
+		if(paletteContents != null){
+			PaletteCountManager.getInstance().load(paletteContents.getFile().getProject(), id);
+		}
+	}
+	
+	public void saveItemCounts(String id) {
+		if(paletteContents != null){
+			PaletteCountManager.getInstance().save(paletteContents.getFile().getProject(), id);
+		}
+	}
+	
+	public void saveAllItemsCount() {
+		if(paletteContents != null){
+			PaletteCountManager.getInstance().saveAll(paletteContents.getFile().getProject());
+		}
+	}
+
 }

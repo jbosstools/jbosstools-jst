@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2014 Red Hat, Inc. 
+ * Copyright (c) 2014 - 2015 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -41,8 +41,6 @@ public class PaletteItemImpl implements IPaletteItem{
 	private String endText="";
 	private IPaletteCategory category;
 	private ArrayList<String> keywordList;
-	private long numberOfCalls, count;
-	private static long globalCount;
 
 	public PaletteItemImpl(String name, String toolTip, String keywords,
 			ImageDescriptor imageDescriptor, Class<? extends IPaletteItemWizard> wizardClass,
@@ -173,41 +171,31 @@ public class PaletteItemImpl implements IPaletteItem{
 
 	@Override
 	public long getCountIndex() {
-		return count;
+		return ((PaletteModelImpl)getCategory().getVersionGroup().getGroup().getPaletteModel()).getCountIndex(getId());
 	}
 	
 	@Override
-	public void setCountIndex(long count) {
-		this.count = count;
-		if(count > globalCount){
-			globalCount = count;
-		}
+	public void setCountIndex(long countIndex) {
+		((PaletteModelImpl)getCategory().getVersionGroup().getGroup().getPaletteModel()).setCountIndex(getId(), countIndex);
 	}
 	
-	public static void setStaticCountIndex(long count) {
-			globalCount = count;
+	public void setProjectCountIndex(long countIndex) {
+		((PaletteModelImpl)getCategory().getVersionGroup().getGroup().getPaletteModel()).setProjectCountIndex(countIndex);
 	}
-
+	
 	@Override
 	public long getNumberOfCalls() {
-		return numberOfCalls;
+		return ((PaletteModelImpl)getCategory().getVersionGroup().getGroup().getPaletteModel()).getNumberOfCalls(getId());
 	}
 
 	@Override
 	public void setNumberOfCalls(long numberOfCalls) {
-		this.numberOfCalls = numberOfCalls;
+		((PaletteModelImpl)getCategory().getVersionGroup().getGroup().getPaletteModel()).setNumberOfCalls(getId(), numberOfCalls);
 	}
 	
 	@Override
 	public void called() {
-		numberOfCalls++;
-		globalCount++;
-		count = globalCount;
-		if(numberOfCalls == Long.MAX_VALUE || globalCount == Long.MAX_VALUE){
-			((PaletteModelImpl)getCategory().getVersionGroup().getGroup().getPaletteModel()).savePaletteItems();
-		}else{
-			((PaletteModelImpl)getCategory().getVersionGroup().getGroup().getPaletteModel()).savePaletteItem(this);
-		}
+		((PaletteModelImpl)getCategory().getVersionGroup().getGroup().getPaletteModel()).itemCalled(getId());
 	}
 	
 }
