@@ -322,9 +322,9 @@ public class PaletteModelImpl implements IPaletteModel{
 					PaletteCountManager.getInstance().getCountIndex(paletteContents.getFile().getProject(), id) == Long.MAX_VALUE	){
 				HTML5DynamicPaletteGroup dynamicPaletteGroup = getDynamicPaletteGroup();
 				dynamicPaletteGroup.initCounts();
-				PaletteCountManager.getInstance().saveAll(paletteContents.getFile().getProject());
+				saveAllItemsCount();
 			}else{
-				PaletteCountManager.getInstance().save(paletteContents.getFile().getProject(), id);
+				saveItemCounts(id);
 			}
 			refreshDynamicGroup();
 		}
