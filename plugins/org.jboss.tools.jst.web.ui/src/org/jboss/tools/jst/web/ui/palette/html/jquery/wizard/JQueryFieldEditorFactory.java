@@ -401,13 +401,9 @@ public class JQueryFieldEditorFactory implements JQueryConstants, HTMLConstants 
 	}
 
 	public static ButtonFieldEditor.ButtonPressedAction createSelectWorkspaceImageAction(String buttonName, final IFile context) {
-		ViewerFilter filter = new ViewerFilter() {
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				return (element instanceof IFolder 
-						|| (element instanceof IProject
-							&& element == context.getProject())
-						|| (element instanceof IFile 
-							&& SRCUtil.isImageFile(((IFile)element).getName())));
+		ViewerFilter filter = new FileViewerFilter(context) {
+			protected boolean acceptFile(IFile f) {
+				return SRCUtil.isImageFile(f.getName());
 			}
 		};
 		return createSelectWorkspaceFileAction(buttonName, context, WizardMessages.selectImageDialogTitle, WizardMessages.selectImageDialogMessage, filter);
@@ -424,13 +420,9 @@ public class JQueryFieldEditorFactory implements JQueryConstants, HTMLConstants 
 	}
 
 	public static ButtonFieldEditor.ButtonPressedAction createSelectWorkspaceVideoAction(String buttonName, final IFile context) {
-		ViewerFilter filter = new ViewerFilter() {
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				return (element instanceof IFolder 
-						|| (element instanceof IProject
-							&& element == context.getProject())
-						|| (element instanceof IFile 
-							&& SRCUtil.isVideoFile(((IFile)element).getName())));
+		ViewerFilter filter = new FileViewerFilter(context) {
+			protected boolean acceptFile(IFile f) {
+				return SRCUtil.isVideoFile(f.getName());
 			}
 		};
 		return createSelectWorkspaceFileAction(buttonName, context, WizardMessages.selectVideoDialogTitle, WizardMessages.selectVideoDialogMessage, filter);
@@ -447,28 +439,33 @@ public class JQueryFieldEditorFactory implements JQueryConstants, HTMLConstants 
 	}
 
 	public static ButtonFieldEditor.ButtonPressedAction createSelectWorkspaceAudioAction(String buttonName, final IFile context) {
-		ViewerFilter filter = new ViewerFilter() {
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				return (element instanceof IFolder 
-						|| (element instanceof IProject
-							&& element == context.getProject())
-						|| (element instanceof IFile 
-							&& SRCUtil.isAudioFile(((IFile)element).getName())));
+		ViewerFilter filter = new FileViewerFilter(context) {
+			protected boolean acceptFile(IFile f) {
+				return SRCUtil.isAudioFile(f.getName());
 			}
 		};
 		return createSelectWorkspaceFileAction(buttonName, context, WizardMessages.selectAudioDialogTitle, WizardMessages.selectAudioDialogMessage, filter);
 	}
 
 	public static ButtonFieldEditor.ButtonPressedAction createSelectWorkspaceSourceAction(String buttonName, final IFile context) {
-		ViewerFilter filter = new ViewerFilter() {
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				return (element instanceof IFolder 
-						|| (element instanceof IProject
-							&& element == context.getProject())
-						|| (element instanceof IFile));
-			}
-		};
+		ViewerFilter filter = new FileViewerFilter(context);
 		return createSelectWorkspaceFileAction(buttonName, context, WizardMessages.selectSourceDialogTitle, WizardMessages.selectSourceDialogMessage, filter);
+	}
+
+	static class FileViewerFilter extends ViewerFilter {
+		IFile context;
+		FileViewerFilter(IFile context) {
+			this.context = context;
+		}
+		public boolean select(Viewer viewer, Object parentElement, Object element) {
+			return (element instanceof IFolder 
+					|| (element instanceof IProject && context != null
+						&& element == context.getProject())
+					|| ((element instanceof IFile) && acceptFile((IFile)element)));
+		}
+		protected boolean acceptFile(IFile f) {
+			return true;
+		}
 	}
 
 	public static ButtonFieldEditor.ButtonPressedAction createSelectWorkspaceFileAction(String buttonName, final IFile context, 
@@ -498,7 +495,7 @@ public class JQueryFieldEditorFactory implements JQueryConstants, HTMLConstants 
 				dialog.setAllowMultiple(false);
 				dialog.setTitle(title); 
 				dialog.setMessage(message); 
-				if (dialog.open() == Window.OK) {
+				if (dialog.open() == Window.OK && context != null) {
 					IResource res = (IResource) dialog.getFirstResult();
 					String value = SRCUtil.getRelativePath(res, context.getParent());
 					inerInitPath = res.getFullPath().toString();

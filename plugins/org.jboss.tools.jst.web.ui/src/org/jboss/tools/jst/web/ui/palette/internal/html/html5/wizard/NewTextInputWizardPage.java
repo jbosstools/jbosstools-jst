@@ -254,6 +254,9 @@ public class NewTextInputWizardPage extends NewHTMLWidgetWizardPage {
 	public List<ElementID> getDatalistIDs(final String mask, final boolean escapeHTML) {
 		final List<ElementID> ids = new ArrayList<ElementID>();
 		datalists = new HashSet<String>();
+		if(getWizard().getFile() == null) {
+			return ids;
+		}
 
 		StructuredModelWrapper.execute(getWizard().getFile(), new ICommand() {
 			public void execute(IDOMDocument xmlDocument) {
