@@ -249,6 +249,7 @@ public class ELValidator extends WebValidator implements IStringValidator {
 	public void validate(IValidator validatorManager, IProject rootProject, Collection<IRegion> dirtyRegions, IValidationContext helper, IReporter reporter, EditorValidationContext validationContext, IProjectValidationContext projectContext, IFile file) {
 		init(rootProject, null, projectContext, validatorManager, reporter);
 		setAsYouTypeValidation(true);
+		asYouTypeTimestamp++;
 		this.document = validationContext.getDocument();
 		ELContext elContext = PageContextFactory.createPageContext(this.document, true);
 		if(elContext!=null) {
