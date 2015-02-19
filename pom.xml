@@ -15,7 +15,7 @@
 		<tern.reqs.url>http://download.jboss.org/jbosstools/updates/requirements/tern</tern.reqs.url>
 		<tern.version>0.9.0.201502141213</tern.version>
 		<angularjs.reqs.url>http://download.jboss.org/jbosstools/updates/requirements/angularjs</angularjs.reqs.url>
-		<angularjs.version>0.8.0.201501282321</angularjs.version>
+		<angularjs.version>0.9.0.201502172152</angularjs.version>
 	</properties>
 	<modules>
 		<module>plugins</module>
