@@ -56,14 +56,16 @@ public class JQueryMobileHyperlinkDetector extends AbstractHyperlinkDetector{
 			if(n != null){
 				if(n.getNodeType() == Node.ELEMENT_NODE && n instanceof ElementImpl){
 					ITextRegion textRegion = ((ElementImpl)n).getStartStructuredDocumentRegion();
-					Region nodeRegion = new Region(textRegion.getStart(), textRegion.getLength());
-					String id = findID(n);
-					if(id != null){
-						String url = file.getLocation().toFile().toURI()+"#"+id; //$NON-NLS-1$
-						String shortName = file.getName()+"#"+id; //$NON-NLS-1$
-						OpenWithEditorExtension[] extensions = OpenWithEditorExtensionManager.INSTANCES;
-						for(OpenWithEditorExtension extension : extensions){
-							links.add(new OpenWithEditorHyperlink(textViewer.getDocument(), nodeRegion, shortName, url, extension));
+					if(textRegion!=null) {
+						Region nodeRegion = new Region(textRegion.getStart(), textRegion.getLength());
+						String id = findID(n);
+						if(id != null){
+							String url = file.getLocation().toFile().toURI()+"#"+id; //$NON-NLS-1$
+							String shortName = file.getName()+"#"+id; //$NON-NLS-1$
+							OpenWithEditorExtension[] extensions = OpenWithEditorExtensionManager.INSTANCES;
+							for(OpenWithEditorExtension extension : extensions){
+								links.add(new OpenWithEditorHyperlink(textViewer.getDocument(), nodeRegion, shortName, url, extension));
+							}
 						}
 					}
 				}
