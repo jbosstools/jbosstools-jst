@@ -13,7 +13,7 @@
 	<properties>
 		<tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-jst.git</tycho.scmUrl>
 		<tern.reqs.url>http://download.jboss.org/jbosstools/updates/requirements/tern</tern.reqs.url>
-		<tern.version>0.7.1.201502162147</tern.version>
+		<tern.version>0.8.2.201502201459</tern.version>
 		<angularjs.reqs.url>http://download.jboss.org/jbosstools/updates/requirements/angularjs</angularjs.reqs.url>
 		<angularjs.version>0.7.0.201412021122</angularjs.version>
 	</properties>
