@@ -21,6 +21,8 @@ import org.eclipse.jface.text.hyperlink.AbstractHyperlinkDetector;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
+import org.jboss.tools.common.text.ext.hyperlink.xml.XMLJumpToHyperlink;
 import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
 import org.jboss.tools.common.text.ext.util.Utils;
 import org.jboss.tools.common.text.ext.util.Utils.AttrNodePair;
@@ -65,8 +67,8 @@ public class DatalistHyperlinkDetector extends AbstractHyperlinkDetector{
 						IndexedRegion node = findNodeWithId(xmlDocument, "datalist", attrValue);
 						
 						if(node != null){
-							Region targetRegion = new Region(node.getStartOffset(), node.getEndOffset() - node.getStartOffset());
-							links.add(new JumpToHyperlink(NLS.bind(WebUIMessages.ShowDatalist, attrValue), textViewer.getDocument(), sourceRegion, targetRegion));
+							Region targetRegion = new Region(node.getStartOffset(), ((IDOMElement)node).getStartEndOffset() - node.getStartOffset());
+							links.add(new XMLJumpToHyperlink(NLS.bind(WebUIMessages.ShowDatalist, attrValue), textViewer.getDocument(), sourceRegion, targetRegion));
 						}
 					}
 				}
