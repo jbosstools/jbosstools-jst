@@ -133,7 +133,7 @@ public class MobilePaletteInsertHelper extends PaletteInsertHelper {
 	}
 
 	private void writeBuffer(IDocument document) throws BadLocationException{
-		if(globalBuffer.length() > 0 && globalPosition >= 0 && globalPosition <= document.getLength()){
+		if(globalBuffer.length() > 0 && globalPosition >= 0 && globalPosition < document.getLength()){
 			document.replace(globalPosition, goobalLength, globalBuffer.toString());
 			globalBuffer = new StringBuffer();
 			globalPosition = -1;
