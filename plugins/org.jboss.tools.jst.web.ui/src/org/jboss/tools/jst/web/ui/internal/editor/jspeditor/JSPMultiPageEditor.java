@@ -58,6 +58,7 @@ import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.IReusableEditor;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWindowListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -88,7 +89,6 @@ import org.jboss.tools.common.model.plugin.ModelPlugin;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.editor.EditorDescriptor;
 import org.jboss.tools.common.model.ui.editor.IModelObjectEditorInput;
-import org.jboss.tools.common.model.ui.views.palette.PaletteContents;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.common.model.util.XModelTreeListenerSWTASync;
 import org.jboss.tools.common.text.ext.IMultiPageEditor;
@@ -588,32 +588,41 @@ public class JSPMultiPageEditor extends JSPMultiPageEditorPart implements
 		if (visualEditorFactory != null) {
 			visualEditor = visualEditorFactory.createVisualEditor(this,sourceEditor, IVisualEditor.VISUALSOURCE_MODE, bundleMap);
 
-			visualSourceIndex = addPage(visualEditor, getEditorInput(),sourceEditor);
-			setPageText(visualSourceIndex,JSPEditorMessages.JSPMultiPageEditor_TabLabel_VisualSource);
-			setPartName(visualEditor.getTitle());
-
-			sourceIndex = addPage(visualEditor, getEditorInput(),sourceEditor);
-			setPageText(sourceIndex, sourceTabLabel);
-			setPartName(visualEditor.getTitle());
-
-			setPreviewIndex(addPage(visualEditor, getEditorInput(),sourceEditor));
-			setPageText(getPreviewIndex(),
-					JSPEditorMessages.JSPMultiPageEditor_TabLabel_Preview);
-			setPartName(visualEditor.getTitle());
+			if (visualEditor != null) {
+				visualSourceIndex = addPage(visualEditor, getEditorInput(),sourceEditor);
+				setPageText(visualSourceIndex,JSPEditorMessages.JSPMultiPageEditor_TabLabel_VisualSource);
+				setPartName(visualEditor.getTitle());
+				
+	
+				sourceIndex = addPage(visualEditor, getEditorInput(),sourceEditor);
+				setPageText(sourceIndex, sourceTabLabel);
+				setPartName(visualEditor.getTitle());
+	
+				setPreviewIndex(addPage(visualEditor, getEditorInput(),sourceEditor));
+				setPageText(getPreviewIndex(),
+						JSPEditorMessages.JSPMultiPageEditor_TabLabel_Preview);
+				setPartName(visualEditor.getTitle());
+			} else {
+				createOnlySourceTab(sourceTabLabel);
+			}
 		} else {
-			sourceIndex = addPage(sourceEditor, getEditorInput(),sourceEditor);
-			setPageText(sourceIndex, sourceTabLabel);
-			setPartName(sourceEditor.getTitle());
-			/*
-			 * When there is only the source part --
-			 * then VpeController very likely hasn't been created.
-			 * Thus Bundle Map should be initialized here instead of
-			 * VpeController.
-			 */
-			bundleMap.init(sourceEditor.getEditorInput());
+			createOnlySourceTab(sourceTabLabel);
 		}
 	}
 
+	private void createOnlySourceTab(String sourceTabLabel) throws PartInitException {
+		sourceIndex = addPage(sourceEditor, getEditorInput(),sourceEditor);
+		setPageText(sourceIndex, sourceTabLabel);
+		setPartName(sourceEditor.getTitle());
+		/*
+		 * When there is only the source part --
+		 * then VpeController very likely hasn't been created.
+		 * Thus Bundle Map should be initialized here instead of
+		 * VpeController.
+		 */
+		bundleMap.init(sourceEditor.getEditorInput());
+	}
+	
 	public void doSave(IProgressMonitor monitor) {
 		sourceEditor.doSave(monitor);
 	}
