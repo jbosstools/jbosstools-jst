@@ -69,6 +69,7 @@ import org.jboss.tools.common.validation.IStringValidator;
 import org.jboss.tools.common.validation.ITypedReporter;
 import org.jboss.tools.common.validation.IValidatingProjectTree;
 import org.jboss.tools.common.validation.PreferenceInfoManager;
+import org.jboss.tools.common.validation.SkipValidation;
 import org.jboss.tools.common.validation.ValidatorManager;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
@@ -373,6 +374,9 @@ public class ELValidator extends WebValidator implements IStringValidator {
 		}
 
 		for (int i = 0; i < resolvers.length; i++) {
+			if(resolvers[i].getClass().getAnnotation(SkipValidation.class) != null) {
+				continue;
+			}
 			ELResolution elResolution = resolvers[i].resolve(context, operandToken, documnetOffset);
 			if(elResolution==null) {
 				continue;

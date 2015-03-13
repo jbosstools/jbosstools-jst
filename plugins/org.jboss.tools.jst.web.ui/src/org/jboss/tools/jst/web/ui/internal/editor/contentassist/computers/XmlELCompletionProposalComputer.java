@@ -50,10 +50,12 @@ import org.jboss.tools.common.el.core.parser.ELParser;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
+import org.jboss.tools.common.el.core.resolver.ELResolverExtension;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.text.TextProposal;
 import org.jboss.tools.common.ui.CommonUIPlugin;
 import org.jboss.tools.jst.web.kb.IPageContext;
+import org.jboss.tools.jst.web.kb.IXmlContext;
 import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
@@ -558,6 +560,14 @@ public class XmlELCompletionProposalComputer extends AbstractXmlCompletionPropos
 				return project.hasNature("org.jboss.tools.jsf.jsfnature") || resource.getFileExtension()==null || !resource.getFileExtension().toLowerCase().startsWith("htm");
 			} catch (CoreException e) {
 				WebUiPlugin.getDefault().logError(e);
+			}
+		} else if(resolvers != null && resolvers.length > 0 && getContext() instanceof IXmlContext) {
+			for (ELResolver r: resolvers) {
+				if(r instanceof ELResolverExtension) {
+					if(((ELResolverExtension)r).isRelevant(getContext())) {
+						return true;
+					}
+				}
 			}
 		}
 		return false;

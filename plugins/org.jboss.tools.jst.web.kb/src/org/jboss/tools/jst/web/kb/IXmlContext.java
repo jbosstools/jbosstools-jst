@@ -11,9 +11,12 @@
 
 package org.jboss.tools.jst.web.kb;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 
 /**
  * 
@@ -27,4 +30,11 @@ public interface IXmlContext extends ELContext {
 	 * @return
 	 */
 	Set<String> getURIs();
+
+	/**
+	 * Returns mapping of URIs to name space objects for the root element.
+	 * 
+	 * @return
+	 */
+	Map<String, List<INameSpace>> getRootNameSpaces();
 }

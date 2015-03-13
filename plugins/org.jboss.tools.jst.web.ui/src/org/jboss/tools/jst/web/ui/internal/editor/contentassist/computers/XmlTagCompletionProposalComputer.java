@@ -789,8 +789,7 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		private IFile file;
 		private Map<String, List<INameSpace>> namespaces;
 		private ITagLibrary[] tagLibraries;
-		
-		
+
 		FakePageContext(Map<String, List<INameSpace>> namespaces, IDocument document, IFile file) {
 			this.namespaces = namespaces;
 			this.document = document;
@@ -811,68 +810,89 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 			tagLibraries = libraries.toArray(new ITagLibrary[0]);
 		}
 		
+		@Override
 		public void setVars(List<Var> vars) {
 			// Do nothing
 		}
 		
+		@Override
 		public void setResource(IFile file) {
 			// Do nothing (we'll use only a file passed as createFakePageContext() method argument
 		}
 		
+		@Override
 		public void setElResolvers(ELResolver[] resolvers) {
 			// Do nothing
 		}
 		
+		@Override
 		public void setDirty(boolean dirty) {
 			// Do nothing
 		}
 		
+		@Override
 		public boolean isDirty() {
 			return false;
 		}
 		
+		@Override
 		public Var[] getVars(int offset) {
 			return new Var[0];
 		}
 		
+		@Override
 		public IFile getResource() {
 			return file;
 		}
 		
+		@Override
 		public ELResolver[] getElResolvers() {
 			return new ELResolver[0];
 		}
 		
+		@Override
 		public Collection<ELReference> getELReferences(IRegion region) {
 			return new ArrayList<ELReference>();
 		}
 		
+		@Override
 		public ELReference[] getELReferences() {
 			return new ELReference[0];
 		}
 		
+		@Override
 		public ELReference getELReference(int offset) {
 			return null;
 		}
 		
+		@Override
 		public Set<String> getURIs() {
 			return namespaces.keySet();
 		}
 		
+		@Override
 		public IResourceBundle[] getResourceBundles() {
 			return new IResourceBundle[0];
 		}
 		
+		@Override
 		public Map<String, List<INameSpace>> getNameSpaces(int offset) {
 			return namespaces;
 		}
 		
+		@Override
 		public ITagLibrary[] getLibraries() {
 			return tagLibraries;
 		}
 		
+		@Override
 		public IDocument getDocument() {
 			return document;
+		}
+
+		@Override
+		public Map<String, List<INameSpace>> getRootNameSpaces() {
+			return namespaces;
 		}
 	}
 	

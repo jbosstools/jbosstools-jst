@@ -664,7 +664,7 @@ public class PageContextFactory implements IResourceChangeListener {
 				
 				IRegion region = new Region(0, document.getLength());
 				INameSpace nameSpace = new NameSpace(
-						uri, prefix,
+						uri, prefix, null,
 						TagLibraryManager.getLibraries(
 								project, uri));
 				context.addNameSpace(region, nameSpace);
@@ -992,7 +992,7 @@ public class PageContextFactory implements IResourceChangeListener {
 
 				Region region = new Region(start, length);
 				INameSpace nameSpace = new NameSpace(
-						uri, prefix,
+						uri, prefix, node.getNodeName(),
 						TagLibraryManager.getLibraries(
 								project, uri));
 
@@ -1014,7 +1014,7 @@ public class PageContextFactory implements IResourceChangeListener {
 						&&
 						!mainNnIsRedefined) {
 					nameSpace = new NameSpace(
-							CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI, "", //$NON-NLS-1$
+							CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI, "", node.getNodeName(), //$NON-NLS-1$
 							TagLibraryManager.getLibraries(
 									project, 
 									CustomTagLibManager.FACELETS_HTML_TAG_LIB_URI));
