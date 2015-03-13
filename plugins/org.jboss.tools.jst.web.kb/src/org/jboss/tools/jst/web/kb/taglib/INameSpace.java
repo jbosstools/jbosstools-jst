@@ -25,4 +25,10 @@ public interface INameSpace {
 	 */
 	String getPrefix();
 
+	/**
+	 * Returns name of root element
+	 * @return
+	 */
+	String getRoot();
+
 }

@@ -63,9 +63,7 @@ public class ELHyperlinkDetector extends AbstractHyperlinkDetector{
 						if(segment != null && segment.isResolved()){
 							IOpenableReference[] openables = segment.getOpenable();
 //							return new IHyperlink[]{new ELHyperlink(textViewer.getDocument(), reference, segment)};
-							if(openables.length == 0) {
-								links.add(new ELHyperlink(textViewer.getDocument(), reference, segment, null));
-							} else {
+							if(openables.length > 0) {
 								List<ELHyperlink> vars = new ArrayList<ELHyperlink>();
 								for (IOpenableReference openable: openables) {
 									ELHyperlink link = new ELHyperlink(textViewer.getDocument(), reference, segment, openable);

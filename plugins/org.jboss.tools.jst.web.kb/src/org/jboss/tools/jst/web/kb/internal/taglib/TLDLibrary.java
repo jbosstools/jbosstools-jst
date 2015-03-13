@@ -72,6 +72,10 @@ public class TLDLibrary extends FunctionTagLib implements ITLDLibrary {
 			public String getPrefix() {
 				return shortName;
 			}
+			
+			public String getRoot() {
+				return null;
+			}
 		});
 	}
 

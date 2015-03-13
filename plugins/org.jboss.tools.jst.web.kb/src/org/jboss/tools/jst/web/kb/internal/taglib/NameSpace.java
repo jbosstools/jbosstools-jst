@@ -25,6 +25,8 @@ public class NameSpace implements INameSpaceExtended {
 	private String fPrefix;
 	private String fUri;
 	private ITagLibrary[] fTagLibraries;
+
+	private String root;
 	
 	/**
 	 * Constructs NameSpace object 
@@ -33,7 +35,7 @@ public class NameSpace implements INameSpaceExtended {
 	 * @param prefix
 	 */
 	public NameSpace(String uri, String prefix) {
-		this(uri, prefix, new ITagLibrary[0]);
+		this(uri, prefix, null, new ITagLibrary[0]);
 	}
 
 	/**
@@ -43,9 +45,21 @@ public class NameSpace implements INameSpaceExtended {
 	 * @param prefix
 	 */
 	public NameSpace(String uri, String prefix, ITagLibrary[] libraries) {
+		this(uri, prefix, null, libraries);
+	}
+
+	/**
+	 * Constructs NameSpace object 
+	 * 
+	 * @param uri
+	 * @param prefix
+	 * @param root
+	 */
+	public NameSpace(String uri, String prefix,  String root, ITagLibrary[] libraries) {
 		this.fUri = uri;
 		this.fPrefix = prefix;
 		this.fTagLibraries = libraries;
+		this.root = root;
 	}
 	
 	/**
@@ -60,6 +74,10 @@ public class NameSpace implements INameSpaceExtended {
 	 */
 	public String getURI() {
 		return fUri;
+	}
+
+	public String getRoot() {
+		return root;
 	}
 
 	/**

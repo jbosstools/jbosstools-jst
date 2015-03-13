@@ -98,6 +98,18 @@ public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 		return result;
 	}
 
+	@Override
+	public Map<String, List<INameSpace>> getRootNameSpaces() {
+		int offset = Integer.MAX_VALUE;
+		for (IRegion region : nameSpaces.keySet()) {
+			if(offset > region.getOffset()) {
+				offset = region.getOffset();
+			}
+		}
+		return getNameSpaces(offset);
+	}
+
+
 	public INameSpace findNameSpaceByPrefix(Set<INameSpace> namespaces, String prefix) {
 		if (namespaces != null && prefix != null) {
 			for (INameSpace ns : namespaces) {
