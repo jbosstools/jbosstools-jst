@@ -36,6 +36,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.common.quickfix.IQuickFixGenerator;
+import org.jboss.tools.common.quickfix.MarkerAnnotationInfo;
 import org.jboss.tools.common.refactoring.MarkerResolutionUtils;
 import org.jboss.tools.common.text.ext.util.StructuredModelWrapper;
 import org.jboss.tools.common.text.ext.util.Utils;
@@ -61,10 +62,6 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	
 	private static final String HTML_VALIDATOR_MARKER="org.eclipse.wst.html.core.validationMarker"; //$NON-NLS-1$
 	private static final String JSP_VALIDATOR_MARKER="org.eclipse.jst.jsp.core.validationMarker"; //$NON-NLS-1$
-	
-	private static final String UNKNOWN_TAG = "Unknown tag"; //$NON-NLS-1$
-	
-	private static final String MISSING_ATTRIBUTE = "Missing required attribute"; //$NON-NLS-1$
 	
 	@Override
 	public IMarkerResolution[] getResolutions(IMarker marker) {
@@ -213,9 +210,9 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 		
 		final int end = position.getOffset()+position.getLength();
 		
-		if(message.startsWith(UNKNOWN_TAG)){
+		if(message.startsWith(MarkerAnnotationInfo.UNKNOWN_TAG)){
 			getAddTLD(proposals, ta, message, start, end);
-		}else if(message.startsWith(MISSING_ATTRIBUTE)){
+		}else if(message.startsWith(MarkerAnnotationInfo.MISSING_ATTRIBUTE)){
 			getAddAttribute(proposals, ta, message, start, end);
 		}
 		return proposals.toArray(new IJavaCompletionProposal[]{});
@@ -322,9 +319,9 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 			return new IMarkerResolution[]{};
 		final int end = attribute.intValue();
 		
-		if(message.startsWith(UNKNOWN_TAG)){
+		if(message.startsWith(MarkerAnnotationInfo.UNKNOWN_TAG)){
 			getAddTLD(resolutions, marker, message, start, end);
-		}else if(message.startsWith(MISSING_ATTRIBUTE)){
+		}else if(message.startsWith(MarkerAnnotationInfo.MISSING_ATTRIBUTE)){
 			getAddAttribute(resolutions, marker, message, start, end);
 		}
 
@@ -383,7 +380,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	public boolean hasResolutions(IMarker marker) {
 		if(marker.exists()){
 			String message = marker.getAttribute(IMarker.MESSAGE, "");
-			return message.startsWith(UNKNOWN_TAG) || message.startsWith(MISSING_ATTRIBUTE);
+			return message.startsWith(MarkerAnnotationInfo.UNKNOWN_TAG) || message.startsWith(MarkerAnnotationInfo.MISSING_ATTRIBUTE);
 		}
 		return false;
 	}
@@ -391,7 +388,7 @@ public class JSPProblemMarkerResolutionGenerator implements IMarkerResolutionGen
 	@Override
 	public boolean hasProposals(Annotation annotation, Position position) {
 		String message = annotation.getText();
-		return message.startsWith(UNKNOWN_TAG) || message.startsWith(MISSING_ATTRIBUTE);
+		return message.startsWith(MarkerAnnotationInfo.UNKNOWN_TAG) || message.startsWith(MarkerAnnotationInfo.MISSING_ATTRIBUTE);
 	}
 
 	@Override
