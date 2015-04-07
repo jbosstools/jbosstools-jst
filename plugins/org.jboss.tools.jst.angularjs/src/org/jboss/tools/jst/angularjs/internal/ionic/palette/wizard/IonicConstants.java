@@ -45,6 +45,7 @@ public interface IonicConstants extends HTMLConstants {
 	public String TAG_ION_SIDE_MENU_CONTENT = "ion-side-menu-content";
 	public String TAG_ION_SLIDE_BOX = "ion-slide-box";
 	public String TAG_ION_SLIDE = "ion-slide";
+	public String TAG_ION_SPINNER = "ion-spinner";
 	public String TAG_ION_TABS = "ion-tabs";
 	public String TAG_ION_TAB = "ion-tab";
 	public String TAG_ION_TOGGLE = "ion-toggle";
@@ -127,6 +128,26 @@ public interface IonicConstants extends HTMLConstants {
 
 	public String SIDE_LEFT = "left";
 	public String SIDE_RIGHT = "right";
+	
+	public String SPINNER_ICON_DEFAULT = "default";
+	public String SPINNER_ICON_ANDROID = "android";
+	public String SPINNER_ICON_BUBBLES = "bubbles";
+	public String SPINNER_ICON_CIRCLES = "circles";
+	public String SPINNER_ICON_CRESCENT = "crescent";
+	public String SPINNER_ICON_DOTS = "dots";
+	public String SPINNER_ICON_IOS = "ios";
+	public String SPINNER_ICON_IOS_SMALL = "ios-small";
+	public String SPINNER_ICON_LINES = "lines";
+	public String SPINNER_ICON_RIPPLE = "ripple";
+	public String SPINNER_ICON_SPIRAL = "spiral";
+
+	/**
+	 * All named spinner icons. Default constant is not included.
+	 */
+	public String[] SPINNER_ICONS = {
+		SPINNER_ICON_ANDROID, SPINNER_ICON_BUBBLES, SPINNER_ICON_CIRCLES, SPINNER_ICON_CRESCENT, SPINNER_ICON_DOTS,
+		SPINNER_ICON_IOS, SPINNER_ICON_IOS_SMALL, SPINNER_ICON_LINES, SPINNER_ICON_RIPPLE, SPINNER_ICON_SPIRAL
+	};
 
 	public String EDITOR_ID_BAR_COLOR = "bar-color";
 	public String EDITOR_ID_LEFT_BUTTON_CLICK = "left-button-click";

@@ -13,6 +13,7 @@ package org.jboss.tools.jst.angularjs.internal.ionic.palette.model;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewButtonWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewCheckBoxWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRadioWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSpinnerWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTextInputWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewToggleWizard;
 import org.jboss.tools.jst.angularjs.internal.ui.AngularJsUIImages;

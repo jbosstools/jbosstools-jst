@@ -29,6 +29,7 @@ public class AngularJsUIImages extends CommonUIImages {
 	public static final String SCROLL_IMAGE = WIZARDS_PATH + "ScrollWizBan.png"; //$NON-NLS-1$
 	public static final String SIDEMENU_IMAGE = WIZARDS_PATH + "SideMenuWizBan.png"; //$NON-NLS-1$
 	public static final String SLIDEBOX_IMAGE = WIZARDS_PATH + "SlideBoxWizBan.png"; //$NON-NLS-1$
+	public static final String SPINNER_IMAGE = WIZARDS_PATH + "IonicSpinnerWizBan.png"; //$NON-NLS-1$ //TODO
 	public static final String TABS_IMAGE = WIZARDS_PATH + "IonicTabsWizBan.png"; //$NON-NLS-1$
 	public static final String TAB_IMAGE = WIZARDS_PATH + "IonicTabWizBan.png"; //$NON-NLS-1$
 	public static final String BUTTON_IMAGE = WIZARDS_PATH + "IonicButtonWizBan.png"; //$NON-NLS-1$

@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,6 +27,20 @@ import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
  *
  */
 public class IonicFieldEditorFactory implements IonicConstants {
+
+	static String[] COLOR_NAMES = {
+		"", "light", "stable", "positive", "calm", "balanced", "energized", "assertive", "royal", "dark",  
+	};
+
+	static String[] getColors(String baseName) {
+		String[] colors = new String[COLOR_NAMES.length];
+		colors[0] = "";
+		for (int i = 1; i < colors.length; i++) {
+			colors[i] = baseName + "-" + COLOR_NAMES[i];
+		}
+		return colors;
+	}
+
 
 	/**
 	 * Used in New Tabs and Tab wizard.
@@ -76,11 +91,7 @@ public class IonicFieldEditorFactory implements IonicConstants {
 				IonicWizardMessages.headerNoTapScrollDescription);
 	}
 
-	static String[] BAR_COLORS = {
-		"", "bar-light", "bar-stable", "bar-positive", "bar-calm", "bar-balanced", "bar-energized", "bar-assertive", "bar-royal", "bar-dark",  
-	};
-
-	static List<String> BAR_COLOR_LIST = Arrays.asList(BAR_COLORS);
+	static List<String> BAR_COLOR_LIST = Arrays.asList(getColors("bar"));
 
 	/**
 	 * Used in New Header wizard.
@@ -91,11 +102,7 @@ public class IonicFieldEditorFactory implements IonicConstants {
 				"");
 	}
 
-	static String[] TABS_COLORS = {
-		"", "tabs-light", "tabs-stable", "tabs-positive", "tabs-calm", "tabs-balanced", "tabs-energized", "tabs-assertive", "tabs-royal", "tabs-dark",  
-	};
-
-	static List<String> TABS_COLOR_LIST = Arrays.asList(TABS_COLORS);
+	static List<String> TABS_COLOR_LIST = Arrays.asList(getColors("tabs"));
 
 	/**
 	 * Used in New Tabs wizard.
@@ -320,11 +327,7 @@ public class IonicFieldEditorFactory implements IonicConstants {
 				IonicWizardMessages.tabBadgeDescription);
 	}
 
-	static String[] BADGE_COLORS = {
-		"", "badge-light", "badge-stable", "badge-positive", "badge-calm", "badge-balanced", "badge-energized", "badge-assertive", "badge-royal", "badge-dark",  
-	};
-
-	static List<String> BADGE_COLOR_LIST = Arrays.asList(BADGE_COLORS);
+	static List<String> BADGE_COLOR_LIST = Arrays.asList(getColors("badge"));
 
 	/**
 	 * Used in New Tab wizard.
@@ -453,11 +456,7 @@ public class IonicFieldEditorFactory implements IonicConstants {
 				IonicWizardMessages.checkboxNgChangeDescription);
 	}
 
-	static String[] TOGGLE_COLORS = {
-		"", "toggle-light", "toggle-stable", "toggle-positive", "toggle-calm", "toggle-balanced", "toggle-energized", "toggle-assertive", "toggle-royal", "toggle-dark",  
-	};
-
-	static List<String> TOGGLE_COLOR_LIST = Arrays.asList(TOGGLE_COLORS);
+	static List<String> TOGGLE_COLOR_LIST = Arrays.asList(getColors("toggle"));
 
 	/**
 	 * Used in New Tabs wizard.
@@ -638,11 +637,7 @@ public class IonicFieldEditorFactory implements IonicConstants {
 				WizardDescriptions.iconPosition);
 	}
 
-	static String[] BUTTON_COLORS = {
-		"", "button-light", "button-stable", "button-positive", "button-calm", "button-balanced", "button-energized", "button-assertive", "button-royal", "button-dark",  
-	};
-
-	static List<String> BUTTON_COLOR_LIST = Arrays.asList(BUTTON_COLORS);
+	static List<String> BUTTON_COLOR_LIST = Arrays.asList(getColors("button"));
 
 	/**
 	 * Used in New Button wizard.
@@ -793,5 +788,45 @@ public class IonicFieldEditorFactory implements IonicConstants {
 		return SwtFieldEditorFactory.INSTANCE.createCheckboxEditor(TAG_ION_NAV_BACK_BUTTON, IonicWizardMessages.addBackButton, true,
 				IonicWizardMessages.navbarAddBackButtonDescription);
 	}
+
+	static String[] spinnerIcons = {
+		SPINNER_ICON_ANDROID,
+		SPINNER_ICON_IOS,
+		SPINNER_ICON_IOS_SMALL,
+		SPINNER_ICON_BUBBLES,
+		SPINNER_ICON_CIRCLES,
+		SPINNER_ICON_CRESCENT,
+		SPINNER_ICON_DOTS,
+		SPINNER_ICON_LINES,
+		SPINNER_ICON_RIPPLE,
+		SPINNER_ICON_SPIRAL,
+		SPINNER_ICON_DEFAULT
+	};
+	
+	/**
+	 * Used in New Spinner wizard.
+	 * @return
+	 */
+	public static IFieldEditor createSpinnerIconEditor(String name, String defaultValud) {
+		List<String> labels = new ArrayList<String>();
+		labels.add("");
+		List<String> list = new ArrayList<String>();
+		list.add(name);
+		return SwtFieldEditorFactory.INSTANCE.createRadioEditor(ATTR_ICON + "-" + name, name, 
+				labels, list, defaultValud,
+				IonicWizardMessages.spinnerIconDescription);
+	}
+
+	static List<String> SPINNER_COLOR_LIST = Arrays.asList(getColors("spinner"));
+
+	/**
+	 * Used in New Spinner wizard.
+	 * @return
+	 */
+	public static IFieldEditor createSpinnerColorEditor() {
+		return SwtFieldEditorFactory.INSTANCE.createComboEditor(TAG_ION_SPINNER, IonicWizardMessages.barColorLabel, SPINNER_COLOR_LIST, "", true,
+				"");
+	}
+
 }
 

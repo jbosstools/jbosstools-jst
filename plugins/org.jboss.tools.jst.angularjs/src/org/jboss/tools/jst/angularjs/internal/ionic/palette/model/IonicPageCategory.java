@@ -20,6 +20,7 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewRefresherW
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewScrollWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSideMenuWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSlideboxWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSpinnerWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizard;
 import org.jboss.tools.jst.angularjs.internal.ui.AngularJsUIImages;
@@ -146,6 +147,18 @@ public class IonicPageCategory extends AbstractPaletteCategory {
 				AngularJsUIImages.getInstance().getOrCreateImageDescriptor(
 						"palette/List.png"), // image path
 				NewListWizard.class, // wizard class
+				null // corrector
+		);
+		add(item);
+
+
+		item = new PaletteItemImpl(
+				"Spinner", // label
+				"<html>\n<b>Spinner:</b><br>\n&lt;ion-spinner><br>\n...<br>\n&lt;/ion-spinner>\n</html>", // tooltip
+				"text input button ", // keywords
+				AngularJsUIImages.getInstance().getOrCreateImageDescriptor(
+						"palette/IonicSpinner.png"), // image path
+				NewSpinnerWizard.class, // wizard class
 				null // corrector
 		);
 		add(item);

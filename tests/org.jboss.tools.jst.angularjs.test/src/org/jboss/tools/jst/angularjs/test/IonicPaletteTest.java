@@ -15,9 +15,6 @@ import java.util.List;
 
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.ui.IEditorPart;
-import org.jboss.tools.common.model.XModelObject;
-import org.jboss.tools.common.model.XModelObjectConstants;
-import org.jboss.tools.common.model.options.PreferenceModelUtilities;
 import org.jboss.tools.common.model.ui.editors.dnd.IDropWizard;
 import org.jboss.tools.common.model.ui.internal.editors.PaletteItemResult;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.IonicConstants;
@@ -48,6 +45,8 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSideMenuWi
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSideMenuWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSlideboxWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSlideboxWizardPage;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSpinnerWizard;
+import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewSpinnerWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizard;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabWizardPage;
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewTabsWizard;
@@ -58,14 +57,12 @@ import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewToggleWiza
 import org.jboss.tools.jst.angularjs.internal.ionic.palette.wizard.NewToggleWizardPage;
 import org.jboss.tools.jst.jsp.test.palette.AbstractPaletteEntryTest;
 import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.JQueryConstants;
-import org.jboss.tools.jst.web.ui.palette.html.jquery.wizard.NewJQueryWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizard;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteCategory;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteGroup;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteVersionGroup;
 import org.jboss.tools.jst.web.ui.palette.internal.html.impl.PaletteModelImpl;
-import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
 import org.jboss.tools.jst.web.ui.test.HTML5PaletteWizardTest;
 
 /**
@@ -1006,6 +1003,32 @@ public class IonicPaletteTest extends AbstractPaletteEntryTest implements IonicC
 		assertAttrExists(wizard, ATTR_ANIMATION, "b");
 		wizardPage.setEditorValue(EDITOR_ID_NAV_VIEW_ANIMATION, "");
 		assertTextDoesNotExist(wizard, ATTR_ANIMATION);
+
+		compareGeneratedAndInsertedText(wizard);
+	}
+
+	public void testNewSpinnerWizard() {
+		IWizardPage currentPage = runToolEntry("Spinner", true);
+		assertTrue(currentPage instanceof NewSpinnerWizardPage);
+
+		NewSpinnerWizardPage wizardPage = (NewSpinnerWizardPage)currentPage;
+		NewSpinnerWizard wizard = (NewSpinnerWizard)wizardPage.getWizard();
+
+		compareUIAndNonUIWizards(wizard, "Spinner");	
+
+		assertTextDoesNotExist(wizard, ATTR_ICON + "=");
+		for (String icon: SPINNER_ICONS) {
+			wizardPage.setEditorValue(ATTR_ICON + "-" + icon, icon);
+			assertAttrExists(wizard, ATTR_ICON, icon);
+		}
+		wizardPage.setEditorValue(ATTR_ICON + "-" + SPINNER_ICON_DEFAULT, SPINNER_ICON_DEFAULT);
+		assertTextDoesNotExist(wizard, ATTR_ICON + "=");
+
+		assertTextDoesNotExist(wizard, ATTR_CLASS);
+		wizardPage.setEditorValue(TAG_ION_SPINNER, "spinner-calm");
+		assertAttrExists(wizard, ATTR_CLASS, "spinner-calm");
+		wizardPage.setEditorValue(TAG_ION_SPINNER, "");
+		assertTextDoesNotExist(wizard, ATTR_CLASS);
 
 		compareGeneratedAndInsertedText(wizard);
 	}
