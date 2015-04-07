@@ -51,6 +51,9 @@ public class IonicWizardMessages extends NLS {
 	public static String newSlideboxWizardTitle;
 	public static String newSlideboxWizardDescription;
 
+	public static String newSpinnerTitle;
+	public static String newSpinnerWizardDescription;
+
 	public static String newTabsWizardDescription;
 
 	public static String newTabTitle;
@@ -182,6 +185,7 @@ public class IonicWizardMessages extends NLS {
 	public static String slideboxPagerClickDescription;
 	public static String slideboxShowPagerDescription;
 	public static String slideboxSlideIntervalDescription;
+	public static String spinnerIconDescription;
 	public static String tabBadgeDescription;
 	public static String tabBadgeStyleDescription;
 	public static String tabIconDescription;
