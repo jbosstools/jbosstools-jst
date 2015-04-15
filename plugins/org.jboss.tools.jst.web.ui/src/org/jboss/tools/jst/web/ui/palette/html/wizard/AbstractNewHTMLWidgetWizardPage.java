@@ -49,10 +49,8 @@ import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.jboss.tools.common.model.options.SharableConstants;
 import org.jboss.tools.common.model.ui.editors.dnd.ValidationException;
 import org.jboss.tools.common.model.ui.views.palette.IPositionCorrector;
-import org.jboss.tools.common.model.ui.views.palette.PaletteInsertManager;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.util.SwtUtil;
@@ -68,7 +66,34 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 	protected Map<String, IFieldEditor> editors = new HashMap<String, IFieldEditor>();
 
 	protected StyledText text;
+
+	/**
+	 * When disableOverridingPreferredBrowser = true, method getPreferredBrowser()
+	 * (overridden by wizards that need a specific browser for better rendering)
+	 * is ignored. 
+	 * 
+	 * Because of Java crash when WebKit is loaded in Mars Eclipse in Windows,
+	 * we have to disable using preferred browser by wizards, that generate html
+	 * currently supported only in WebKit.
+	 * 
+	 * Since it is a sad thing to dump a good preview for advanced widgets,
+	 * we need to keep an eye on browser support in Eclipse in different OS
+	 * and before releases try testing wizards with 
+	 *     disableOverridingPreferredBrowser = false;
+	 * 
+	 * Current list of wizards that need WebKit for proper rendering:
+	 *     NewRangeSliderWizardPage
+	 *     NewTableWizardPage (html)
+	 *     NewTableWizardPage (jquery)
+	 *     NewTabsWizardPage
+	 *     NewHeadingWizardPage
+	 *     NewPanelWizardPage
+	 *     NewMeterWizardPage
+	 *     NewSpinnerWizardPage
+	 */
+	protected static final boolean disableOverridingPreferredBrowser = true;
 	protected Browser browser;
+
 	protected File sourceFile = null;
 	protected String sourceURL = null;
 	
@@ -105,6 +130,8 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 	}
 
 	String warningMessage;
+
+	@Override
 	public void validate() throws ValidationException {
 		if(warningMessage != null) {
 			throw new ValidationException(warningMessage, true);
@@ -122,7 +149,8 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 			createTextPreview(previewPanel);
 		
 			Composite browserPanel = createBrowserPanel(previewPanel);
-			browser = WebUiPlugin.createBrowser(browserPanel, getPreferredBrowser());
+			int preferredBrowser = disableOverridingPreferredBrowser ? SWT.NONE : getPreferredBrowser();
+			browser = WebUiPlugin.createBrowser(browserPanel, preferredBrowser);
 
 			if(browser != null) {
 				browser.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -138,6 +166,7 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 		
 	}
 
+	@Override
 	protected void startPreview() {
 		Display.getCurrent().asyncExec(new Runnable() {
 			public void run() {
@@ -158,6 +187,7 @@ public class AbstractNewHTMLWidgetWizardPage extends AbstractWizardPageWithPrevi
 		});
 	}
 
+	@Override
 	protected void onCreateControl() {
 		Display.getDefault().addFilter(SWT.FocusOut, focusReturn);
 		Display.getDefault().addFilter(SWT.MouseDown, focusReturn);
