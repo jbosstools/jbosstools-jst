@@ -48,7 +48,10 @@ import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.util.BeanUtil;
 import org.jboss.tools.common.util.FileUtil;
 import org.jboss.tools.common.web.WebUtils;
+import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
+import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.internal.KbBuilder;
 import org.jboss.tools.jst.web.kb.preferences.ELSearchPreferences;
 
 public abstract class RefactorSearcher {
@@ -104,12 +107,17 @@ public abstract class RefactorSearcher {
 		for(IProject rProject: referencingProject){
 			scanProject(rProject, monitor);
 		}
-		
-		if(!containsInSearchScope(project))
+
+		try {
+			if(!containsInSearchScope(project) || !project.hasNature(IKbProject.NATURE_ID)) {
+				return;
+			}
+		} catch (CoreException e) {
+			WebKbPlugin.getDefault().logError(e);
 			return;
-		
+		}
 		updateEnvironment(project);
-		
+
 		IJavaProject javaProject = EclipseUtil.getJavaProject(project);
 		
 		// searching java, xml and property files in source folders
