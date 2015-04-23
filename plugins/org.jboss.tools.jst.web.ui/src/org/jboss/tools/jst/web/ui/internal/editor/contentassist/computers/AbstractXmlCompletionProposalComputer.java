@@ -40,7 +40,6 @@ import org.jboss.tools.jst.web.kb.KbQuery;
 import org.jboss.tools.jst.web.kb.KbQuery.Type;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
 import org.jboss.tools.jst.web.kb.internal.KbProject;
-import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -121,8 +120,8 @@ abstract public class AbstractXmlCompletionProposalComputer extends AbstractXMLM
 		IDocument document = getDocument();
 		IFile file = PageContextFactory.getResource(document);
 		if(file == null) {
-			//Report the illegal state and finish nicely without content assist crash.
-			WebUiPlugin.getPluginLog().logError(new IllegalStateException("Cannot find existing file by its document."));
+			// File will be null for documents belonged to external files. Ignore such files.
+//			WebUiPlugin.getPluginLog().logError(new IllegalStateException("Cannot find existing file by its document."));
 			return null;
 		}
 		return PageContextFactory.createPageContext(document, file, contextType, false);
