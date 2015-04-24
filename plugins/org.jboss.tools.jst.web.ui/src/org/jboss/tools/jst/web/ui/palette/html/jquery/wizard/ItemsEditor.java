@@ -18,11 +18,16 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.common.ui.widget.editor.IFieldEditor;
+import org.jboss.tools.common.util.PlatformUtil;
+import org.jboss.tools.jst.web.ui.internal.properties.advanced.LayoutUtil;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.AbstractNewHTMLWidgetWizardPage;
 import org.jboss.tools.jst.web.ui.palette.html.wizard.WizardMessages;
 
@@ -49,8 +54,18 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 	}
 
 	protected AbstractNewHTMLWidgetWizardPage page;
+
 	protected TabFolder tab = null;
 	protected Composite control = null;
+	/**
+	 * GTK3 does not allow reusing same control in several tab items.
+	 * (see https://bugs.eclipse.org/bugs/show_bug.cgi?id=454936)
+	 * For this case form for item editors is created as sibling of the tab folder.
+	 * This only slightly changes look of the component.  
+	 * The tab folder is used for presenting the selected item in the
+	 * form in both cases in the same way.
+	 */
+	boolean isFormSeparate = PlatformUtil.isGTK3();
 
 	protected int selected = -1;
 	protected int number = -1;
@@ -100,12 +115,16 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 			createEditors();
 			return null;
 		}
+
 		Group panel = new Group(parent,SWT.BORDER);
 		panel.setText(folderName);
 		GridData d = new GridData(GridData.FILL_HORIZONTAL);
 		d.horizontalSpan = 3;
 		panel.setLayoutData(d);		
 		GridLayout layout = new GridLayout(3, false);
+		if(isFormSeparate) {
+			layout.verticalSpacing = 1;
+		}
 		panel.setLayout(layout);
 
 		IFieldEditor number = JQueryFieldEditorFactory.createItemsNumberEditor(WizardMessages.numberOfItemsLabel, minNumber, maxNumber, initValue);
@@ -114,14 +133,33 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 		tab = new TabFolder(panel, SWT.NULL);
 		d = new GridData(GridData.FILL_HORIZONTAL);
 		d.horizontalSpan = 3;
+		if(isFormSeparate) {
+			d.heightHint = 0;
+			d.verticalIndent = 4;
+		}
 		tab.setLayoutData(d);
 		tab.addSelectionListener(this);
 
-		control = new Composite(tab, SWT.NONE);
+		Composite controlParent = tab;
+		if(isFormSeparate) {
+			controlParent = LayoutUtil.createGroup(panel, "");
+		}
+	
+		control = new Composite(controlParent, SWT.NONE);
 		control.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		control.setLayout(new GridLayout(3, false));
 
 		createItemEditors();
+
+		if(isFormSeparate) {
+			controlParent.setBackground(tab.getBackground());
+			control.setBackground(tab.getBackground());
+			for (Control c: control.getChildren()) {
+				if(!(c instanceof Text) && !(c instanceof Combo)) {
+					c.setBackground(tab.getBackground());
+				} 
+			}
+		}
 
 		setNumber(Integer.parseInt(number.getValueAsString()));
 		setSelected(0);
@@ -158,13 +196,13 @@ public class ItemsEditor implements SelectionListener, JQueryConstants {
 		while(tab.getItemCount() > n && tab.getItemCount() > 1) {
 			TabItem b = tab.getItem(tab.getItemCount() - 1);
 			b.getParent().setSelection(b);
-			b.setControl(null);
+			if(!isFormSeparate) b.setControl(null);
 			b.dispose();
 		}
 		for (int i = tab.getItemCount(); i < n; i++) {
 			TabItem b1 = new TabItem(tab, SWT.NULL);
 			b1.setText("    " + (char)('1' + i) + "    ");
-			b1.setControl(control);
+			if(!isFormSeparate) b1.setControl(control);
 		}
 		if(sel >= n) sel = n - 1;
 		if(selected != sel) {
