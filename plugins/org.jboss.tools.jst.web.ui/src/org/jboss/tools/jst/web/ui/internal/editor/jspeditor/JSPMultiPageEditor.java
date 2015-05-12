@@ -1187,4 +1187,9 @@ class ResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
+	@Override
+	public void switchToSourceTab() {
+		setActiveEditor(sourceEditor);
+	}
+
 }
