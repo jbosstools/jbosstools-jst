@@ -762,6 +762,6 @@ public class InsertJSCSSPaletteEntryTest extends AbstractPaletteEntryTest implem
 	}
 
 	String getCSS() {
-		return "http://code.ionicframework.com/1.0.0-rc.2/css/ionic.css";
+		return "http://code.ionicframework.com/1.0.0/css/ionic.css";
 	}
 }

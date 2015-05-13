@@ -2,8 +2,8 @@
 <libs>
  <lib name="Ionic">
   <version name="1.0">
-   <url>http://code.ionicframework.com/1.0.0-rc.2/js/ionic.bundle.js</url>
-   <url>http://code.ionicframework.com/1.0.0-rc.2/css/ionic.css</url>
+   <url>http://code.ionicframework.com/1.0.0/js/ionic.bundle.js</url>
+   <url>http://code.ionicframework.com/1.0.0/css/ionic.css</url>
   </version>
  </lib>
 </libs>
