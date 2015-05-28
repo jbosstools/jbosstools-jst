@@ -1,0 +1,62 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Contributors:
+ *       Red Hat, Inc. - initial API and implementation
+ *******************************************************************************/
+package org.jboss.tools.jst.js.bower.internal.launch.shortcut;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.runtime.CoreException;
+import org.jboss.tools.jst.js.bower.BowerCommands;
+import org.jboss.tools.jst.js.bower.internal.BowerConstants;
+
+/**
+ * @author "Ilya Buziuk (ibuziuk)"
+ */
+public class BowerUpdate extends GenericBowerLaunch {
+	private static final String LAUNCH_NAME = "Bower Update"; //$NON-NLS-1$
+
+	@Override
+	protected String getCommandArguments() {
+		return BowerCommands.UPDATE.getValue();
+	}
+
+	@Override
+	protected String getLaunchName() {
+		return LAUNCH_NAME;
+	}
+
+	@Override
+	protected String getWorkingDirectory(IResource resource) throws CoreException {
+		final List<IFile> foundFiles = new ArrayList<>();
+		if (resource != null && resource.exists()) {
+			IProject project = resource.getProject();
+			project.accept(new IResourceVisitor() {
+				@Override
+				public boolean visit(IResource resource) throws CoreException {
+					if (resource.getType() == IResource.FILE && BowerConstants.BOWER_JSON.equals(resource.getName())) {
+						foundFiles.add((IFile) resource);
+						return false;
+					}
+					return true;
+				}
+			});
+			if (!foundFiles.isEmpty()) {
+				return foundFiles.get(0).getParent().getFullPath().toOSString();
+			}
+		}
+		return null;
+	}
+
+}
