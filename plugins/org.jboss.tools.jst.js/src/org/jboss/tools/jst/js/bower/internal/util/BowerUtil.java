@@ -78,7 +78,7 @@ public final class BowerUtil {
 				// Bower Root on Windows - 'npm' folder
 				bowerRoot = npm.getAbsolutePath();
 			} else {
-				// Bower Root on Linux & Mac Os - "npm/node_modules/bower/bin"
+				// Bower Root on Linux & Mac Os - "/usr/lib/node_modules/bower/bin"
 				bowerRoot = npm.getAbsolutePath() + File.separator + BowerConstants.NODE_MODULES + File.separator
 						+ BowerConstants.BOWER + File.separator + BowerConstants.BIN;
 			}

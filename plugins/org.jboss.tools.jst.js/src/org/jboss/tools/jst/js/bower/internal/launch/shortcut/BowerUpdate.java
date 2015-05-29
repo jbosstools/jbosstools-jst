@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.jboss.tools.jst.js.bower.BowerCommands;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
+import org.jboss.tools.jst.js.bower.launch.GenericBowerLaunch;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"

@@ -10,7 +10,7 @@
           name="Bower">
       </launchConfigurationType>
    </extension>
-    <extension
+   <extension
        point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
           configTypeID="org.jboss.tools.jst.js.bower.bowerLaunchConfigurationType"

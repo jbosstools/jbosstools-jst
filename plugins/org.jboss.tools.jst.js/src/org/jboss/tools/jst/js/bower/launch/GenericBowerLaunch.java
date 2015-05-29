@@ -8,7 +8,7 @@
  *  Contributors:
  *       Red Hat, Inc. - initial API and implementation
  *******************************************************************************/
-package org.jboss.tools.jst.js.bower.internal.launch.shortcut;
+package org.jboss.tools.jst.js.bower.launch;
 
 import org.eclipse.core.externaltools.internal.IExternalToolConstants;
 import org.eclipse.core.resources.IResource;
@@ -59,7 +59,7 @@ public abstract class GenericBowerLaunch implements ILaunchShortcut {
 	public void launch(IEditorPart editor, String mode) {			
 	}
 	
-	private void execute(String workingDirectory, String bowerExecutableLocation) {
+	protected void execute(String workingDirectory, String bowerExecutableLocation) {
 		ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
 		ILaunchConfigurationType programType = manager.getLaunchConfigurationType(IExternalToolConstants.ID_PROGRAM_LAUNCH_CONFIGURATION_TYPE);
 		try {
