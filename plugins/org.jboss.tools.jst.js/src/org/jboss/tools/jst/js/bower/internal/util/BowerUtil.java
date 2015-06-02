@@ -57,17 +57,6 @@ public final class BowerUtil {
 	public static boolean isBowerJson(final IResource resource) {
 		return (BowerConstants.BOWER_JSON.equals(resource.getName()) && resource.exists());
 	}
-
-	public static String getNpmLocationFromPath() {
-		String path = System.getenv(BowerConstants.PATH);
-		String[] split = path.split(";"); //$NON-NLS-1$
-		for (String p : split) {
-			if (p.endsWith(File.separator + BowerConstants.NPM)) {
-				return p;
-			}
-		}
-		return null;
-	}
 	
 	public static String getBowerExecutableLocation() {
 		String bowerExecutable = (PlatformUtil.isWindows()) ? BowerConstants.BOWER_CMD : BowerConstants.BOWER; // "bower.cmd" (Windows) / "bower" (Linux & Mac OS)
@@ -78,7 +67,7 @@ public final class BowerUtil {
 				// Bower Root on Windows - 'npm' folder
 				bowerRoot = npm.getAbsolutePath();
 			} else {
-				// Bower Root on Linux & Mac Os - "/usr/lib/node_modules/bower/bin"
+				// Bower Root on Linux & Mac Os - "/usr/local/lib/node_modules/bower/bin"
 				bowerRoot = npm.getAbsolutePath() + File.separator + BowerConstants.NODE_MODULES + File.separator
 						+ BowerConstants.BOWER + File.separator + BowerConstants.BIN;
 			}

@@ -17,17 +17,12 @@ import org.eclipse.core.internal.resources.Container;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.tools.jst.js.bower.BowerCommands;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
 import org.jboss.tools.jst.js.bower.internal.BowerJsonGenerator;
 import org.jboss.tools.jst.js.bower.launch.GenericBowerLaunch;
 import org.jboss.tools.jst.js.internal.Activator;
+import org.jboss.tools.jst.js.internal.util.EditorUtil;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
@@ -65,28 +60,11 @@ public class BowerInit extends GenericBowerLaunch {
 				String bowerJson = BowerJsonGenerator.generateDefault(name);
 				InputStream source = new ByteArrayInputStream(bowerJson.getBytes());
 				file.create(source, IResource.NONE, null);
-				openInEditor(file);
+				EditorUtil.openInEditor(file);
 			}
 		} catch (CoreException e) {
 			Activator.logError(e);
 		}
 	}
-
-	private void openInEditor(final IFile file) throws PartInitException {
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
-				try {
-					page.openEditor(new FileEditorInput(file), desc.getId());
-				} catch (PartInitException e) {
-					Activator.logError(e);
-				}
-			}
-		});
-
-	}
-
+	
 }

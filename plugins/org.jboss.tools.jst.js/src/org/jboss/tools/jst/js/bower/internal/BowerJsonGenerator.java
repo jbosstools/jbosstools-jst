@@ -22,7 +22,7 @@ import com.google.gson.GsonBuilder;
 public final class BowerJsonGenerator {
 	private static final String NAME = "Bower"; //$NON-NLS-1$
 	private static final String VERSION = "0.0.0"; //$NON-NLS-1$
-	private static final String[] AUTHORS = { "JBoss Tools <tools@jboss.com>" }; //$NON-NLS-1$
+	private static final String[] AUTHORS = { "JBoss Tools <tools@jboss.org>" }; //$NON-NLS-1$
 	private static final String LICENSE = "MIT"; //$NON-NLS-1$
 	private static final String[] IGNORE = { "**/.*", "node_modules", "bower_components", "test", "tests" }; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 

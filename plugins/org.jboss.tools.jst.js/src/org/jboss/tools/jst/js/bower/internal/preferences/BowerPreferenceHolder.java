@@ -11,24 +11,36 @@
 package org.jboss.tools.jst.js.bower.internal.preferences;
 
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.jboss.tools.jst.js.bower.internal.BowerConstants;
-import org.jboss.tools.jst.js.internal.Activator;
+import org.eclipse.jface.util.PropertyChangeEvent;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
 public class BowerPreferenceHolder {
+	public static final String PREF_NPM_LOCATION = "Pref_npm_Location"; //$NON-NLS-1$
+	private static IPreferenceStore store;
 	
 	public static String getNpmLocation() {
-		return getBowerPreferences().getString(BowerConstants.PREF_NPM_LOCATION);
+		return store.getString(PREF_NPM_LOCATION);
 	}
 
 	public static void setNpmLocation(String location) {
-		getBowerPreferences().setValue(BowerConstants.PREF_NPM_LOCATION, location);
+		store.setValue(PREF_NPM_LOCATION, location);
 	}
 
-	private static IPreferenceStore getBowerPreferences() {
-		return Activator.getDefault().getPreferenceStore();
+	public static IPreferenceStore getStore() {
+		return store;
+	}
+
+	public static void setStore(IPreferenceStore store) {
+		BowerPreferenceHolder.store = store;
+	}
+
+	public static void load(PropertyChangeEvent event) {
+		if (event.getProperty().equals(PREF_NPM_LOCATION)) {
+			String value = event.getNewValue().toString();
+			setNpmLocation(value);
+		}
 	}
 
 }

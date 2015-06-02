@@ -16,12 +16,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
 import org.jboss.tools.jst.js.bower.internal.Messages;
-import org.jboss.tools.jst.js.internal.Activator;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
@@ -32,25 +30,16 @@ public class BowerPreferencePage extends FieldEditorPreferencePage implements IW
 	
 	public BowerPreferencePage() {
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 	}
 	
 	@Override
 	public void init(IWorkbench workbench) {
+		setPreferenceStore(BowerPreferenceHolder.getStore());
 	}
 	
-	@Override
-	public boolean performOk() {
-		super.performOk();
-		String filePath = bowerEditor.getTextControl(getFieldEditorParent()).getText();
-		BowerPreferenceHolder.setNpmLocation(new File(filePath.trim()).getAbsolutePath());
-		return true;
-	}
-	
-
 	@Override
 	protected void createFieldEditors() {
-		bowerEditor = new NpmHomeFieldEditor(BowerConstants.PREF_NPM_LOCATION, Messages.BowerPreferencePage_LocationLabel, getFieldEditorParent());
+		bowerEditor = new NpmHomeFieldEditor(BowerPreferenceHolder.PREF_NPM_LOCATION, Messages.BowerPreferencePage_LocationLabel, getFieldEditorParent());
 		addField(bowerEditor);
 	}
 		
@@ -91,16 +80,6 @@ public class BowerPreferencePage extends FieldEditorPreferencePage implements IW
 				return false;
 			}
 			return true;
-		}
-		
-		@Override
-		protected void doLoadDefault() {
-			Text textControl = getTextControl();
-			if (textControl != null) {
-				String value = BowerPreferenceHolder.getNpmLocation();
-				textControl.setText(value);
-			}
-			valueChanged();
 		}
 		
 		@Override

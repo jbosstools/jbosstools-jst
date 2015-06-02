@@ -11,7 +11,9 @@
 package org.jboss.tools.jst.js.bower.internal.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.jboss.tools.jst.js.bower.internal.util.BowerUtil;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.jboss.tools.jst.js.bower.internal.util.ExternalToolDetector;
+import org.jboss.tools.jst.js.internal.Activator;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
@@ -20,8 +22,9 @@ public class BowerPreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		String npmLocation = BowerUtil.getNpmLocationFromPath();
-		BowerPreferenceHolder.setNpmLocation((npmLocation != null) ? npmLocation : ""); //$NON-NLS-1$
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		String npmLocation = ExternalToolDetector.detectNpm();
+		store.setDefault(BowerPreferenceHolder.PREF_NPM_LOCATION, ((npmLocation != null) ? npmLocation : "")); //$NON-NLS-1$
 	}
 
 }
