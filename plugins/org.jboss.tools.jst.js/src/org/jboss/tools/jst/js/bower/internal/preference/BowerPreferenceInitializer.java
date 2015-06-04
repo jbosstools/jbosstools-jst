@@ -8,7 +8,7 @@
  *  Contributors:
  *       Red Hat, Inc. - initial API and implementation
  *******************************************************************************/
-package org.jboss.tools.jst.js.bower.internal.preferences;
+package org.jboss.tools.jst.js.bower.internal.preference;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -23,8 +23,10 @@ public class BowerPreferenceInitializer extends AbstractPreferenceInitializer {
 	@Override
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		String npmLocation = ExternalToolDetector.detectNpm();
-		store.setDefault(BowerPreferenceHolder.PREF_NPM_LOCATION, ((npmLocation != null) ? npmLocation : "")); //$NON-NLS-1$
+		String nodeLocation = ExternalToolDetector.detectNode();
+		String bowerLocation = ExternalToolDetector.detectBower();
+		store.setDefault(BowerPreferenceHolder.PREF_NODE_LOCATION, ((nodeLocation != null) ? nodeLocation : "")); //$NON-NLS-1$
+		store.setDefault(BowerPreferenceHolder.PREF_BOWER_LOCATION, ((bowerLocation != null) ? bowerLocation : "")); //$NON-NLS-1$
 	}
 
 }
