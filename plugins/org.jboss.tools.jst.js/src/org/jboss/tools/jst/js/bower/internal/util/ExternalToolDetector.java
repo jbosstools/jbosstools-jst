@@ -12,34 +12,89 @@ package org.jboss.tools.jst.js.bower.internal.util;
 
 import java.io.File;
 
-import org.jboss.tools.jst.js.bower.internal.BowerConstants;
+import static org.jboss.tools.jst.js.bower.internal.BowerConstants.*;
 import org.jboss.tools.jst.js.internal.util.PlatformUtil;
 
 /**
  * @author Ilya Buziuk (ibuziuk)
  */
 public final class ExternalToolDetector {
+	private static final String USR_LOCAL_BIN = "/usr/local/bin"; //$NON-NLS-1$
 
 	private ExternalToolDetector() {
 	}
 
-	public static String detectNpm() {
-		return detectNpmFromPathVariable();
-	}
-
-	private static String detectNpmFromPathVariable() {
-		String npmLocation = null;
+	public static String detectNode() {
+		String nodeLocation = null;
 		if (PlatformUtil.isWindows()) {
-			String path = System.getenv(BowerConstants.PATH);
-			String[] split = path.split(";"); //$NON-NLS-1$
-			for (String pathElement : split) {
-				if (pathElement.endsWith(File.separator + BowerConstants.NPM)) {
-					npmLocation = pathElement;
+			nodeLocation = detectFromPath(File.separator + NODE_JS);
+		} else {
+			// Detecting Node for Mac & Linux
+			File usrLocalBin = new File(USR_LOCAL_BIN);
+			if (usrLocalBin != null && usrLocalBin.exists()) {
+				File nodeExecutable = new File(usrLocalBin, NODE);
+				if (nodeExecutable != null && nodeExecutable.exists()) {
+					nodeLocation = usrLocalBin.getAbsolutePath();
+				}
+			}
+		}
+		return nodeLocation;
+	}
+	
+	public static String detectBower() {
+		String bowerLocation = null;
+		if (PlatformUtil.isWindows()) {
+			String npmLocation = detectNpmFromPath();
+			if (npmLocation != null) {
+				String separator = File.separator;
+				if (!npmLocation.endsWith(separator)) {
+					npmLocation = npmLocation + separator;
+				}
+				
+				File bowerHome =  new File(npmLocation, NODE_MODULES + separator + BOWER + separator + BIN);
+				if (bowerHome != null && bowerHome.exists()) {
+					bowerLocation = bowerHome.getAbsolutePath();
+				}
+			}
+		} else {
+			// Detecting Bower for Mac & Linux
+			File usrLocalBin = new File(USR_LOCAL_BIN);
+			if (usrLocalBin != null && usrLocalBin.exists()) {
+				File bowerExecutable = new File(usrLocalBin, BOWER);
+				if (bowerExecutable != null && bowerExecutable.exists()) {
+					bowerLocation = usrLocalBin.getAbsolutePath();
+				}
+			}
+		}
+		return bowerLocation;
+	}
+	
+	private static String detectNpmFromPath() {
+		return detectFromPath(File.separator + NPM);
+	}
+		
+	private static String detectFromPath(final String pattern) {
+		String nodeLocation = null;
+		String path = getPath();
+		String spliter = getPathSpliter();
+		if (path != null) {
+			String[] pathElements = path.split(spliter);
+			for (String element : pathElements) {
+				if (element.contains(pattern)) {
+					nodeLocation = element;
 					break;
 				}
 			}
 		}
-		return npmLocation;
+		return nodeLocation;
+	}
+	
+	private static String getPath() {
+		return System.getenv(PATH);
+	}
+	
+	private static String getPathSpliter() {
+		return (PlatformUtil.isWindows()) ? ";" : ":"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 }

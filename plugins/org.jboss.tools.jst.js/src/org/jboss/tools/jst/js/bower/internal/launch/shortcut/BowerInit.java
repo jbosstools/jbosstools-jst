@@ -33,7 +33,7 @@ public class BowerInit extends GenericBowerLaunch {
 	private Container root;
 
 	@Override
-	protected String getCommandArguments() {
+	protected String getCommandName() {
 		return BowerCommands.INIT.getValue() + " --config.interactive"; //$NON-NLS-1$
 	}
 
@@ -52,7 +52,7 @@ public class BowerInit extends GenericBowerLaunch {
 	}
 
 	@Override
-	protected void execute(String workingDirectory, String bowerExecutableLocation) {
+	protected void execute(String workingDirectory, String nodeExecutableLocation, String bowerExecutableLocation) {
 		try {
 			String name = root.getProject().getName();
 			IFile file = this.root.getFile(BowerConstants.BOWER_JSON);

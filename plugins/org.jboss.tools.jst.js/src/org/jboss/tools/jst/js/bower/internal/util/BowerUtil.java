@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.jboss.tools.jst.js.bower.internal.util;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +20,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
-import org.jboss.tools.jst.js.bower.internal.preferences.BowerPreferenceHolder;
-import org.jboss.tools.jst.js.internal.util.PlatformUtil;
 
 /**
  * @author Ilya Buziuk (ibuziuk)
@@ -55,30 +52,7 @@ public final class BowerUtil {
 	}
 
 	public static boolean isBowerJson(final IResource resource) {
-		return (BowerConstants.BOWER_JSON.equals(resource.getName()) && resource.exists());
+		return (resource != null && BowerConstants.BOWER_JSON.equals(resource.getName()) && resource.exists());
 	}
 	
-	public static String getBowerExecutableLocation() {
-		String bowerExecutable = (PlatformUtil.isWindows()) ? BowerConstants.BOWER_CMD : BowerConstants.BOWER; // "bower.cmd" (Windows) / "bower" (Linux & Mac OS)
-		File npm = new File(BowerPreferenceHolder.getNpmLocation()); // "npm" dir
-		if (npm != null && npm.exists()) {
-			String bowerRoot;
-			if (PlatformUtil.isWindows()) {
-				// Bower Root on Windows - 'npm' folder
-				bowerRoot = npm.getAbsolutePath();
-			} else {
-				// Bower Root on Linux & Mac Os - "/usr/local/lib/node_modules/bower/bin"
-				bowerRoot = npm.getAbsolutePath() + File.separator + BowerConstants.NODE_MODULES + File.separator
-						+ BowerConstants.BOWER + File.separator + BowerConstants.BIN;
-			}
-			
-			File bower = new File(bowerRoot, bowerExecutable);
-			if (bower != null && bower.exists()) {
-				return bower.getAbsolutePath();
-			}
-		
-		}
-		return null;
-	}
-
 }

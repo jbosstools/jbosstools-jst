@@ -27,7 +27,7 @@ public final class BowerInitTester extends PropertyTester {
 	}
 
 	@Override
-	public boolean test(Object receiver, String property, Object[] arg2, Object expectedValue) {
+	public boolean test(Object receiver, String property, Object[] objects, Object expectedValue) {
 		try {
 			if (IS_BOWER_INIT.equals(property) && receiver instanceof IResource) {
 				IProject project = ((IResource) receiver).getProject();

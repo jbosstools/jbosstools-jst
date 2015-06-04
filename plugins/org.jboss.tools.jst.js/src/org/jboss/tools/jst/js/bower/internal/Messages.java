@@ -18,14 +18,19 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getName().toString().toLowerCase();
 
-	public static String BowerPreferencePage_LocationLabel;
+	public static String BowerPreferencePage_BowerLocationLabel;
+	public static String BowerPreferencePage_NodeLocationLabel;
 	public static String BowerPreferencePage_NotInstalledError;
-	public static String BowerPreferencePage_NotSpecifiedWarning;
-	public static String BowerPreferencePage_NotValidError;
-	public static String ErrorHandler_NpmNotDefinedTitle;
-	public static String ErrorHandler_NpmNotDefinedMessage;
-	public static String ErrorHandler_BowerNotInstalledTitle;
-	public static String ErrorHandler_BowerNotInstalledMessage;
+	public static String BowerPreferencePage_NotSpecifiedNodeWarning;
+	public static String BowerPreferencePage_NotSpecifiedBowerWarning;
+	public static String BowerPreferencePage_NotValidNodeError;
+	public static String BowerPreferencePage_NotValidBowerError;
+	public static String ErrorHandler_NodeNotDefinedTitle;
+	public static String ErrorHandler_NodeNotDefinedMessage;
+	public static String ErrorHandler_BowerNotDefinedTitle;
+	public static String ErrorHandler_BowerNotDefinedMessage;
+	public static String ErrorHandler_LaunchErrorTitle;
+	public static String ErrorHandler_LaunchErrorMessage;
 	
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
