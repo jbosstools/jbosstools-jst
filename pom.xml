@@ -11,9 +11,20 @@
 	<version>3.7.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
+		<!--
+			Tern is on Early Access so make sure other files are updated when this version changes!
+			https://github.com/jbosstools/jbosstools-download.jboss.org/tree/master/jbosstools/mars/snapshots/updates/earlyaccess.properties
+			https://github.com/jbdevstudio/jbdevstudio-website/tree/master/content/9.0/snapshots/updates/earlyaccess.properties
+		-->
 		<tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-jst.git</tycho.scmUrl>
 		<tern.reqs.url>http://download.jboss.org/jbosstools/updates/requirements/tern</tern.reqs.url>
 		<tern.version>0.10.0.201506020610</tern.version>
+		<!--
+			Angular is on Early Access so make sure other files are updated when this version changes!
+			https://github.com/jbosstools/jbosstools-discovery/blob/master/jbtearlyaccesstarget/multiple/jbtearlyaccess-multiple.target#L10-L11
+			https://github.com/jbosstools/jbosstools-download.jboss.org/tree/master/jbosstools/mars/snapshots/updates/earlyaccess.properties
+			https://github.com/jbdevstudio/jbdevstudio-website/tree/master/content/9.0/snapshots/updates/earlyaccess.properties
+		-->
 		<angularjs.reqs.url>http://download.jboss.org/jbosstools/updates/requirements/angularjs</angularjs.reqs.url>
 		<angularjs.version>0.10.0.201506020622</angularjs.version>
 	</properties>
