@@ -210,20 +210,22 @@ public class PaletteModelImpl implements IPaletteModel{
 	public String getPreferredExpandedCategory() {
 		if(paletteContents != null) {
 			IFile f = paletteContents.getFile();
-			try {
-				String s = f.getPersistentProperty(PaletteModel.HTML5_EXPANDED_CATEGORY_NAME);
-				if(s == null || s.length() == 0) {
-					s = WebUiPlugin.getDefault().getPreferenceStore().getString(PaletteModel.HTML5_EXPANDED_CATEGORY);
+			if(f != null){
+				try {
+					String s = f.getPersistentProperty(PaletteModel.HTML5_EXPANDED_CATEGORY_NAME);
 					if(s == null || s.length() == 0) {
-						s = JQueryConstants.JQM_CATEGORY;
+						s = WebUiPlugin.getDefault().getPreferenceStore().getString(PaletteModel.HTML5_EXPANDED_CATEGORY);
+						if(s == null || s.length() == 0) {
+							s = JQueryConstants.JQM_CATEGORY;
+						}
+						f.setPersistentProperty(PaletteModel.HTML5_EXPANDED_CATEGORY_NAME, s);
+					} else {
+						WebUiPlugin.getDefault().getPreferenceStore().setValue(PaletteModel.HTML5_EXPANDED_CATEGORY, s);
 					}
-					f.setPersistentProperty(PaletteModel.HTML5_EXPANDED_CATEGORY_NAME, s);
-				} else {
-					WebUiPlugin.getDefault().getPreferenceStore().setValue(PaletteModel.HTML5_EXPANDED_CATEGORY, s);
+					return s; 
+				} catch (CoreException e) {
+					WebUiPlugin.getDefault().logError(e);
 				}
-				return s; 
-			} catch (CoreException e) {
-				WebUiPlugin.getDefault().logError(e);
 			}
 		}
 		return null;
