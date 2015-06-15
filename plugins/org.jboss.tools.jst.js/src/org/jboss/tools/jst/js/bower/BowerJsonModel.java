@@ -8,7 +8,7 @@
  *  Contributors:
  *       Red Hat, Inc. - initial API and implementation
  *******************************************************************************/
-package org.jboss.tools.jst.js.bower.internal;
+package org.jboss.tools.jst.js.bower;
 
 import java.util.List;
 

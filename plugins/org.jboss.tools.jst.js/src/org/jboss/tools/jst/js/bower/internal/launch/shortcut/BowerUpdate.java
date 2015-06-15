@@ -45,7 +45,7 @@ public class BowerUpdate extends GenericBowerLaunch {
 			} else if (resource.getType() == IResource.PROJECT) {
 				IProject project = (IProject) resource;
 				IFile file = project.getFile(BowerConstants.BOWER_JSON);
-				if (file != null && file.exists()) {
+				if (file.exists()) {
 					workingDir = resource.getFullPath().toOSString();
 				} else {
 					// TODO: Need more logic here - project root does not necessarily contain bower.json

@@ -13,6 +13,8 @@ package org.jboss.tools.jst.js.bower.internal;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.jboss.tools.jst.js.bower.BowerJsonModel;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

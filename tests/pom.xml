@@ -18,6 +18,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>org.jboss.tools.jst.web.ui.test</module>
 		<module>org.jboss.tools.jst.angularjs.test</module>
 		<module>org.jboss.tools.jst.jsdt.test</module>
+		<module>org.jboss.tools.jst.js.test</module>
 	</modules>
 	<build>
 		<plugins>

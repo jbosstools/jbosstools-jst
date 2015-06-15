@@ -1,0 +1,15 @@
+{
+  "name": "TestBowerProject",
+  "version": "0.0.0",
+  "authors": [
+    "JBoss Tools <tools@jboss.org>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
