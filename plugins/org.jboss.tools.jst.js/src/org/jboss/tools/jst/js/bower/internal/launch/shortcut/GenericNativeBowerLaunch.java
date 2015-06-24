@@ -8,7 +8,7 @@
  *  Contributors:
  *       Red Hat, Inc. - initial API and implementation
  *******************************************************************************/
-package org.jboss.tools.jst.js.bower.launch;
+package org.jboss.tools.jst.js.bower.internal.launch.shortcut;
 
 import org.eclipse.core.externaltools.internal.IExternalToolConstants;
 import org.eclipse.core.resources.IResource;
@@ -27,10 +27,12 @@ import org.jboss.tools.jst.js.bower.internal.util.ExternalToolUtil;
 import org.jboss.tools.jst.js.internal.Activator;
 
 /**
+ * Generic {@link org.eclipse.debug.ui.ILaunchShortcut} which falls back on <strong>native</strong> bower implementation
+ *     
  * @author "Ilya Buziuk (ibuziuk)"
  */
 @SuppressWarnings("restriction")
-public abstract class GenericBowerLaunch implements ILaunchShortcut {
+public abstract class GenericNativeBowerLaunch implements ILaunchShortcut {
 	
 	@Override
 	public void launch(ISelection selection, String mode) {
@@ -67,7 +69,7 @@ public abstract class GenericBowerLaunch implements ILaunchShortcut {
 			wc.setAttribute(IExternalToolConstants.ATTR_LOCATION, nodeExecutableLocation);
 			wc.setAttribute(IExternalToolConstants.ATTR_WORKING_DIRECTORY, "${workspace_loc:" + workingDirectory + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 			
-			// The argument passed to Node are: 1) bower executable location 2) bower command name ("update", "init", "install" etc.)
+			// The argument passed to Node are: 1) bower executable location 2) bower command name ("update", "install" etc.)
 			wc.setAttribute(IExternalToolConstants.ATTR_TOOL_ARGUMENTS, bowerExecutableLocation + " " + getCommandName()); //$NON-NLS-1$
 			cfg = wc.doSave();
 			cfg.launch(ILaunchManager.RUN_MODE, null, false, true);

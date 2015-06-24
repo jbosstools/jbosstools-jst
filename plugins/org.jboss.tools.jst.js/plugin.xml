@@ -5,9 +5,9 @@
        point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
           id="org.jboss.tools.jst.js.bower.bowerLaunchConfigurationType"
-          delegate="org.jboss.tools.jst.js.bower.internal.launch.type.BowerLaunchConfig"
+          delegate="org.jboss.tools.jst.js.bower.internal.launch.type.BowerInitLaunchConfigurationDelegate"
           modes="run"
-          name="Bower">
+          name="Bower Init">
       </launchConfigurationType>
    </extension>
    <extension
@@ -15,8 +15,16 @@
       <launchConfigurationTypeImage
           configTypeID="org.jboss.tools.jst.js.bower.bowerLaunchConfigurationType"
           icon="icons/bower_16.png"
-          id="rg.jboss.tools.jst.js.bower.bowerLaunchConfigurationTypeImage">
+          id="org.jboss.tools.jst.js.bower.bowerLaunchConfigurationTypeImage">
     	</launchConfigurationTypeImage>
+   </extension>
+   <extension
+       point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+          class="org.jboss.tools.jst.js.bower.internal.launch.ui.BowerLaunchConfigurationTabGroup"
+          id="org.jboss.tools.jst.js.bowerLaunchConfigurationTypeTabGroup"
+          type="org.jboss.tools.jst.js.bower.bowerLaunchConfigurationType">
+    	</launchConfigurationTabGroup>
    </extension>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">

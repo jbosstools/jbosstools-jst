@@ -14,16 +14,16 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
-import junit.framework.TestCase;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
-import org.jboss.tools.jst.js.bower.BowerJsonModel;
+import org.jboss.tools.jst.js.bower.BowerJson;
 
 import com.google.gson.Gson;
+
+import junit.framework.TestCase;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
@@ -55,7 +55,7 @@ public class BowerCoreTestCase extends TestCase {
 	
 	public void testBowerJsonModel() throws UnsupportedEncodingException, CoreException {
 		Reader reader = new InputStreamReader(this.bowerJson.getContents(), "UTF-8"); //$NON-NLS-1$
-		BowerJsonModel model = new Gson().fromJson(reader, BowerJsonModel.class);
+		BowerJson model = new Gson().fromJson(reader, BowerJson.class);
 		assertNotNull(model);
 		assertEquals("TestBowerProject", model.getName()); //$NON-NLS-1$
 		assertEquals("0.0.0", model.getVersion()); //$NON-NLS-1$

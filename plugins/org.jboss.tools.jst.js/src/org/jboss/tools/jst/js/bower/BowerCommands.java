@@ -11,9 +11,9 @@
 package org.jboss.tools.jst.js.bower;
 
 /**
- * All Bower CLI commands 
+ * All Bower CLI commands
  *
- * @see <a href="http://bower.io/docs/api/">http://bower.io/docs/api/</a>       
+ * @see <a href="http://bower.io/docs/api/">http://bower.io/docs/api/</a>
  * @author "Ilya Buziuk (ibuziuk)"
  */
 public enum BowerCommands {
@@ -21,8 +21,8 @@ public enum BowerCommands {
 	HELP("help"), //$NON-NLS-1$
 	HOME("home"), //$NON-NLS-1$
 	INFO("info"), //$NON-NLS-1$
-	INIT("init"),  //$NON-NLS-1$
-	INSTALL("install"),  //$NON-NLS-1$
+	INIT("init"), //$NON-NLS-1$
+	INSTALL("install"), //$NON-NLS-1$
 	LINK("link"), //$NON-NLS-1$
 	LIST("list"), //$NON-NLS-1$
 	LOGIN("login"), //$NON-NLS-1$
@@ -34,7 +34,7 @@ public enum BowerCommands {
 	UNINSTALL("uninstall"), //$NON-NLS-1$
 	UNREGISTER("unregister"), //$NON-NLS-1$
 	VERSION("version"); //$NON-NLS-1$
-	
+
 	private final String value;
 
 	private BowerCommands(final String value) {

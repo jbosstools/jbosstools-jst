@@ -16,12 +16,11 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.jboss.tools.jst.js.bower.BowerCommands;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
-import org.jboss.tools.jst.js.bower.launch.GenericBowerLaunch;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
-public class BowerUpdate extends GenericBowerLaunch {
+public class BowerUpdate extends GenericNativeBowerLaunch {
 	private static final String LAUNCH_NAME = "Bower Update"; //$NON-NLS-1$
 
 	@Override

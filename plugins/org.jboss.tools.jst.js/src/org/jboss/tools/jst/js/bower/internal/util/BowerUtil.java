@@ -19,13 +19,17 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
+import org.jboss.tools.jst.js.bower.BowerJson;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * @author Ilya Buziuk (ibuziuk)
  */
 public final class BowerUtil {
-	
+
 	private BowerUtil() {
 	}
 
@@ -45,7 +49,7 @@ public final class BowerUtil {
 		}
 		return !foundFiles.isEmpty();
 	}
-	
+
 	public static boolean hasBowerJson(final IFolder folder) throws CoreException {
 		IResource bowerJson = folder.findMember(BowerConstants.BOWER_JSON);
 		return (bowerJson != null && bowerJson.exists());
@@ -54,5 +58,10 @@ public final class BowerUtil {
 	public static boolean isBowerJson(final IResource resource) {
 		return (resource != null && BowerConstants.BOWER_JSON.equals(resource.getName()) && resource.exists());
 	}
-	
+
+	public static String generateJson(BowerJson bowerJson) {
+		Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+		return gson.toJson(bowerJson);
+	}
+
 }

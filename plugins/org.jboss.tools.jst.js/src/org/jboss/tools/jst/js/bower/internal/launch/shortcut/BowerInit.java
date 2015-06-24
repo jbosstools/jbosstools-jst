@@ -10,61 +10,73 @@
  *******************************************************************************/
 package org.jboss.tools.jst.js.bower.internal.launch.shortcut;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
-import org.eclipse.core.internal.resources.Container;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.jboss.tools.jst.js.bower.BowerCommands;
-import org.jboss.tools.jst.js.bower.internal.BowerConstants;
-import org.jboss.tools.jst.js.bower.internal.BowerJsonGenerator;
-import org.jboss.tools.jst.js.bower.launch.GenericBowerLaunch;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.ui.DebugUITools;
+import org.eclipse.debug.ui.ILaunchGroup;
+import org.eclipse.debug.ui.ILaunchShortcut;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
+import org.jboss.tools.jst.js.bower.internal.launch.BowerLaunchConstants;
 import org.jboss.tools.jst.js.internal.Activator;
-import org.jboss.tools.jst.js.internal.util.EditorUtil;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
-@SuppressWarnings("restriction")
-public class BowerInit extends GenericBowerLaunch {
-	private static final String LAUNCH_NAME = "Bower Init"; //$NON-NLS-1$
-	private Container root;
+public class BowerInit implements ILaunchShortcut {
 
 	@Override
-	protected String getCommandName() {
-		return BowerCommands.INIT.getValue() + " --config.interactive"; //$NON-NLS-1$
-	}
+	public void launch(ISelection selection, String mode) {
+		if (selection instanceof IStructuredSelection) {
+			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+			Object object = structuredSelection.getFirstElement();
 
-	@Override
-	protected String getLaunchName() {
-		return LAUNCH_NAME;
-	}
-
-	@Override
-	protected String getWorkingDirectory(IResource resource) throws CoreException {
-		if (resource != null && resource.exists() && resource instanceof Container) {
-			this.root = (Container) resource;
-			return resource.getFullPath().toOSString();
-		}
-		return null;
-	}
-
-	@Override
-	protected void execute(String workingDirectory, String nodeExecutableLocation, String bowerExecutableLocation) {
-		try {
-			String name = root.getProject().getName();
-			IFile file = this.root.getFile(BowerConstants.BOWER_JSON);
-			if (!file.exists()) {
-				String bowerJson = BowerJsonGenerator.generateDefault(name);
-				InputStream source = new ByteArrayInputStream(bowerJson.getBytes());
-				file.create(source, IResource.NONE, null);
-				EditorUtil.openInEditor(file);
+			IContainer basedir = null;
+			if (object instanceof IProject || object instanceof IFolder) {
+				basedir = (IContainer) object;
 			}
-		} catch (CoreException e) {
-			Activator.logError(e);
+			try {
+				launch(basedir, mode);
+			} catch (CoreException e) {
+				Activator.logError(e);
+			}
 		}
 	}
-	
+
+	private void launch(IContainer basedir, String mode) throws CoreException {
+		ILaunchConfiguration launchConfiguration = getLaunchConfiguration(basedir, mode);
+		ILaunchGroup group = DebugUITools.getLaunchGroup(launchConfiguration, mode);
+		String groupId = group != null ? group.getIdentifier() : BowerLaunchConstants.ID_EXTERNAL_TOOLS_LAUNCH_GROUP;
+		DebugUITools.openLaunchConfigurationDialog(getShell(), launchConfiguration, groupId, null);
+	}
+
+	private ILaunchConfiguration getLaunchConfiguration(IContainer basedir, String mode) throws CoreException {
+		IPath basedirLocation = basedir.getLocation();
+		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
+		ILaunchConfigurationType launchConfigurationType = launchManager
+				.getLaunchConfigurationType(BowerLaunchConstants.LAUNCH_CONFIGURATION_TYPE_ID);
+		String name = launchManager.generateLaunchConfigurationName(basedirLocation.lastSegment());
+		ILaunchConfigurationWorkingCopy workingCopy = launchConfigurationType.newInstance(null, name);
+		workingCopy.setAttribute(BowerLaunchConstants.ATTR_BOWER_DIR, basedirLocation.toString());
+		workingCopy.setAttribute(BowerLaunchConstants.ATTR_BOWER_NAME, basedir.getProject().getName());
+		return workingCopy;
+	}
+
+	@Override
+	public void launch(IEditorPart part, String mode) {
+	}
+
+	private Shell getShell() {
+		return Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
+	}
 }

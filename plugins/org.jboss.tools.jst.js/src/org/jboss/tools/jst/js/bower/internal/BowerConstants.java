@@ -28,5 +28,13 @@ public final class BowerConstants {
 	public static final String NODE_MODULES = "node_modules"; //$NON-NLS-1$
 	public static final String NPM = "npm"; //$NON-NLS-1$
 	public static final String PATH = "PATH"; //$NON-NLS-1$
+	
+	// Default bower.json values
+	public static final String DEFAULT_NAME = "Bower"; //$NON-NLS-1$
+	public static final String DEFAULT_VERSION = "0.0.0"; //$NON-NLS-1$
+	public static final String[] DEFAULT_AUTHORS = { "JBoss Tools <tools@jboss.org>" }; //$NON-NLS-1$
+	public static final String DEFAULT_LICENSE = "MIT"; //$NON-NLS-1$
+	public static final String[] DEFAULT_IGNORE = { "**/.*", "node_modules", "bower_components", "test", "tests" }; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+
 
 }

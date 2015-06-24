@@ -15,12 +15,58 @@ import java.util.List;
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
-public class BowerJsonModel {
+public class BowerJson {
 	private String name;
 	private String version;
 	private List<String> authors;
 	private String license;
 	private List<String> ignore;
+	
+	public static class Builder {
+		private String name;
+		private String version;
+		private List<String> authors;
+		private String license;
+		private List<String> ignore;
+		
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+		
+		public Builder version(String version) {
+			this.version = version;
+			return this;
+		}
+		
+		public Builder authrors(List<String> authors) {
+			this.authors = authors;
+			return this;
+		}
+		
+		public Builder license(String license) {
+			this.license = license;
+			return this;
+		}
+				
+		public Builder ignore(List<String> ignore) {
+			this.ignore = ignore;
+			return this;
+		}
+		
+		public BowerJson build() {
+			return new BowerJson(this);
+		}
+		
+	}
+	
+	private BowerJson(Builder builder) {
+		this.name = builder.name;
+		this.version = builder.version;
+		this.authors = builder.authors;
+		this.license = builder.license;
+		this.ignore = builder.ignore;
+	}
 
 	public String getName() {
 		return name;
@@ -67,5 +113,4 @@ public class BowerJsonModel {
 		return "BowerJson [name=" + name + " , version=" + version + " , authors=" + authors + " , license=" + license //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				+ " , ignore=" + ignore + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
-
 }

@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package org.jboss.tools.jst.js.internal.util;
+package org.jboss.tools.jst.js.util;
 
 /**
  * @author Ilya Buziuk (ibuziuk)
