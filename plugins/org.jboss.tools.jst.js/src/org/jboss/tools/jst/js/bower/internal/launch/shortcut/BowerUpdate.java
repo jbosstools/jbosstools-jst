@@ -48,6 +48,7 @@ public class BowerUpdate extends GenericNativeBowerLaunch {
 					workingDir = resource.getFullPath().toOSString();
 				} else {
 					// TODO: Need more logic here - project root does not necessarily contain bower.json
+					// .bowerrc with the whole configuration
 				}
 			}
 		}

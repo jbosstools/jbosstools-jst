@@ -13,12 +13,16 @@ package org.jboss.tools.jst.js.util;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
@@ -55,10 +59,27 @@ public final class WorkbenchResourceUtil {
 
 	}
 
-	public static void createFile(IFile file, String content) throws CoreException {
-		if (!file.exists()) {
+	public static void createFile(final IFile file, final String content) throws CoreException {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				if (!file.exists()) {
+					InputStream source = new ByteArrayInputStream(content.getBytes());
+					try {
+						file.create(source, IResource.NONE, null);
+					} catch (CoreException e) {
+						Activator.logError(e);
+					}
+				}
+			}
+		});
+	}
+	
+	public static void updateFile(IFile file, String content) throws CoreException {
+		if (file.exists()) {
 			InputStream source = new ByteArrayInputStream(content.getBytes());
-			file.create(source, IResource.NONE, null);
+			file.setContents(source, true, true, new NullProgressMonitor());
 		}
 	}
 
@@ -95,5 +116,32 @@ public final class WorkbenchResourceUtil {
 
 		return null;
 	}
+	
+	public static IContainer getContainerFromSelection(IStructuredSelection selection) {
+		IContainer container = null;
+		if (selection != null && !selection.isEmpty()) {
+			Object selectedObject = selection.getFirstElement();
+			if (selectedObject instanceof IContainer) {
+				container = (IContainer) selectedObject;
+			} else if (selectedObject instanceof IFile) {
+				container = ((IFile) selectedObject).getParent();
+			}
+		}
+		return container;
+	}
+	
+	public static String getAbsolutePath(IResource resource) {
+		IPath path = null;
+		String absoluteLocation = null;
+		if (resource != null) {
+			path = resource.getRawLocation();
+			path = (path != null) ? path : resource.getLocation();
+			if (path != null) {
+				absoluteLocation = path.toOSString();
+			}
+		}
+		return absoluteLocation;
+	}
+	
 
 }

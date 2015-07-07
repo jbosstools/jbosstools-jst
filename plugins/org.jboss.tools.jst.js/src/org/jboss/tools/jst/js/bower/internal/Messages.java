@@ -50,6 +50,13 @@ public class Messages extends NLS {
 	public static String BowerLaunchConfigurationTab_browseWorkspace;
 	public static String BowerLaunchConfigurationTab_rootFolderSelection;
 	
+	public static String BowerInitWizard_pageName;
+	public static String BowerInitWizard_pageTitle;
+	public static String BowerInitWizard_pageDescription;
+	public static String BowerInitWizard_errorDirNotDefiened;
+	public static String BowerInitWizard_errorBowerJsonAlreadyExist;
+	public static String BowerInitWizard_errorDirNotExist;
+	
 	static {
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
 	}
