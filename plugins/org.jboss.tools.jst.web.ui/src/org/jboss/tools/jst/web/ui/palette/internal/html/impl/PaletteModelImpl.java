@@ -193,11 +193,11 @@ public class PaletteModelImpl implements IPaletteModel{
 	}
 	
 	public void onCategoryExpandChange(String name, boolean state) {
-		if(paletteContents != null) {
-			IFile f = paletteContents.getFile();
+		IFile file = getFile();
+		if(file != null){
 			if(state) {
 				try {
-					f.setPersistentProperty(PaletteModel.HTML5_EXPANDED_CATEGORY_NAME, name);
+					file.setPersistentProperty(PaletteModel.HTML5_EXPANDED_CATEGORY_NAME, name);
 				} catch (CoreException e) {
 					WebUiPlugin.getDefault().logError(e);
 				}
@@ -208,24 +208,22 @@ public class PaletteModelImpl implements IPaletteModel{
 	
 	@Override
 	public String getPreferredExpandedCategory() {
-		if(paletteContents != null) {
-			IFile f = paletteContents.getFile();
-			if(f != null){
-				try {
-					String s = f.getPersistentProperty(PaletteModel.HTML5_EXPANDED_CATEGORY_NAME);
+		IFile file = getFile();
+		if(file != null){
+			try {
+				String s = file.getPersistentProperty(PaletteModel.HTML5_EXPANDED_CATEGORY_NAME);
+				if(s == null || s.length() == 0) {
+					s = WebUiPlugin.getDefault().getPreferenceStore().getString(PaletteModel.HTML5_EXPANDED_CATEGORY);
 					if(s == null || s.length() == 0) {
-						s = WebUiPlugin.getDefault().getPreferenceStore().getString(PaletteModel.HTML5_EXPANDED_CATEGORY);
-						if(s == null || s.length() == 0) {
-							s = JQueryConstants.JQM_CATEGORY;
-						}
-						f.setPersistentProperty(PaletteModel.HTML5_EXPANDED_CATEGORY_NAME, s);
-					} else {
-						WebUiPlugin.getDefault().getPreferenceStore().setValue(PaletteModel.HTML5_EXPANDED_CATEGORY, s);
+						s = JQueryConstants.JQM_CATEGORY;
 					}
-					return s; 
-				} catch (CoreException e) {
-					WebUiPlugin.getDefault().logError(e);
+					file.setPersistentProperty(PaletteModel.HTML5_EXPANDED_CATEGORY_NAME, s);
+				} else {
+					WebUiPlugin.getDefault().getPreferenceStore().setValue(PaletteModel.HTML5_EXPANDED_CATEGORY, s);
 				}
+				return s; 
+			} catch (CoreException e) {
+				WebUiPlugin.getDefault().logError(e);
 			}
 		}
 		return null;
@@ -286,42 +284,48 @@ public class PaletteModelImpl implements IPaletteModel{
 	}
 	
 	public long getCountIndex(String id) {
-		if(paletteContents != null){
-			return PaletteCountManager.getInstance().getCountIndex(paletteContents.getFile().getProject(), id);
+		IFile file = getFile();
+		if(file != null){
+			return PaletteCountManager.getInstance().getCountIndex(file.getProject(), id);
 		}
 		return 0;
 	}
 	
 	public void setCountIndex(String id, long countIndex) {
-		if(paletteContents != null){
-			PaletteCountManager.getInstance().setCountIndex(paletteContents.getFile().getProject(), id, countIndex);
+		IFile file = getFile();
+		if(file != null){
+			PaletteCountManager.getInstance().setCountIndex(file.getProject(), id, countIndex);
 		}
 	}
 	
 	public void setProjectCountIndex(long countIndex) {
-		if(paletteContents != null){
-			PaletteCountManager.getInstance().setProjectCountIndex(paletteContents.getFile().getProject(), countIndex);
+		IFile file = getFile();
+		if(file != null){
+			PaletteCountManager.getInstance().setProjectCountIndex(file.getProject(), countIndex);
 		}
 	}
 
 	public long getNumberOfCalls(String id) {
-		if(paletteContents != null){
-			return PaletteCountManager.getInstance().getNumberOfCalls(paletteContents.getFile().getProject(), id);
+		IFile file = getFile();
+		if(file != null){
+			return PaletteCountManager.getInstance().getNumberOfCalls(file.getProject(), id);
 		}
 		return 0;
 	}
 
 	public void setNumberOfCalls(String id, long numberOfCalls) {
-		if(paletteContents != null){
-			PaletteCountManager.getInstance().setNumberOfCalls(paletteContents.getFile().getProject(), id, numberOfCalls);
+		IFile file = getFile();
+		if(file != null){
+			PaletteCountManager.getInstance().setNumberOfCalls(file.getProject(), id, numberOfCalls);
 		}
 	}
 	
 	public void itemCalled(String id) {
-		if(paletteContents != null){
-			PaletteCountManager.getInstance().called(paletteContents.getFile().getProject(), id);
-			if(PaletteCountManager.getInstance().getNumberOfCalls(paletteContents.getFile().getProject(), id) == Long.MAX_VALUE || 
-					PaletteCountManager.getInstance().getCountIndex(paletteContents.getFile().getProject(), id) == Long.MAX_VALUE	){
+		IFile file = getFile();
+		if(file != null){
+			PaletteCountManager.getInstance().called(file.getProject(), id);
+			if(PaletteCountManager.getInstance().getNumberOfCalls(file.getProject(), id) == Long.MAX_VALUE || 
+					PaletteCountManager.getInstance().getCountIndex(file.getProject(), id) == Long.MAX_VALUE	){
 				HTML5DynamicPaletteGroup dynamicPaletteGroup = getDynamicPaletteGroup();
 				dynamicPaletteGroup.initCounts();
 				saveAllItemsCount();
@@ -333,21 +337,27 @@ public class PaletteModelImpl implements IPaletteModel{
 	}
 	
 	public void loadItemCounts(String id) {
-		if(paletteContents != null){
-			PaletteCountManager.getInstance().load(paletteContents.getFile().getProject(), id);
+		IFile file = getFile();
+		if(file != null){
+			PaletteCountManager.getInstance().load(file.getProject(), id);
 		}
 	}
 	
 	public void saveItemCounts(String id) {
-		if(paletteContents != null){
-			PaletteCountManager.getInstance().save(paletteContents.getFile().getProject(), id);
+		IFile file = getFile();
+		if(file != null){
+			PaletteCountManager.getInstance().save(file.getProject(), id);
 		}
 	}
 	
 	public void saveAllItemsCount() {
-		if(paletteContents != null){
-			PaletteCountManager.getInstance().saveAll(paletteContents.getFile().getProject());
+		IFile file = getFile();
+		if(file != null){
+			PaletteCountManager.getInstance().saveAll(file.getProject());
 		}
 	}
 
+	private IFile getFile(){
+		return (paletteContents != null) ? paletteContents.getFile() : null;
+	}
 }
