@@ -16,4 +16,16 @@
 		<emma.instrument.bundles>org.jboss.tools.jst.js</emma.instrument.bundles>
 	</properties>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<configuration>
+					<useUIThread>false</useUIThread>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
