@@ -8,7 +8,7 @@
  *  Contributors:
  *       Red Hat, Inc. - initial API and implementation
  *******************************************************************************/
-package org.jboss.tools.jst.js.bower.internal.launch.ui;
+package org.jboss.tools.jst.js.bower.internal.wizard;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;

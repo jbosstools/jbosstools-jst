@@ -41,7 +41,6 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.jboss.tools.jst.js.bower.BowerJson;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
 import org.jboss.tools.jst.js.bower.internal.Messages;
-import org.jboss.tools.jst.js.bower.internal.launch.ui.PopUpPropertyDialog;
 import org.jboss.tools.jst.js.util.WorkbenchResourceUtil;
 
 @SuppressWarnings("restriction")
@@ -242,7 +241,7 @@ public class BowerInitPage extends WizardPage {
 	
 	private void createAuthorsEditor(Composite mainComposite) {
 		TableGroupComposite authorsComposite = new TableGroupComposite(Messages.BowerLaunchConfigurationTab_Authors,
-				Messages.BowerLaunchConfigurationTab_Author, mainComposite);
+				Messages.BowerLaunchConfigurationTab_Author, mainComposite, Messages.BowerInitWizard_addAuthor, Messages.BowerInitWizard_editAuthor);
 		authorsComposite.createControls();
 		this.authorsTable = authorsComposite.getTable();
 		this.addAuthorButton = authorsComposite.getAddButton();
@@ -250,7 +249,7 @@ public class BowerInitPage extends WizardPage {
 	
 	private void createIgnoreEditor(Composite mainComposite) {
 		TableGroupComposite ignoreComposite = new TableGroupComposite(Messages.BowerLaunchConfigurationTab_Ignore,
-				Messages.BowerLaunchConfigurationTab_Ignore, mainComposite); 
+				Messages.BowerLaunchConfigurationTab_Ignore, mainComposite, Messages.BowerInitWizard_addIgnore, Messages.BowerInitWizard_editIgnore); 
 		ignoreComposite.createControls();
 		this.ignoreTable = ignoreComposite.getTable();
 		this.addIgnoreButton = ignoreComposite.getAddButton();
@@ -314,11 +313,15 @@ public class BowerInitPage extends WizardPage {
 		private Button addButton;
 		private Button editButton;
 		private Button removeButton;
+		private String addDialogTitle;
+		private String editDialogTitle;
 		
-		public TableGroupComposite(String groupLabel, String propertyLabel, Composite parent) {
+		public TableGroupComposite(String groupLabel, String propertyLabel, Composite parent, String addDialogTitle, String editDialogTitle) {
 			this.groupLabel = groupLabel;
 			this.propertyLabel = propertyLabel;
 			this.parent = parent;
+			this.addDialogTitle = addDialogTitle;
+			this.editDialogTitle = editDialogTitle;
 		}
 		
 		public Table getTable() {
@@ -337,7 +340,7 @@ public class BowerInitPage extends WizardPage {
 		      public void doubleClick(DoubleClickEvent event) {
 		        TableItem[] selection = table.getSelection();
 		        if(selection.length == 1) {
-		          editProperty(selection[0].getText(0), selection[0].getText(1));
+		          editProperty(editDialogTitle, selection[0].getText(0), selection[0].getText(1));
 		        }
 		      }
 		    });
@@ -378,7 +381,7 @@ public class BowerInitPage extends WizardPage {
 		    addButton.setText(Messages.BowerLaunchConfigurationTab_buttonAdd);
 		    addButton.addSelectionListener(new SelectionAdapter() {
 		      public void widgetSelected(SelectionEvent e) {
-		        addProperty();
+		        addProperty(addDialogTitle);
 		      }
 		    });
 		    editButton = new Button(buttonComposite, SWT.NONE);
@@ -388,7 +391,7 @@ public class BowerInitPage extends WizardPage {
 		        if(table.getSelectionCount() > 0) {
 		          TableItem[] selection = table.getSelection();
 		          if(selection.length == 1) {
-		            editProperty(selection[0].getText(0), selection[0].getText(1));
+		            editProperty(editDialogTitle, selection[0].getText(0), selection[0].getText(1));
 		          }
 		        }
 		      }
@@ -406,16 +409,16 @@ public class BowerInitPage extends WizardPage {
 		    removeButton.setEnabled(false);
 		}
 		
-		private void addProperty() {
-			PopUpPropertyDialog dialog = new PopUpPropertyDialog(getShell(), Messages.BowerLaunchConfigurationTab_addParameter, propertyLabel, "", null); //$NON-NLS-1$
+		private void addProperty(String title) {
+			PopUpPropertyDialog dialog = new PopUpPropertyDialog(getShell(), title, propertyLabel, "", null); //$NON-NLS-1$
 			if (dialog.open() == IDialogConstants.OK_ID) {
 				TableItem item = new TableItem(table, SWT.NONE);
 				item.setText(0, dialog.getName());
 			}
 		}
 
-		private void editProperty(String name, String value) {
-			PopUpPropertyDialog dialog = new PopUpPropertyDialog(getShell(), Messages.BowerLaunchConfigurationTab_editParameter, propertyLabel, name, null);
+		private void editProperty(String title, String name, String value) {
+			PopUpPropertyDialog dialog = new PopUpPropertyDialog(getShell(), title, propertyLabel, name, null);
 			if (dialog.open() == IDialogConstants.OK_ID) {
 				TableItem[] item = table.getSelection();
 				item[0].setText(0, dialog.getName());
