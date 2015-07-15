@@ -9,6 +9,9 @@
 	<feature id="org.jboss.tools.jst.jsdt.feature">
 		<category name="org.jboss.tools.jst.nightly.category" />
 	</feature>
+	<feature id="org.jboss.tools.jst.js.feature">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
 	<feature id="org.jboss.tools.jst.angularjs.feature">
 		<category name="org.jboss.tools.jst.nightly.category" />
 	</feature>
@@ -21,6 +24,9 @@
 		<category name="org.jboss.tools.jst.nightly.category" />
 	</feature>
 	<feature id="org.jboss.tools.jst.jsdt.feature.source">
+		<category name="org.jboss.tools.jst.nightly.category" />
+	</feature>
+	<feature id="org.jboss.tools.jst.js.feature.source">
 		<category name="org.jboss.tools.jst.nightly.category" />
 	</feature>
 	<feature id="org.jboss.tools.jst.angularjs.feature.source">
