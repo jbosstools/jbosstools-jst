@@ -22,7 +22,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.osgi.util.NLS;
@@ -30,7 +29,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
-import org.eclipse.ui.internal.Workbench;
 import org.eclipse.ui.internal.wizards.NewWizardRegistry;
 import org.eclipse.ui.wizards.IWizardDescriptor;
 import org.jboss.tools.common.text.ext.ExtensionsPlugin;
@@ -191,8 +189,7 @@ public class CreateNewFileHyperlink extends AbstractHyperlink{
 			wizard.init(PlatformUI.getWorkbench(), selection);
 			WizardDialog wDialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 			
-			wDialog.setBlockOnOpen(false);
-			wDialog.open();
+			wDialog.create();
 			
 			IWizardPage[] pages = wizard.getPages();
 			for(IWizardPage page : pages){
@@ -201,7 +198,6 @@ public class CreateNewFileHyperlink extends AbstractHyperlink{
 				}
 			}
 			
-			wDialog.setBlockOnOpen(true);
 			return wDialog.open();
 		} catch (CoreException e) {
 			ExtensionsPlugin.getDefault().logError(e);
