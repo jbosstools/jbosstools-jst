@@ -49,7 +49,7 @@ public class BowerInitWizard extends Wizard implements INewWizard {
 				if (!file.exists()) {
 					String json = BowerUtil.generateJson(bowerJson);
 					WorkbenchResourceUtil.createFile(file, json);
-					WorkbenchResourceUtil.openInEditor(file);
+					WorkbenchResourceUtil.openInEditor(file, null);
 				}
 			}
 		} catch (CoreException e) {

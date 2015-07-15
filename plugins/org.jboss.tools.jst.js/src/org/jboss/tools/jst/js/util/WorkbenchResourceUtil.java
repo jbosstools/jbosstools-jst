@@ -24,8 +24,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -42,38 +41,27 @@ public final class WorkbenchResourceUtil {
 	private WorkbenchResourceUtil() {
 	}
 
-	public static void openInEditor(final IFile file) throws PartInitException {
-		Display.getDefault().asyncExec(new Runnable() {
+	public static void openInEditor(final IFile file, String editorID) throws PartInitException {
+		IEditorRegistry editorRegistry = PlatformUI.getWorkbench().getEditorRegistry();
+		if (editorID == null || editorRegistry.findEditor(editorID) == null) {
+			editorID = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getFullPath().toString()).getId();
+		}
 
-			@Override
-			public void run() {
-				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().getDefaultEditor(file.getName());
-				try {
-					page.openEditor(new FileEditorInput(file), desc.getId());
-				} catch (PartInitException e) {
-					Activator.logError(e);
-				}
-			}
-		});
-
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		page.openEditor(new FileEditorInput(file), editorID, true, IWorkbenchPage.MATCH_ID);
 	}
+	
+	
 
 	public static void createFile(final IFile file, final String content) throws CoreException {
-		Display.getDefault().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-				if (!file.exists()) {
-					InputStream source = new ByteArrayInputStream(content.getBytes());
-					try {
-						file.create(source, IResource.NONE, null);
-					} catch (CoreException e) {
-						Activator.logError(e);
-					}
-				}
+		if (!file.exists()) {
+			InputStream source = new ByteArrayInputStream(content.getBytes());
+			try {
+				file.create(source, IResource.NONE, null);
+			} catch (CoreException e) {
+				Activator.logError(e);
 			}
-		});
+		}
 	}
 	
 	public static void updateFile(IFile file, String content) throws CoreException {
