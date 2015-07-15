@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<feature id="org.jboss.tools.jst.test.feature" label="JBoss Tools - Tests - JST" version="3.7.0.qualifier" provider-name="JBoss by RedHat">
+<feature
+      id="org.jboss.tools.jst.test.feature"
+      label="%featureName"
+      version="3.7.0.qualifier"
+      provider-name="%providerName"
+      license-feature="org.jboss.tools.foundation.license.feature"
+      license-feature-version="0.0.0">
 
    <description url="http://www.jboss.org/tools">
       %description
@@ -9,15 +15,45 @@
       %copyright
    </copyright>
 
-   <license url="%licenseURL">
+   <license>
       %license
    </license>
 
-	<plugin id="org.jboss.tools.jst.jsp.base.test" download-size="0" install-size="0" version="0.0.0" />
-	<plugin id="org.jboss.tools.jst.web.kb.test" download-size="0" install-size="0" version="0.0.0" unpack="false"/>
-	<plugin id="org.jboss.tools.jst.web.test" download-size="0" install-size="0" version="0.0.0" />
-	<plugin id="org.jboss.tools.jst.web.ui.test" download-size="0" install-size="0" version="0.0.0" />
-	<plugin id="org.jboss.tools.jst.angularjs.test" download-size="0" install-size="0" version="0.0.0" />
-	<plugin id="org.jboss.tools.jst.jsdt.test" download-size="0" install-size="0" version="0.0.0" />
+   <plugin
+         id="org.jboss.tools.jst.jsp.base.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.jboss.tools.jst.web.kb.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.jboss.tools.jst.web.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.jboss.tools.jst.web.ui.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.jboss.tools.jst.angularjs.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.jboss.tools.jst.jsdt.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>
