@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.jboss.tools.jst.js.bower.BowerJson;
+import org.jboss.tools.jst.js.bower.BowerJson.Builder;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
 import org.jboss.tools.jst.js.bower.internal.Messages;
 import org.jboss.tools.jst.js.util.WorkbenchResourceUtil;
@@ -100,9 +101,30 @@ public class BowerInitPage extends WizardPage {
 		String license = licenseText.getText();
 		List<String> authors = getItems(authorsTable);
 		List<String> ignore = getItems(ignoreTable);
-
-		BowerJson model = new BowerJson.Builder().name(name).version(version).license(license).authrors(authors)
-				.ignore(ignore).build();
+        
+		Builder builder = new BowerJson.Builder();
+	
+		if (name != null && !name.isEmpty()) {
+			builder.name(name);
+		}
+		
+		if (version != null && !version.isEmpty()) {
+			builder.version(version);
+		}
+		
+		if (license != null && !license.isEmpty()) {
+			builder.license(license);
+		}
+		
+		if (authors != null && !authors.isEmpty()) {
+			builder.authrors(authors);
+		}
+		
+		if (ignore != null && !ignore.isEmpty()) {
+			builder.ignore(ignore);
+		}
+		
+		BowerJson model = builder.build();
 
 		return model;
 	}
@@ -118,7 +140,7 @@ public class BowerInitPage extends WizardPage {
 		
 		this.defaultVersion = BowerConstants.DEFAULT_VERSION; 
 		this.defaultLicense =  BowerConstants.DEFAULT_LICENSE;
-		this.defaultAuthors = Arrays.asList(BowerConstants.DEFAULT_AUTHORS);
+		
 		this.defaultIgnore =  Arrays.asList(BowerConstants.DEFAULT_IGNORE);
 				
 		this.dirText.setText(defaultDirectory);
