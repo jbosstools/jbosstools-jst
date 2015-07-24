@@ -17,15 +17,12 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.common.el.core.resolver.ELContext;
 import org.jboss.tools.jst.web.kb.taglib.IHTMLLibraryVersion;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibVersionRecognizer;
 import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
+import org.jboss.tools.jst.web.ui.JSTWebUIImages;
 import org.jboss.tools.jst.web.ui.palette.internal.PaletteSettings;
 import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
 
@@ -33,7 +30,6 @@ import org.jboss.tools.jst.web.ui.palette.internal.html.IPaletteItem;
 public class HTML5DynamicPaletteGroup extends AbstractPaletteGroup {
 	private ArrayList<IPaletteItem> items = new ArrayList<IPaletteItem>();
 	private ArrayList<ImageDescriptor> descriptors = new ArrayList<ImageDescriptor>();
-	private ImageDescriptor imageDescriptor = null;
 	
 	public HTML5DynamicPaletteGroup(){
 		add(new DynamicPaletteVersionGroup());
@@ -85,24 +81,7 @@ public class HTML5DynamicPaletteGroup extends AbstractPaletteGroup {
 
 	@Override
 	public ImageDescriptor getImageDescriptor() {
-		if(imageDescriptor == null && descriptors.size() > 0){
-			Image resultImage = new Image(Display.getCurrent(), descriptors.size()*16, 16);
-			ImageData data = resultImage.getImageData();
-			data.alpha = 0;
-			resultImage = new Image(Display.getCurrent(), data);
-			final GC gc = new GC(resultImage);
-			int x = 0;
-			for (ImageDescriptor descriptor : descriptors) {
-				if(descriptor != null){
-					Image image = descriptor.createImage(Display.getCurrent());
-					gc.drawImage(image, x, 0);
-					x += image.getBounds().width;
-				}
-			}
-			gc.dispose();
-			imageDescriptor = ImageDescriptor.createFromImage(resultImage);
-		}
-		return imageDescriptor;
+		return JSTWebUIImages.getInstance().getOrCreateImageDescriptor(JSTWebUIImages.MOST_POPULAR_IMAGE);
 	}
 	
 	private String getIdWithoutVersion(IPaletteItem item){
