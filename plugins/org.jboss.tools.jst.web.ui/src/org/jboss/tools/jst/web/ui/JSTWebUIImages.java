@@ -18,6 +18,7 @@ import org.jboss.tools.common.ui.CommonUIImages;
 public class JSTWebUIImages extends CommonUIImages{
 	private static String WIZARDS_PATH         = "wizards/"; //$NON-NLS-1$
 	private static String VIEWS_PATH         = "views/"; //$NON-NLS-1$
+	private static String PALETTE_PATH         = "palette/"; //$NON-NLS-1$
 	
 	public static final String CSS_FILE_IMAGE    = WIZARDS_PATH + "CSSFileWizBan.png"; //$NON-NLS-1$
 	public static final String DATASOURCE_IMAGE    = WIZARDS_PATH + "DatasourceWizBan.png"; //$NON-NLS-1$
@@ -64,6 +65,8 @@ public class JSTWebUIImages extends CommonUIImages{
 	public static final String MENU_IMAGE  = WIZARDS_PATH + "MenuWizBan.png"; //$NON-NLS-1$
 	public static final String LIST_IMAGE    = WIZARDS_PATH + "HTML5ListWizBan.png"; //$NON-NLS-1$
 	public static final String METER_IMAGE    = WIZARDS_PATH + "MeterWizBan.png"; //$NON-NLS-1$
+	
+	public static final String MOST_POPULAR_IMAGE    = PALETTE_PATH + "MostPopular.png"; //$NON-NLS-1$
 
 	private static JSTWebUIImages INSTANCE;
 	
