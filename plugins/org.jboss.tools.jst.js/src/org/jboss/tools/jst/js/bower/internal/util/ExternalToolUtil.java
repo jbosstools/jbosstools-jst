@@ -34,14 +34,40 @@ public final class ExternalToolUtil {
 		String nodeExecutableLocation = null;
 		String nodeExecutableName = getNodeExecutableName();
 		File nodeExecutable = new File(BowerPreferenceHolder.getNodeLocation(), nodeExecutableName);
-		if (nodeExecutable != null && nodeExecutable.exists()) {
+		if (nodeExecutable.exists()) {
 			nodeExecutableLocation = nodeExecutable.getAbsolutePath();
+		} else if (PlatformUtil.isLinux()) {
+			// JBIDE-20351 Bower tooling doesn't detect node when the binary is called 'nodejs'
+			// If "nodejs" is not detected try to detect "node"
+			nodeExecutableName = BowerConstants.NODE; 
+			nodeExecutable = new File(BowerPreferenceHolder.getNodeLocation(), nodeExecutableName);
+			if (nodeExecutable.exists()) {
+				nodeExecutableLocation = nodeExecutable.getAbsolutePath();
+			}				
 		}
 		return nodeExecutableLocation;
 	}
 	
 	public static String getNodeExecutableName() {
-		return (PlatformUtil.isWindows()) ? BowerConstants.NODE_EXE : BowerConstants.NODE;
+		String name = null;
+		switch(PlatformUtil.getOs()) {
+			case WINDOWS:
+				name = BowerConstants.NODE_EXE;	
+				break;
+				
+			case MACOS:
+				name = BowerConstants.NODE;
+				break;
+				
+			case LINUX:
+				name = BowerConstants.NODE_JS;
+				break;
+			
+			case OTHER:
+				name = BowerConstants.NODE;
+				break;
+		}
+		return name;
 	}
 	
 }

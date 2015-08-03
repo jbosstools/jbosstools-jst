@@ -28,21 +28,60 @@ public final class ExternalToolDetector {
 
 	public static String detectNode() {
 		String nodeLocation = detectFromPath(File.separator + NODE_JS);
-		if (nodeLocation == null && !PlatformUtil.isWindows()) {
+		if (nodeLocation == null) {
 			// Try to detect in "usr/local/bin" and "usr/bin" for Mac & Linux 
-			File usrLocalBin = new File(USR_LOCAL_BIN);
-			if (isDetected(usrLocalBin, NODE)) {
-				nodeLocation = usrLocalBin.getAbsolutePath();
-			} else {
-				File usrBin = new File(USR_BIN);
-				if (isDetected(usrBin, NODE)) {
-					nodeLocation = usrBin.getAbsolutePath();
-				}
+			if (PlatformUtil.isLinux()) {
+				nodeLocation = detectNodeOnLinux();
+			} else if (PlatformUtil.isMacOS()) {	
+				nodeLocation = detectNodeOnMac();
 			}
 		}
 		return nodeLocation;
 	}
-	
+
+	/**
+	 * JBIDE-20351 Bower tooling doesn't detect node when the binary is called 'nodejs'
+	 * There is a naming conflict with the node package (Amateur Packet Radio Node Program), and the nodejs binary. 
+	 * On Linux "nodejs" availability must be checked firstly. 
+	 * 
+	 * @see <a href="http://packages.ubuntu.com/trusty/node">Amateur Packet Radio Node </a>
+	 * @see <a href="https://issues.jboss.org/browse/JBIDE-20351">JBIDE-20351</a>
+	 */
+	private static String detectNodeOnLinux() {
+		String nodeLocation = null;
+		File usrLocalBin = new File(USR_LOCAL_BIN);
+		File usrBin = new File(USR_BIN);
+		
+		// detect "nodejs" binary
+		if (isDetected(usrLocalBin, NODE_JS)) {
+			nodeLocation = usrLocalBin.getAbsolutePath();
+		} else if (isDetected(usrBin, NODE_JS)) {
+			nodeLocation = usrBin.getAbsolutePath();
+		}
+		
+		// detect "node" binary if "nodejs" was not detected 
+		if (nodeLocation == null) {
+			if (isDetected(usrLocalBin, NODE)) {
+				nodeLocation = usrLocalBin.getAbsolutePath();
+			} else if (isDetected(usrBin, NODE)) {
+				nodeLocation = usrBin.getAbsolutePath();
+			}
+		}
+		return nodeLocation;
+	}
+
+	private static String detectNodeOnMac() {
+		String nodeLocation = null;
+		File usrLocalBin = new File(USR_LOCAL_BIN);
+		File usrBin = new File(USR_BIN);
+		if (isDetected(usrLocalBin, NODE)) {
+			nodeLocation = usrLocalBin.getAbsolutePath();
+		} else if (isDetected(usrBin, NODE)) {
+			nodeLocation = usrBin.getAbsolutePath();
+		}
+		return nodeLocation;
+	}
+
 	public static String detectBower() {
 		String bowerLocation = null;
 		if (PlatformUtil.isWindows()) {

@@ -35,7 +35,7 @@ public final class PlatformUtil {
 		return OS.LINUX.equals(getOs());
 	}
 
-	private static OS getOs() {
+	public static OS getOs() {
 		if (detectedOs == null) {
 			String currentOs = System.getProperty("os.name", "generic").toLowerCase(); //$NON-NLS-1$ //$NON-NLS-2$
 			if ((currentOs.indexOf(MAC) >= 0) || (currentOs.indexOf(DARWIN) >= 0)) {
@@ -51,7 +51,7 @@ public final class PlatformUtil {
 		return detectedOs;
 	}
 
-	private enum OS {
+	public enum OS {
 		WINDOWS, MACOS, LINUX, OTHER
 	}
 }

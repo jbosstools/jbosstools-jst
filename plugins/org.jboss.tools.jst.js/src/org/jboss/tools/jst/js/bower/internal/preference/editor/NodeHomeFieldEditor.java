@@ -15,8 +15,10 @@ import java.io.File;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.swt.widgets.Composite;
+import org.jboss.tools.jst.js.bower.internal.BowerConstants;
 import org.jboss.tools.jst.js.bower.internal.Messages;
 import org.jboss.tools.jst.js.bower.internal.util.ExternalToolUtil;
+import org.jboss.tools.jst.js.util.PlatformUtil;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
@@ -47,9 +49,20 @@ public class NodeHomeFieldEditor extends DirectoryFieldEditor {
 		File selectedFile = new File(filename);
 		String nodeExecutableName = ExternalToolUtil.getNodeExecutableName();
 		File nodeExecutable = new File(selectedFile, nodeExecutableName);
-		if (nodeExecutable == null || !nodeExecutable.exists()) {
-			setErrorMessage(Messages.BowerPreferencePage_NotValidNodeError);
-			return false;
+		if (!nodeExecutable.exists()) {
+			
+			if (!PlatformUtil.isLinux()) {
+				setErrorMessage(Messages.BowerPreferencePage_NotValidNodeError);
+				return false;				
+			} 
+			// JBIDE-20351 Bower tooling doesn't detect node when the binary is called 'nodejs'
+			// If "nodejs" is not detected try to detect "node"
+			nodeExecutableName = BowerConstants.NODE;
+			nodeExecutable = new File(selectedFile, nodeExecutableName);
+			if (!nodeExecutable.exists()) {
+				setErrorMessage(Messages.BowerPreferencePage_NotValidNodeError);
+				return false;				
+			}
 		}
 
 		return true;
