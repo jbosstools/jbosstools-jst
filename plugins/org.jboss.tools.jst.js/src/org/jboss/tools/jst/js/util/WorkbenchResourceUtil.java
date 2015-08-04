@@ -29,6 +29,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.console.IConsoleConstants;
 import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.tools.jst.js.internal.Activator;
@@ -130,6 +131,15 @@ public final class WorkbenchResourceUtil {
 		}
 		return absoluteLocation;
 	}
-	
 
+	public static void showConsoleView() throws PartInitException {
+		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow != null) {
+			IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+			if (activePage != null) {
+				activePage.showView(IConsoleConstants.ID_CONSOLE_VIEW);
+			}
+		}
+	}
+	
 }

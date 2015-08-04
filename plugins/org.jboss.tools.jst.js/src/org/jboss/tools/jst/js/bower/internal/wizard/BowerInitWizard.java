@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Red Hat, Inc.
+ * Distributed under license by Red Hat, Inc. All rights reserved.
+ * This program is made available under the terms of the
+ * Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ *  Contributors:
+ *       Red Hat, Inc. - initial API and implementation
+ *******************************************************************************/
 package org.jboss.tools.jst.js.bower.internal.wizard;
 
 import org.eclipse.core.internal.resources.Container;
@@ -16,6 +26,9 @@ import org.jboss.tools.jst.js.bower.internal.util.BowerUtil;
 import org.jboss.tools.jst.js.internal.Activator;
 import org.jboss.tools.jst.js.util.WorkbenchResourceUtil;
 
+/**
+ * @author "Ilya Buziuk (ibuziuk)"
+ */
 @SuppressWarnings("restriction")
 public class BowerInitWizard extends Wizard implements INewWizard {
 	private IStructuredSelection selection;
