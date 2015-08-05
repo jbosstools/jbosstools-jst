@@ -22,7 +22,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.jboss.tools.jst.js.bower.BowerJson;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
-import org.jboss.tools.jst.js.bower.internal.util.BowerUtil;
+import org.jboss.tools.jst.js.bower.util.BowerUtil;
 import org.jboss.tools.jst.js.internal.Activator;
 import org.jboss.tools.jst.js.util.WorkbenchResourceUtil;
 

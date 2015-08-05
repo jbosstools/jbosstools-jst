@@ -22,4 +22,6 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
-Export-Package: org.jboss.tools.jst.js.bower
+Export-Package: org.jboss.tools.jst.js.bower,
+ org.jboss.tools.jst.js.bower.util,
+ org.jboss.tools.jst.js.util

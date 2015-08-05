@@ -44,7 +44,7 @@ public final class ExternalToolDetector {
 	 * There is a naming conflict with the node package (Amateur Packet Radio Node Program), and the nodejs binary. 
 	 * On Linux "nodejs" availability must be checked firstly. 
 	 * 
-	 * @see <a href="http://packages.ubuntu.com/trusty/node">Amateur Packet Radio Node </a>
+	 * @see <a href="http://packages.ubuntu.com/trusty/node">Amateur Packet Radio Node</a>
 	 * @see <a href="https://issues.jboss.org/browse/JBIDE-20351">JBIDE-20351</a>
 	 */
 	private static String detectNodeOnLinux() {

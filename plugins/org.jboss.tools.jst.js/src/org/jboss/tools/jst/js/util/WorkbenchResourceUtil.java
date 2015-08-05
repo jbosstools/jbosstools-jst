@@ -142,4 +142,18 @@ public final class WorkbenchResourceUtil {
 		}
 	}
 	
+	public static IFile findFileRecursively(IContainer container, String name) throws CoreException {
+		for (IResource r : container.members()) {
+			if (r instanceof IContainer) {
+				IFile file = findFileRecursively((IContainer) r, name);
+				if (file != null && file.exists()) {
+					return file;
+				}
+			} else if (r instanceof IFile && r.getName().equals(name) && r.exists()) {
+				return (IFile) r;
+			}
+		}
+		return null;
+	}
+	
 }
