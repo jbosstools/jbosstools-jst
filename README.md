@@ -30,19 +30,42 @@ The general idea is to keep your 'master' branch in-sync with the
 
 ## Building JST Tools
 
-To build _JST Tools_ requires specific versions of Java (1.6+) and
+To build _JST Tools_ requires specific versions of Java (1.7+) and
 +Maven (3.1+). See this [link](https://github.com/jbosstools/jbosstools-devdoc/blob/master/building/readme.md) for more information on how to setup, run and configure build.
 
-This command will run the build:
+This command will run the build and tests:
 
     $ mvn clean verify
 
-If you just want to check if things compiles/builds you can run:
+If you just want to check if things compiles/builds you can run the build without tests:
 
     $ mvn clean verify -DskipTest=true
 
+JST Tools Build includes specific version of Tern IDE into JST p2 repository. By default it uses
+mirrored p2 repository located at download.jboss.org. To build using latest Tern IDE use this command
+
+    $ mvn clean verify -Dtern.repo.url=${external.url}
+
+Where ${external.url} should be replaced with latest SNAPSHOT p2 repository URL from 
+[Tern IDE Documentation](https://github.com/angelozerr/tern.java/wiki/Installation-Update-Site). For
+example to test build with latest Tern IDE 1.0.0 replace ${externai.url} with 
+[this one](http://oss.opensagres.fr/tern.repository/1.0.0-SNAPSHOT/).
+
+JST Tools Build is also running tests related to AngularJS features and requires access to AngularJS Eclipse
+tools p2 repository during the build. By default it uses mirrored p2 repository located at download.jboss.org.
+To run make build running tests using specific version of Angular JS Eclipse tools use this command
+
+    $ mvn clean verify -Dangularjs.repo.url=${external.url}
+
+Where ${external.url} should be replaced with latest SNAPSHOT p2 repository URL from 
+[AngularJS Eclipse Documentation](https://github.com/angelozerr/angularjs-eclipse/wiki/Installation-Update-Site). For example to test build with latest AngularJS Eclipse 1.0.0 replace ${externai.url} with 
+[this one](http://oss.opensagres.fr/angularjs-eclipse/1.0.0-SNAPSHOT/).
+
+Configuring Tern IDE and AngularJS Eclipse p2 repositories works only for builds from master branch. For release 
+specific branches build fails because all dependencies to Tern IDE and AngularJS Eclipse are updated to only one version using version range [X.X.X.qualifier,X.X.X.qualifier] in plug-in's manifest files.
+
 But *do not* push changes without having the new and existing unit tests pass!
- 
+
 ## Contribute fixes and features
 
 _JST Tools_ is open source, and we welcome anybody that wants to
