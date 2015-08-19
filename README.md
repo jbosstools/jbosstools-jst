@@ -48,7 +48,7 @@ mirrored p2 repository located at download.jboss.org. To build using latest Tern
 
 Where ${external.url} should be replaced with latest SNAPSHOT p2 repository URL from 
 [Tern IDE Documentation](https://github.com/angelozerr/tern.java/wiki/Installation-Update-Site). For
-example to test build with latest Tern IDE 1.0.0 replace ${externai.url} with 
+example to test build with latest Tern IDE 1.0.0 replace ${external.url} with 
 [this one](http://oss.opensagres.fr/tern.repository/1.0.0-SNAPSHOT/).
 
 JST Tools Build is also running tests related to AngularJS features and requires access to AngularJS Eclipse
@@ -58,7 +58,7 @@ To run make build running tests using specific version of Angular JS Eclipse too
     $ mvn clean verify -Dangularjs.repo.url=${external.url}
 
 Where ${external.url} should be replaced with latest SNAPSHOT p2 repository URL from 
-[AngularJS Eclipse Documentation](https://github.com/angelozerr/angularjs-eclipse/wiki/Installation-Update-Site). For example to test build with latest AngularJS Eclipse 1.0.0 replace ${externai.url} with 
+[AngularJS Eclipse Documentation](https://github.com/angelozerr/angularjs-eclipse/wiki/Installation-Update-Site). For example to test build with latest AngularJS Eclipse 1.0.0 replace ${external.url} with 
 [this one](http://oss.opensagres.fr/angularjs-eclipse/1.0.0-SNAPSHOT/).
 
 Configuring Tern IDE and AngularJS Eclipse p2 repositories works only for builds from master branch. For release 
