@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMember;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.wst.validation.internal.core.ValidationException;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
@@ -252,7 +253,23 @@ public class ELValidator extends WebValidator implements IStringValidator {
 		setAsYouTypeValidation(true);
 		asYouTypeTimestamp++;
 		this.document = validationContext.getDocument();
-		ELContext elContext = PageContextFactory.createPageContext(this.document, true);
+		if(dirtyRegions.size() == 1) {
+			IRegion region = dirtyRegions.iterator().next();
+			try {
+				String s = document.get(region.getOffset(), region.getLength());
+				if(s.indexOf(PageContextFactory.EL_START_1) < 0
+					&& s.indexOf(PageContextFactory.EL_START_2) < 0) {
+					return;
+				}
+			} catch (BadLocationException e) {
+				WebKbPlugin.getDefault().logError(e);
+			}
+			
+		}
+		/**
+		 * Use cache since for an open file a document listener will clear the obsolete context.
+		 */
+		ELContext elContext = PageContextFactory.createPageContext(this.document, false);
 		if(elContext!=null) {
 			elContext.setDirty(true);
 			for (IRegion region : dirtyRegions) {

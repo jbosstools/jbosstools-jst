@@ -46,7 +46,9 @@ import org.eclipse.jdt.internal.ui.text.FastJavaPartitionScanner;
 import org.eclipse.jdt.ui.text.IJavaPartitions;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.rules.IToken;
@@ -55,9 +57,16 @@ import org.eclipse.jst.jsp.core.internal.contentmodel.TaglibController;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TLDCMDocumentManager;
 import org.eclipse.jst.jsp.core.internal.contentmodel.tld.TaglibTracker;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IStorageEditorInput;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.texteditor.DocumentProviderRegistry;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.common.componentcore.internal.ComponentResource;
 import org.eclipse.wst.common.componentcore.internal.StructureEdit;
@@ -146,7 +155,123 @@ public class PageContextFactory implements IResourceChangeListener {
 		return JSP_PAGE_CONTEXT_TYPE.equals(typeId) || FACELETS_PAGE_CONTEXT_TYPE.equals(typeId);
 	}
 
+	/**
+	 * For each file opened in an editor a document listener is created.
+	 * If context for that file is already cached, the listener is added to the document.
+	 * When editor is closed, listener is removed.
+	 * For a file not opened in an editor, no listener is added to the document.
+	 */
+	Map<IFile, DocListener> listeners = new HashMap<IFile, DocListener>();
+
 	private PageContextFactory() {
+		initDocumentListeners();
+	}
+
+	private void initDocumentListeners() {
+		IWorkbenchWindow[] ws = WebKbPlugin.getDefault().getWorkbench().getWorkbenchWindows();
+		for (IWorkbenchWindow window: ws) {
+			for (IEditorReference ref: window.getActivePage().getEditorReferences()) {
+				IEditorPart editor = ref.getEditor(false);
+				if(editor != null) {
+					addListenerToPart(editor);
+				}
+			}
+			window.getActivePage().addPartListener(new IPartListener() {
+
+				@Override
+				public void partOpened(IWorkbenchPart part) {
+					if(part instanceof IEditorPart) {
+						addListenerToPart((IEditorPart)part);
+					}				
+				}
+
+				@Override
+				public void partActivated(IWorkbenchPart part) {
+				}
+
+				@Override
+				public void partBroughtToTop(IWorkbenchPart part) {
+				}
+
+				@Override
+				public void partClosed(IWorkbenchPart part) {
+					if(part instanceof IEditorPart) {
+						IEditorPart editor = (IEditorPart)part;
+						IEditorInput input = editor.getEditorInput();
+						if(input instanceof IFileEditorInput) {
+							IFileEditorInput i = (IFileEditorInput)input;
+							IFile file = i.getFile();
+							if(file != null) {
+								DocListener listener = listeners.get(file);
+								if(listener != null) {
+									listener.remove();
+								}
+							}
+						}
+					}
+				}
+
+				@Override
+				public void partDeactivated(IWorkbenchPart part) {
+				}
+			});
+		}
+	}
+	
+	class DocListener implements IDocumentListener {
+		IFile file;
+		IDocument document;
+
+		public DocListener(IFile file, IDocument document) {
+			this.file = file;
+			this.document = document;
+			listeners.put(file, this);
+			document.addDocumentListener(this);
+		}
+		@Override
+		public void documentChanged(DocumentEvent event) {
+			cleanUp(file);
+		}						
+		@Override
+		public void documentAboutToBeChanged(DocumentEvent event) {
+		}
+
+		public void remove() {
+			if(document == null) return;
+			document.removeDocumentListener(this);
+			document = null;
+			listeners.remove(file);
+		}
+	}
+
+	private void addListenerToPart(IEditorPart editor) {
+		IEditorInput input = editor.getEditorInput();
+		if(input instanceof IFileEditorInput) {
+			IFileEditorInput i = (IFileEditorInput)input;
+			IFile file = i.getFile();
+			if(file != null) {
+				DocListener listener = listeners.get(file);
+				if(listener == null) {
+					IDocument doc = getConnectedDocument(input);
+					if(doc != null) {
+						listener = new DocListener(file, doc);
+					}
+				}
+			}
+		}
+	}
+
+	private IDocument getConnectedDocument(IEditorInput input) {
+		IDocumentProvider provider= DocumentProviderRegistry.getDefault().getDocumentProvider(input);
+		IDocument result = null;
+		try {
+			provider.connect(input);
+			result = provider.getDocument(input);
+			provider.disconnect(input);
+		} catch (CoreException e) {
+			WebKbPlugin.getDefault().logError(e);
+		}
+		return result;
 	}
 
 	/*
@@ -375,7 +500,7 @@ public class PageContextFactory implements IResourceChangeListener {
 		}
 
 		boolean modified = EclipseUIUtil.isOpenInActiveEditor(file);
-		boolean isContextCachingAllowed = !dontUseCache && !modified;
+		boolean isContextCachingAllowed = !dontUseCache && !modified; 
 		SimpleELContext context = isContextCachingAllowed ? getSavedContext(file) : null;
 		if (context == null) {
 			String typeId = getContentTypeIdentifier(file == null ? document : file);
@@ -883,7 +1008,6 @@ public class PageContextFactory implements IResourceChangeListener {
 		String text = regionNode.getFullText(region);
 		if(text.indexOf('{')>-1 && (text.indexOf(EL_START_1) > -1 || text.indexOf(EL_START_2) > -1)) {
 			int offset = regionNode.getStartOffset() + region.getStart();
-			if (context.getELReference(offset) != null) return; // prevent the duplication of EL references while iterating thru the regions 
 
 			ELReference elReference = new ValidationELReference();
 			elReference.setResource(context.getResource());
