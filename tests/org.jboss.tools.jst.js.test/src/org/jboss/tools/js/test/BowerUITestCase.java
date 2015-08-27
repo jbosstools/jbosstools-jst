@@ -60,13 +60,13 @@ public class BowerUITestCase extends TestCase {
 		assertTrue("Project does not exist", isProjectCreated(testProjectName)); //$NON-NLS-1$
 		tree.select(testProjectName);
 				
-		bot.menu("File").menu("New").menu("Other...").click();  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+		bot.menu("File").menu("New").menu("Other...").click();  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
 		SWTBotShell shell = bot.shell("New"); //$NON-NLS-1$
 		shell.activate();
 		
 		bot.text().setText("Bower"); //$NON-NLS-1$
-		bot.tree().expandNode("Bower").select("Bower Init"); //$NON-NLS-1$ //$NON-NLS-2$
+		bot.tree().expandNode("JavaScript").select("Bower Init"); //$NON-NLS-1$ //$NON-NLS-2$
 		bot.button("Next >").click(); //$NON-NLS-1$
 		
 		String name = bot.textWithLabel("Name:").getText(); //$NON-NLS-1$

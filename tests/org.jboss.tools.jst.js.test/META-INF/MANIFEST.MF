@@ -14,7 +14,8 @@ Require-Bundle: org.eclipse.ui,
  com.google.gson;bundle-version="2.1.0",
  org.jboss.tools.jst.js,
  org.eclipse.swtbot.go,
- org.apache.log4j
+ org.apache.log4j,
+ org.eclipse.wst.jsdt.ui
 Eclipse-RegisterBuddy: org.apache.log4j
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

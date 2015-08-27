@@ -36,20 +36,11 @@
    </extension>
    <extension
       point = "org.eclipse.ui.newWizards">
-      <category 
-            id="org.jboss.tools.jst.js.Bower" 
-            name="Bower">
-      </category>
-      <category
-            id="org.jboss.tools.jst.js.BowerInit"
-            parentCategory="org.jboss.tools.jst.js.Bower"
-            name="Bower Init">
-      </category>
       <wizard
             id="org.jboss.tools.jst.js.wizards.bower.init"
             name="Bower Init"
             class="org.jboss.tools.jst.js.bower.internal.wizard.BowerInitWizard"
-            category="org.jboss.tools.jst.js.Bower/org.jboss.tools.jst.js.BowerInit"
+            category="org.eclipse.wst.jsdt.ui.java"
             icon="icons/bower_16.png">
             <description>Bower Init</description>
             <selection class="org.eclipse.core.resources.IResource"/>
