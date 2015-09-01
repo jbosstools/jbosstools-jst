@@ -34,6 +34,8 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.xml.core.internal.document.AttrImpl;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.jboss.tools.common.EclipseUtil;
 import org.jboss.tools.common.meta.action.XActionInvoker;
 import org.jboss.tools.common.meta.action.impl.handlers.DefaultCreateHandler;
@@ -286,7 +288,13 @@ public class ExternalizeStringsWizard extends Wizard {
 							Object selectedElement = structuredSelection.getFirstElement();
 							if (selectedElement instanceof Node) {
 								Node node = (Node) selectedElement;
-								String jsfCoreTaglibPrefix = ExternalizeStringsUtils.registerMessageTaglib(editor);
+								int offset = -1;
+								if(node instanceof IDOMNode){
+									offset = ((IDOMNode)node).getStartOffset();
+								}else if(node instanceof IDOMAttr){
+									offset = ((IDOMAttr)node).getStartOffset();
+								}
+								String jsfCoreTaglibPrefix = ExternalizeStringsUtils.registerMessageTaglib(editor, offset);
 								/*
 								 * Create f:loadBundle element
 								 */

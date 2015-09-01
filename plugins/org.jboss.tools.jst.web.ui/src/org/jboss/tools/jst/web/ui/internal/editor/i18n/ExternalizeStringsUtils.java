@@ -87,6 +87,10 @@ import org.jboss.tools.jst.web.ui.internal.editor.util.Constants;
 import org.jboss.tools.jst.web.ui.internal.editor.util.FaceletsUtil;
 import org.jboss.tools.jst.web.kb.IXmlContext;
 import org.jboss.tools.jst.web.kb.PageContextFactory;
+import org.jboss.tools.jst.web.kb.internal.JspContextImpl;
+import org.jboss.tools.jst.web.kb.internal.XmlContextImpl;
+import org.jboss.tools.jst.web.kb.taglib.INameSpace;
+import org.jboss.tools.jst.web.kb.taglib.ITagLibrary;
 import org.jboss.tools.jst.web.project.WebProject;
 import org.jboss.tools.jst.web.project.list.IWebPromptingProvider;
 import org.jboss.tools.jst.web.project.list.WebPromptingProvider;
@@ -617,7 +621,7 @@ public class ExternalizeStringsUtils {
 		 * Add <f:loadBundle> tag to the current page.
 		 * Insert the tag inside <f:view> or <html>.
 		 */
-		String jsfCoreTaglibPrefix = registerMessageTaglib(editor);
+		String jsfCoreTaglibPrefix = registerMessageTaglib(editor, -1);
 		IStructuredModel model = null;
 		IModelManager manager = StructuredModelManager.getModelManager();
 		if (manager != null) {
@@ -676,41 +680,66 @@ public class ExternalizeStringsUtils {
 	 * 
 	 * @param editor
 	 *            the editor
+	 * @offset offset
 	 * @return the jsf core taglib prefix
 	 */
-	public static String registerMessageTaglib(ITextEditor editor) {
-		Set<String> taglibs = null;
+	public static String registerMessageTaglib(ITextEditor editor, int offset) {
 		String jsfCoreTaglibPrefix = "f"; //$NON-NLS-1$
+		boolean isJsfCoreTaglibRegistered = false;
 		if (editor instanceof JSPMultiPageEditor) {
 			StructuredTextEditor ed = ((JSPMultiPageEditor) editor).getSourceEditor();
 			if (ed instanceof JSPTextEditor) {
 				ELContext context = PageContextFactory.getInstance().createPageContext(ed.getTextViewer().getDocument());
-				if (context instanceof IXmlContext) {
-					IXmlContext xmlPageContext = (IXmlContext) context;
-					taglibs = xmlPageContext.getURIs();
-					boolean isJsfCoreTaglibRegistered = false;
-					for (String tl : taglibs) {
-						if (DropURI.JSF_CORE_URI.equalsIgnoreCase(tl)) {
+				if (context instanceof SourceEditorPageContext) {
+					SourceEditorPageContext sourcePageContext = (SourceEditorPageContext) context;
+					List<TaglibData>taglibs = sourcePageContext.getTagLibs();
+					
+					for (TaglibData tl : taglibs) {
+						if (DropURI.JSF_CORE_URI.equalsIgnoreCase(tl.getUri())) {
 							isJsfCoreTaglibRegistered = true;
+							jsfCoreTaglibPrefix = tl.getPrefix();
 							break;
 						}
 					}
-					if (!isJsfCoreTaglibRegistered) {
-						/*
-						 * Register the required taglib
-						 */
-						PaletteTaglibInserter PaletteTaglibInserter = new PaletteTaglibInserter();
-						Properties p = new Properties();
-						p.put("selectionProvider", editor.getSelectionProvider()); //$NON-NLS-1$
-						p.setProperty(URIConstants.LIBRARY_URI, DropURI.JSF_CORE_URI);
-						p.setProperty(URIConstants.LIBRARY_VERSION, ""); //$NON-NLS-1$
-						p.setProperty(URIConstants.DEFAULT_PREFIX, jsfCoreTaglibPrefix);
-						p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
-						p.setProperty(JSPPaletteInsertHelper.PROPERTY_REFORMAT_BODY, "yes"); //$NON-NLS-1$
-						p.setProperty(PaletteInsertHelper.PROPERTY_START_TEXT, 
-								"<%@ taglib uri=\"http://java.sun.com/jsf/core\" prefix=\"f\" %>\\n"); //$NON-NLS-1$
-						PaletteTaglibInserter.inserTaglib(ed.getTextViewer().getDocument(), p);
+				} else if(context instanceof XmlContextImpl){
+					XmlContextImpl jspPageContext = (XmlContextImpl) context;
+					Map<String, List<INameSpace>> nameSpaces = null;
+					if(offset <= 0){
+						nameSpaces = jspPageContext.getNameSpaces(offset);
+					}else{
+						nameSpaces = jspPageContext.getRootNameSpaces();
 					}
+					
+					for (List<INameSpace> ns : nameSpaces.values()) {
+						for(INameSpace nameSpace : ns){
+							if (DropURI.JSF_CORE_URI.equalsIgnoreCase(nameSpace.getURI())) {
+								isJsfCoreTaglibRegistered = true;
+								jsfCoreTaglibPrefix = nameSpace.getPrefix();
+								break;
+							}
+							if(isJsfCoreTaglibRegistered){
+								break;
+							}
+						}
+					}
+				}
+				
+				if (!isJsfCoreTaglibRegistered) {
+					/*
+					 * Register the required taglib
+					 */
+					PaletteTaglibInserter PaletteTaglibInserter = new PaletteTaglibInserter();
+					Properties p = new Properties();
+					p.put("selectionProvider", editor.getSelectionProvider()); //$NON-NLS-1$
+					p.setProperty(URIConstants.LIBRARY_URI, DropURI.JSF_CORE_URI);
+					p.setProperty(URIConstants.LIBRARY_VERSION, ""); //$NON-NLS-1$
+					p.setProperty(URIConstants.DEFAULT_PREFIX, jsfCoreTaglibPrefix);
+					p.setProperty(JSPPaletteInsertHelper.PROPOPERTY_ADD_TAGLIB, "true"); //$NON-NLS-1$
+					p.setProperty(JSPPaletteInsertHelper.PROPERTY_REFORMAT_BODY, "yes"); //$NON-NLS-1$
+					
+					p.setProperty(PaletteInsertHelper.PROPERTY_START_TEXT, 
+							"<%@ taglib uri=\"http://java.sun.com/jsf/core\" prefix=\"f\" %>\\n"); //$NON-NLS-1$
+					PaletteTaglibInserter.inserTaglib(ed.getTextViewer().getDocument(), p);
 				}
 			}
 		}
