@@ -22,6 +22,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.jboss.tools.jst.js.bower.BowerJson;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
+import org.jboss.tools.jst.js.bower.internal.Messages;
 import org.jboss.tools.jst.js.bower.util.BowerUtil;
 import org.jboss.tools.jst.js.internal.Activator;
 import org.jboss.tools.jst.js.util.WorkbenchResourceUtil;
@@ -37,6 +38,7 @@ public class BowerInitWizard extends Wizard implements INewWizard {
 	public BowerInitWizard() {
 		super();
 		setDefaultPageImageDescriptor(Activator.getImageDescriptor("/icons/bower_75.png")); //$NON-NLS-1$
+		setWindowTitle(Messages.BowerInitWizard_windowTitle);
 	}
 
 	@Override

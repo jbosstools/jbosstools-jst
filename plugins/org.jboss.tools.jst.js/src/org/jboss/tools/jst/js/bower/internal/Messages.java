@@ -53,6 +53,7 @@ public class Messages extends NLS {
 	public static String BowerInitWizard_pageName;
 	public static String BowerInitWizard_pageTitle;
 	public static String BowerInitWizard_pageDescription;
+	public static String BowerInitWizard_windowTitle;
 	
 	public static String BowerInitWizard_errorDirNotDefiened;
 	public static String BowerInitWizard_errorDirNotExist;
