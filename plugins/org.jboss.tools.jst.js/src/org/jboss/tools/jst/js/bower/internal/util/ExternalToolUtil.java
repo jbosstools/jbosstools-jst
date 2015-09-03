@@ -12,9 +12,9 @@ package org.jboss.tools.jst.js.bower.internal.util;
 
 import java.io.File;
 
+import org.jboss.tools.common.util.PlatformUtil;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
 import org.jboss.tools.jst.js.bower.internal.preference.BowerPreferenceHolder;
-import org.jboss.tools.jst.js.util.PlatformUtil;
 
 /**
  * @author Ilya Buziuk (ibuziuk)
