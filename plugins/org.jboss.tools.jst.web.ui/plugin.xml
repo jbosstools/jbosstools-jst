@@ -333,6 +333,7 @@
 
    <extension point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension targetID="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective">
+      	 <actionSet id="org.eclipse.debug.ui.breakpointActionSet"/>
          <perspectiveShortcut id="org.eclipse.jdt.ui.JavaPerspective">
          </perspectiveShortcut>
          <perspectiveShortcut id="org.eclipse.debug.ui.DebugPerspective">
