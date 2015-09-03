@@ -11,9 +11,7 @@
 package org.jboss.tools.jst.js.bower.internal.util;
 
 import java.io.File;
-
-import org.jboss.tools.jst.js.util.PlatformUtil;
-
+import org.jboss.tools.common.util.PlatformUtil;
 import static org.jboss.tools.jst.js.bower.internal.BowerConstants.*;
 
 /**
