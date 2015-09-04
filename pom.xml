@@ -18,14 +18,14 @@
 			 https://github.com/jbdevstudio/jbdevstudio-website/tree/master/content/9.0/snapshots/updates/earlyaccess.properties -->
 		
 		<tern.reqs.url>http://download.jboss.org/jbosstools/updates/requirements/tern</tern.reqs.url>
-		<tern.version>0.10.0.201506172157</tern.version>
+		<tern.version>1.0.0.201508302102</tern.version>
 		<tern.repo.url>${tern.reqs.url}/${tern.version}/</tern.repo.url>
 		<!-- Angular is on Early Access so make sure other files are updated when 
 			 this version changes! https://github.com/jbosstools/jbosstools-discovery/blob/master/jbtearlyaccesstarget/multiple/jbtearlyaccess-multiple.target#L10-L11 
 			 https://github.com/jbosstools/jbosstools-download.jboss.org/tree/master/jbosstools/mars/snapshots/updates/earlyaccess.properties 
 			 https://github.com/jbdevstudio/jbdevstudio-website/tree/master/content/9.0/snapshots/updates/earlyaccess.properties -->
 		<angularjs.reqs.url>http://download.jboss.org/jbosstools/updates/requirements/angularjs</angularjs.reqs.url>
-		<angularjs.version>0.10.0.201506182210</angularjs.version>
+		<angularjs.version>1.0.0.201508312121</angularjs.version>
 		<angularjs.repo.url>${angularjs.reqs.url}/${angularjs.version}</angularjs.repo.url>
 	</properties>
 	<modules>
