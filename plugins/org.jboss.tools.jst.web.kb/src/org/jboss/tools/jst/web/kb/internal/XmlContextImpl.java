@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.kb.internal;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -37,8 +38,104 @@ import org.jboss.tools.jst.web.kb.taglib.INameSpace;
 public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 
 	// Fix for JBIDE-5097: It must be a map of <IRegion to Map of <NS-Prefix to NS>> 
-	protected Map<IRegion, Map<String, INameSpace>> nameSpaces = new HashMap<IRegion, Map<String, INameSpace>>();
 	protected Set<String> uris = new HashSet<String>();
+
+	protected class RegionNameSpaces {
+		protected RegionNameSpaces parent;
+		protected IRegion region;
+		protected Map<String, INameSpace> nameSpacesByPrefix = new HashMap<String, INameSpace>();
+		protected Map<String, List<INameSpace>> nameSpacesByUri = null;
+		protected List<RegionNameSpaces> children = null;
+
+		public void addNameSpace(IRegion region, INameSpace nameSpace) {
+			if(this.region == null || this.region == region || areEqual(this.region, region)) {
+				this.region = region;
+				nameSpacesByPrefix.put(nameSpace.getPrefix(), nameSpace);
+				return;
+			} else if(children != null) {
+				for (RegionNameSpaces c: children) {
+					if(contains(c.region, region)) {
+						c.addNameSpace(region, nameSpace);
+						return;
+					}
+				}
+			}
+			if(children == null) {
+				children = new ArrayList<RegionNameSpaces>();
+			}
+			RegionNameSpaces c = new RegionNameSpaces();
+			c.parent = this;
+			c.region = region;
+			children.add(c);
+			c.addNameSpace(region, nameSpace);
+		}
+
+		public RegionNameSpaces find(int offset) {
+			if(children != null) {
+				for (RegionNameSpaces c: children) {
+					if(c.region.getOffset() <= offset && c.region.getOffset() + c.region.getLength() >= offset) {
+						return c.find(offset);
+					}
+				}
+			}
+			if(this.region == null) {
+				return this;
+			} else if(region.getOffset() <= offset && region.getOffset() + region.getLength() >= offset) {
+				return this;
+			}
+			return null;
+		}
+
+		/**
+		 * Returns map where key is URI, and value is list of namespaces, prefixes
+		 * being unique in the entire map. When several namespaces with the same prefix are 
+		 * visible from the current region, the most inner one is used.
+		 * 
+		 * @return
+		 */
+		public Map<String, List<INameSpace>> getNameSpacesByUri() {
+			if(nameSpacesByUri == null) {
+				nameSpacesByUri = new HashMap<String, List<INameSpace>>();
+				Set<String> prefixes = new HashSet<String>();
+				RegionNameSpaces s = this;
+				while(s != null) {
+					for (String prefix: s.nameSpacesByPrefix.keySet()) {
+						if(prefixes.contains(prefix)) continue;
+						INameSpace n = s.nameSpacesByPrefix.get(prefix);
+						prefixes.add(prefix);
+						String uri = n.getURI();
+						List<INameSpace> list = nameSpacesByUri.get(uri);
+						if(list == null) {
+							list = new ArrayList<INameSpace>();
+							nameSpacesByUri.put(uri, list);
+						}
+						list.add(n);
+					}
+					s = s.parent;
+				}
+				modifyNameSpacesByUri(this);
+			}
+			return nameSpacesByUri;
+		}
+		
+	}
+
+	boolean areEqual(IRegion r1, IRegion r2) {
+		return r1.getOffset() == r2.getOffset() && r1.getLength() == r2.getLength();
+	}
+
+	boolean contains(IRegion r1, IRegion r2) {
+		return r2.getOffset() >= r1.getOffset() && r1.getOffset() + r1.getLength() >= r2.getOffset() + r2.getLength();
+	}
+
+	/**
+	 * Overriden by jsp context to add global namespace with empty prefix.
+	 * @param s
+	 */
+	protected void modifyNameSpacesByUri(RegionNameSpaces s) {		
+	}
+
+	RegionNameSpaces root = new RegionNameSpaces();
 
 	public IDocument getDocument() {
 		IDocument document = null;
@@ -53,7 +150,9 @@ public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 		}
 		return document;
 	}
-	
+
+	static final Map<String, List<INameSpace>> EMPTY_NAME_SPACES = Collections.emptyMap();
+
 	/* 
 	 * TODO: the visibility must differ between 'include'-like and 'template'-like inclusion
 	 * 
@@ -61,52 +160,13 @@ public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 	 * @see org.jboss.tools.jst.web.kb.IPageContext#getNameSpaces(int)
 	 */
 	public Map<String, List<INameSpace>> getNameSpaces(int offset) {
-		Map<String, List<INameSpace>> result = new HashMap<String, List<INameSpace>>();
-		Map<INameSpace, IRegion> namespaceToRegions = new HashMap<INameSpace, IRegion>();
-
-		for (IRegion region : nameSpaces.keySet()) {
-			if(offset>=region.getOffset() && offset<=region.getOffset() + region.getLength()) {
-				Map<String, INameSpace> namespaces = nameSpaces.get(region);
-				if (namespaces != null) {
-					for (INameSpace ns : namespaces.values()) {
-						INameSpace existingNameSpace = findNameSpaceByPrefix(namespaceToRegions.keySet(), ns.getPrefix());
-						IRegion existingRegion = namespaceToRegions.get(existingNameSpace); 
-						if (existingRegion != null) {
-							// Perform visibility check for region
-							if (region.getOffset() > existingRegion.getOffset()) {
-								// Replace existingNS by this ns
-								namespaceToRegions.remove(existingNameSpace);
-								namespaceToRegions.put(ns, region);
-							}
-						} else {
-							namespaceToRegions.put(ns, region);
-						}
-					}
-				}
-			}
-		}
-
-		for (INameSpace ns : namespaceToRegions.keySet()) {
-			List<INameSpace> list = result.get(ns.getURI());
-			if(list==null) {
-				list = new ArrayList<INameSpace>();
-			}
-			list.add(ns);
-			result.put(ns.getURI(), list);
-		}
-
-		return result;
+		RegionNameSpaces n = root.find(offset);
+		return (n != null) ? n.getNameSpacesByUri() : EMPTY_NAME_SPACES;
 	}
 
 	@Override
 	public Map<String, List<INameSpace>> getRootNameSpaces() {
-		int offset = Integer.MAX_VALUE;
-		for (IRegion region : nameSpaces.keySet()) {
-			if(offset > region.getOffset()) {
-				offset = region.getOffset();
-			}
-		}
-		return getNameSpaces(offset);
+		return root.getNameSpacesByUri();
 	}
 
 
@@ -127,20 +187,14 @@ public class XmlContextImpl extends ELContextImpl implements IXmlContext {
 	 * @param name space
 	 */
 	public void addNameSpace(IRegion region, INameSpace nameSpace) {
-		Map<String, INameSpace> nameSpaceMap = nameSpaces.get(region);
+		root.addNameSpace(region, nameSpace);
 
-		if (nameSpaceMap == null) {
-			nameSpaceMap = new HashMap<String, INameSpace>();
-			nameSpaces.put(region, nameSpaceMap);
-		}
-
-		nameSpaceMap.put(nameSpace.getPrefix(), nameSpace); 	// Fix for JBIDE-5097
-		
 		String uri = nameSpace.getURI();
 		if(!uri.isEmpty()) {
 			uris.add(uri);
 		}
 	}
+
 
 	public Set<String> getURIs() {
 		return uris;

@@ -49,15 +49,14 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 		return fIncludedContexts;
 	}
 
-	@Override
-	public Map<String, List<INameSpace>> getNameSpaces(int offset) {
-		Map<String, List<INameSpace>> superNameSpaces = super.getNameSpaces(offset);
-		
-		List<INameSpace> fakeForHtmlNS = new ArrayList<INameSpace>();
+	static List<INameSpace> fakeForHtmlNS = new ArrayList<INameSpace>();
+	static {
 		fakeForHtmlNS.add(new NameSpace("", "")); //$NON-NLS-1$ //$NON-NLS-2$
-		superNameSpaces.put("", fakeForHtmlNS); //$NON-NLS-1$
-		
-		return superNameSpaces;
+	}
+
+	@Override
+	protected void modifyNameSpacesByUri(RegionNameSpaces s) {
+		s.nameSpacesByUri.put("", fakeForHtmlNS); //$NON-NLS-1$
 	}
 
 	/*
@@ -106,16 +105,7 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 	public ITagLibrary[] getLibraries() {
 		Set<ITagLibrary> libraries = new HashSet<ITagLibrary>();
 
-		for (Map<String, INameSpace> nsMap : nameSpaces.values()) {
-			for (INameSpace ns : nsMap.values()) {
-				if (ns instanceof INameSpaceExtended) {
-					ITagLibrary[] libs = ((INameSpaceExtended)ns).getTagLibraries();
-					for(ITagLibrary lib : libs) {
-						libraries.add(lib);
-					}
-				}
-			}
-		}
+		collect(root, libraries);
 
 		for (ELContext includedContext : this.fIncludedContexts) {
 			if (includedContext instanceof IPageContext) { 
@@ -127,6 +117,22 @@ public class JspContextImpl extends XmlContextImpl implements IPageContext, IInc
 		}
 		
 		return libraries.toArray(new ITagLibrary[libraries.size()]);
+	}
+
+	private void collect(RegionNameSpaces rns, Set<ITagLibrary> libraries) {
+		for (INameSpace ns : rns.nameSpacesByPrefix.values()) {
+			if (ns instanceof INameSpaceExtended) {
+				ITagLibrary[] libs = ((INameSpaceExtended)ns).getTagLibraries();
+				for(ITagLibrary lib : libs) {
+					libraries.add(lib);
+				}
+			}
+		}
+		if(rns.children != null) {
+			for (RegionNameSpaces c: rns.children) {
+				collect(c, libraries);
+			}
+		}
 	}
 
 	/**
