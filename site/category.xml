@@ -37,6 +37,7 @@
 	</feature>
 
 	<bundle id="minimal-json" />
+	<bundle id="minimatch.java" />
 	<feature id="tern-feature">
 		<category name="org.jboss.tools.jst.nightly.category" />
 	</feature>
@@ -52,5 +53,4 @@
 	<feature id="tern.eclipse.ide.tools.feature">
 		<category name="org.jboss.tools.jst.nightly.category" />
 	</feature>
-	<bundle id="minimatch.java" />
 </site>
