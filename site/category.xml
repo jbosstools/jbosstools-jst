@@ -52,4 +52,5 @@
 	<feature id="tern.eclipse.ide.tools.feature">
 		<category name="org.jboss.tools.jst.nightly.category" />
 	</feature>
+	<bundle id="minimatch.java" />
 </site>
