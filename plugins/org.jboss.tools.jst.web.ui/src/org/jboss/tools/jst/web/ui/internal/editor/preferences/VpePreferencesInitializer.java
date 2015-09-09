@@ -39,5 +39,8 @@ public class VpePreferencesInitializer extends AbstractPreferenceInitializer {
 		defaultPreferences.put(IVpePreferencesPage.VISUAL_SOURCE_EDITORS_SPLITTING, IVpePreferencesPage.SPLITTING_VERT_TOP_SOURCE_VALUE);
 		defaultPreferences.putBoolean(IVpePreferencesPage.SYNCHRONIZE_SCROLLING_BETWEEN_SOURCE_VISUAL_PANES, false);
 		defaultPreferences.putInt(IVpePreferencesPage.VISUAL_SOURCE_EDITORS_WEIGHTS, IVpePreferencesPage.DEFAULT_VISUAL_SOURCE_EDITORS_WEIGHTS);
+		
+		defaultPreferences.putBoolean(IVpePreferencesPage.USE_VISUAL_EDITOR_FOR_HTML5, true);
+		defaultPreferences.putBoolean(IVpePreferencesPage.REMEMBER_VISUAL_EDITOR_ENGINE, false);
 	}
 }
