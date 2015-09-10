@@ -60,6 +60,7 @@ import org.jboss.tools.common.el.core.model.ELUtil;
 import org.jboss.tools.common.el.core.parser.ELParser;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
 import org.jboss.tools.common.el.core.resolver.ELContext;
+import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.common.el.core.resolver.ELResolver;
 import org.jboss.tools.common.el.core.resolver.ELResolverFactoryManager;
 import org.jboss.tools.common.el.core.resolver.Var;
@@ -899,6 +900,11 @@ public class XmlTagCompletionProposalComputer  extends AbstractXmlCompletionProp
 		@Override
 		public Map<String, List<INameSpace>> getRootNameSpaces() {
 			return namespaces;
+		}
+
+		@Override
+		public List<Var> getVarsAsList(int offset) {
+			return ELContextImpl.EMPTY;
 		}
 	}
 	

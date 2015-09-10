@@ -70,8 +70,8 @@ public class IncludeModelTest extends TestCase {
 		
 		IFile f1 = project.getFile("WebContent/pages/params/template.xhtml");
 		ELContext context = PageContextFactory.createPageContext(f1);
-		Var[] vars1 = context.getVars(0);
-		assertEquals(6, vars1.length);
+		List<Var> vars1 = context.getVarsAsList(0);
+		assertEquals(6, vars1.size());
 		
 	}
 

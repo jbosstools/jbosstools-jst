@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.jboss.tools.common.el.core.ELReference;
 import org.jboss.tools.common.el.core.parser.ELParserUtil;
+import org.jboss.tools.common.el.core.resolver.ELContextImpl;
 import org.jboss.tools.common.el.core.resolver.Var;
 import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
@@ -70,14 +71,18 @@ public class IncludeModel implements IIncludeModel {
 	}
 
 	public synchronized List<Var> getVars(IPath path) {
-		List<Var> result = new ArrayList<Var>();
 		List<PageInclude> is = parentReferences.get(path);
-		if(is != null) {
+		if(is == null ||is.isEmpty()) {
+			return ELContextImpl.EMPTY;
+		} else if(is.size() == 1) {
+			return is.get(0).getVars();
+		} else {
+			List<Var> result = new ArrayList<Var>();
 			for (PageInclude i: is) {
 				result.addAll(i.getVars());
 			}
+			return result;
 		}
-		return result;
 	}
 
 	static final String STORE_ELEMENT_INCLUDES = "includes"; //$NON-NLS-1$
