@@ -127,8 +127,10 @@ public class PaletteAdapter implements IPaletteAdapter {
 				if(c.getLabel().isEmpty()){
 					c.loadVersion(c.getPaletteGroup().getSelectedVersionGroup().getVersion());
 					MobileDrawerEditPart part = (MobileDrawerEditPart)getViewer().getEditPartRegistry().get(c);
-					HTML5DynamicDrawerFigure figure = (HTML5DynamicDrawerFigure)part.getFigure();
-					figure.refresh();
+					if(part != null) {
+						HTML5DynamicDrawerFigure figure = (HTML5DynamicDrawerFigure)part.getFigure();
+						figure.refresh();
+					}
 				}
 			}
 		}

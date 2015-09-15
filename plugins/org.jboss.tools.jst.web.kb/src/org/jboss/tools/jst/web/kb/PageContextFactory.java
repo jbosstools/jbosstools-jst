@@ -62,6 +62,8 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IStorageEditorInput;
+import org.eclipse.ui.IWindowListener;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.ide.IDE;
@@ -162,71 +164,106 @@ public class PageContextFactory implements IResourceChangeListener {
 	 * For a file not opened in an editor, no listener is added to the document.
 	 */
 	Map<IFile, DocListener> listeners = new HashMap<IFile, DocListener>();
+	PartListener partListener;
 
 	private PageContextFactory() {
+		partListener = new PartListener();
 		initDocumentListeners();
 	}
 
 	private void initDocumentListeners() {
 		IWorkbenchWindow[] ws = WebKbPlugin.getDefault().getWorkbench().getWorkbenchWindows();
 		for (IWorkbenchWindow window: ws) {
-			for (IEditorReference ref: window.getActivePage().getEditorReferences()) {
-				IEditorPart editor = ref.getEditor(false);
-				if(editor != null) {
-					addListenerToPart(editor);
-				}
+			initDocumentListenersForWindow(window);
+		}
+		WebKbPlugin.getDefault().getWorkbench().addWindowListener(new WindowListener());
+	}
+
+	class WindowListener implements IWindowListener {
+		@Override
+		public void windowOpened(IWorkbenchWindow window) {
+			initDocumentListenersForWindow(window);
+		}
+
+		@Override
+		public void windowDeactivated(IWorkbenchWindow window) {
+		}
+
+		@Override
+		public void windowClosed(IWorkbenchWindow window) {
+		}
+
+		@Override
+		public void windowActivated(IWorkbenchWindow window) {
+		}
+	}
+
+	class PartListener implements IPartListener {
+		@Override
+		public void partOpened(IWorkbenchPart part) {
+			if(part instanceof IEditorPart) {
+				addListenerToPart((IEditorPart)part);
 			}
-			window.getActivePage().addPartListener(new IPartListener() {
+		}
 
-				@Override
-				public void partOpened(IWorkbenchPart part) {
-					if(part instanceof IEditorPart) {
-						addListenerToPart((IEditorPart)part);
-					}				
-				}
+		@Override
+		public void partActivated(IWorkbenchPart part) {
+		}
 
-				@Override
-				public void partActivated(IWorkbenchPart part) {
-				}
+		@Override
+		public void partBroughtToTop(IWorkbenchPart part) {
+		}
 
-				@Override
-				public void partBroughtToTop(IWorkbenchPart part) {
-				}
-
-				@Override
-				public void partClosed(IWorkbenchPart part) {
-					if(part instanceof IEditorPart) {
-						IEditorPart editor = (IEditorPart)part;
-						IEditorInput input = editor.getEditorInput();
-						if(input instanceof IFileEditorInput) {
-							IFileEditorInput i = (IFileEditorInput)input;
-							IFile file = i.getFile();
-							if(file != null) {
-								DocListener listener = listeners.get(file);
-								if(listener != null) {
-									listener.remove();
-								}
-							}
+		@Override
+		public void partClosed(IWorkbenchPart part) {
+			if(part instanceof IEditorPart) {
+				IEditorPart editor = (IEditorPart)part;
+				IEditorInput input = editor.getEditorInput();
+				if(input instanceof IFileEditorInput) {
+					IFileEditorInput i = (IFileEditorInput)input;
+					IFile file = i.getFile();
+					if(file != null) {
+						DocListener listener = listeners.get(file);
+						if(listener != null) {
+							listener.remove();
 						}
 					}
 				}
-
-				@Override
-				public void partDeactivated(IWorkbenchPart part) {
-				}
-			});
+			}
 		}
+
+		@Override
+		public void partDeactivated(IWorkbenchPart part) {
+		}
+	}
+
+	void initDocumentListenersForWindow(IWorkbenchWindow window) {
+		IWorkbenchPage page = window.getActivePage();
+		if(page == null) {
+			//The window is not open yet, and as soon as it is open, this method 
+			//will be called again by window listener.
+			return;
+		}
+		for (IEditorReference ref: page.getEditorReferences()) {
+			IEditorPart editor = ref.getEditor(false);
+			if(editor != null) {
+				addListenerToPart(editor);
+			}
+		}
+		page.addPartListener(partListener);
 	}
 	
 	class DocListener implements IDocumentListener {
 		IFile file;
 		IDocument document;
+		int references;
 
 		public DocListener(IFile file, IDocument document) {
 			this.file = file;
 			this.document = document;
 			listeners.put(file, this);
 			document.addDocumentListener(this);
+			add();
 		}
 		@Override
 		public void documentChanged(DocumentEvent event) {
@@ -236,11 +273,18 @@ public class PageContextFactory implements IResourceChangeListener {
 		public void documentAboutToBeChanged(DocumentEvent event) {
 		}
 
+		public void add() {
+			references++;
+		}
+
 		public void remove() {
 			if(document == null) return;
-			document.removeDocumentListener(this);
-			document = null;
-			listeners.remove(file);
+			references--;
+			if(references <= 0) {
+				document.removeDocumentListener(this);
+				document = null;
+				listeners.remove(file);
+			}
 		}
 	}
 
@@ -256,6 +300,8 @@ public class PageContextFactory implements IResourceChangeListener {
 					if(doc != null) {
 						listener = new DocListener(file, doc);
 					}
+				} else {
+					listener.add();
 				}
 			}
 		}
