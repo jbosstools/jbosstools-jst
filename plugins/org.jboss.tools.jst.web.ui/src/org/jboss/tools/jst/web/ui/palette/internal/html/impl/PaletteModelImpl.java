@@ -62,23 +62,25 @@ public class PaletteModelImpl implements IPaletteModel{
 	
 	@Override
 	public void load() {
-		sortedPaletteGroups = loadPaletteGroups();
-		
-		paletteGroupMap = new HashMap<String, IPaletteGroup>();
-		
-		String expandedCategory = getPreferredExpandedCategory();
-		
-		paletteRoot = new PaletteRootImpl(this);
-		HTML5DynamicPaletteGroup dynamicPaletteGroup = null;
-		for(IPaletteGroup paletteGroup : sortedPaletteGroups){
-			if(!(paletteGroup instanceof HTML5DynamicPaletteGroup)){
-				loadPaletteGroup(paletteGroup, expandedCategory);
-			}else{
-				dynamicPaletteGroup = (HTML5DynamicPaletteGroup)paletteGroup;
+		if(sortedPaletteGroups == null){
+			sortedPaletteGroups = loadPaletteGroups();
+			
+			paletteGroupMap = new HashMap<String, IPaletteGroup>();
+			
+			String expandedCategory = getPreferredExpandedCategory();
+			
+			paletteRoot = new PaletteRootImpl(this);
+			HTML5DynamicPaletteGroup dynamicPaletteGroup = null;
+			for(IPaletteGroup paletteGroup : sortedPaletteGroups){
+				if(!(paletteGroup instanceof HTML5DynamicPaletteGroup)){
+					loadPaletteGroup(paletteGroup, expandedCategory);
+				}else{
+					dynamicPaletteGroup = (HTML5DynamicPaletteGroup)paletteGroup;
+				}
 			}
-		}
-		if(dynamicPaletteGroup != null){
-			loadPaletteGroup(dynamicPaletteGroup, expandedCategory);
+			if(dynamicPaletteGroup != null){
+				loadPaletteGroup(dynamicPaletteGroup, expandedCategory);
+			}
 		}
 	}
 	
