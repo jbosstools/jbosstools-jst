@@ -154,8 +154,8 @@ public class StyledTextDropTargetEffect extends DropTargetEffect {
 		StyledText text = (StyledText) getControl();
 		
 		Point mousePoint = text.getDisplay().map(null, text, event.x, event.y);
-		Point newOffsetPoint = text.getLocationAtOffset(newOffset);
 		if (newOffset < 0) return;
+		Point newOffsetPoint = text.getLocationAtOffset(newOffset);
 		Point pt = mousePoint;
 		Rectangle ca = text.getClientArea();
 		ca.height -= text.getLineHeight();
