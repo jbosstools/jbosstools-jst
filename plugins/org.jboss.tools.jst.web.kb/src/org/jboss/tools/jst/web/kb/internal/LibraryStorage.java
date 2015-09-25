@@ -173,4 +173,11 @@ public class LibraryStorage {
 		}
 	}
 
+	public synchronized void dispose() {
+		ITagLibrary[] ls = getAllLibrariesArray();
+		for (ITagLibrary l: ls) {
+			((KbObject)l).dispose();
+		}
+		clear();
+	}
 }

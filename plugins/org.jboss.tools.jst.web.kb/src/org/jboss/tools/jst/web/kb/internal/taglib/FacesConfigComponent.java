@@ -183,4 +183,17 @@ public class FacesConfigComponent extends AbstractComponent {
 			addFacet(f);
 		}
 	}
+
+	@Override
+	public void dispose() {
+		Facet[] fs = getFacets();
+		for (Facet f: fs) {
+			f.dispose();
+		}
+		synchronized(facets) {
+			facets.clear();
+			facetArray = EMPTY_FACET_SET;
+		}
+		super.dispose();
+	}
 }

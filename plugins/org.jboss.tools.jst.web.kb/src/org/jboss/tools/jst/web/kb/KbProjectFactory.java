@@ -146,11 +146,15 @@ public class KbProjectFactory {
 	private static class RCL implements IResourceChangeListener {
 
 		public void resourceChanged(IResourceChangeEvent event) {
-			if(event.getType() == IResourceChangeEvent.PRE_DELETE) {
+			if(event.getType() == IResourceChangeEvent.PRE_DELETE
+					|| event.getType() == IResourceChangeEvent.PRE_CLOSE) {
 				IResource resource = event.getResource();
 				IProject project = (IProject)resource.getAdapter(IProject.class);
 				if(project != null) {
-					mockProjectStore.remove(project);
+					IKbProject p = mockProjectStore.remove(project);
+					if(p instanceof KbProject) {
+						((KbProject)p).dispose();
+					}
 				}
 			}
 		}

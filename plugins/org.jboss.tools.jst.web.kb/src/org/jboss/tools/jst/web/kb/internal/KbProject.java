@@ -1155,6 +1155,7 @@ public class KbProject extends KbObject implements IKbProject {
 		extensionModels.put(id, model);
 	}
 
+	@Override
 	public void dispose() {
 		for (KbProject p: getKbProjects()) {
 			removeKbProject(p);
@@ -1162,6 +1163,14 @@ public class KbProject extends KbObject implements IKbProject {
 		for (KbProject p: getDependentKbProjects()) {
 			p.removeKbProject(this);
 		}
+		libraries.dispose();
+		classPath.dispose();
+		for (Object o: extensionModels.values()) {
+			if(o instanceof AbstractKbProjectExtension) {
+				((AbstractKbProjectExtension)o).dispose();
+			}
+		}
+		extensionModels.clear();
 		modifications++;
 	}
 
