@@ -18,6 +18,7 @@ import java.util.Properties;
 
 import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.event.Change;
+import org.jboss.tools.jst.web.kb.IKbProject;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
@@ -80,23 +81,26 @@ public class FaceletTagLibrary extends FunctionTagLib implements
 		compositeLibraryName = s;
 	}
 
+	private static final ITagLibrary[] EMPTY_LIB_ARRAY = new ITagLibrary[0];
+
 	public ITagLibrary[] getCompositeLibraries() {
-		List<ITagLibrary> result = new ArrayList<ITagLibrary>();
-		if(compositeLibraryName != null && compositeLibraryName.length() > 0) {
-			String uri = JSF2ResourcesScanner.URI_PREFIX + "/" + compositeLibraryName;
-			ITagLibrary[] list = getKbProject() == null ? new ITagLibrary[0] : getKbProject().getTagLibraries(uri);
-			if(list.length > 0) {
-				for (ITagLibrary l: list) result.add(l);
+		IKbProject kbProject = getKbProject();
+		if(kbProject != null && compositeLibraryName != null && compositeLibraryName.length() > 0) {
+			String uri1 = JSF2ResourcesScanner.URI_PREFIX + "/" + compositeLibraryName;
+			ITagLibrary[] list1 = kbProject.getTagLibraries(uri1);
+			String uri2 = JSF2ResourcesScanner.URI_PREFIX_22 + "/" + compositeLibraryName;
+			ITagLibrary[] list2 = kbProject.getTagLibraries(uri2);
+			if(list1.length == 0) {
+				return list2;
+			} else if(list2.length == 0) {
+				return list1;
 			}
+			ITagLibrary[] result = new ITagLibrary[list1.length + list2.length];
+			System.arraycopy(list1, 0, result, 0, list1.length);
+			System.arraycopy(list2, 0, result, list1.length, list2.length);
+			return result;
 		}
-		if(compositeLibraryName != null && compositeLibraryName.length() > 0) {
-			String uri = JSF2ResourcesScanner.URI_PREFIX_22 + "/" + compositeLibraryName;
-			ITagLibrary[] list = getKbProject() == null ? new ITagLibrary[0] : getKbProject().getTagLibraries(uri);
-			if(list.length > 0) {
-				for (ITagLibrary l: list) result.add(l);
-			}
-		}
-		return result.toArray(new ITagLibrary[0]);
+		return EMPTY_LIB_ARRAY;
 	}
 	
 	public void setCompositeLibraryName(IValueInfo s) {
@@ -104,7 +108,16 @@ public class FaceletTagLibrary extends FunctionTagLib implements
 		attributesInfo.put(COMPOSITE_LIBRARY_NAME, s);
 	}
 
-	public void onCompositeLibraryChanged() {
+	public synchronized void onCompositeLibraryChanged() {
+		disposeCopies();
+	}
+
+	synchronized void disposeCopies() {
+		for (Cloned c: copies.values()) {
+			if(c.copy instanceof KbObject) {
+				((KbObject)c.copy).dispose();
+			}
+		}
 		copies.clear();
 	}
 
@@ -135,7 +148,7 @@ public class FaceletTagLibrary extends FunctionTagLib implements
 
 	private IComponent[] collectComponents(ITagLibrary[] ls) {
 		if(ls.length == 0) {
-			return new IComponent[0];
+			return EMPTY_ARRAY;
 		} else {
 			List<IComponent> cs = new ArrayList<IComponent>();
 			for (ITagLibrary l: ls) {
@@ -154,7 +167,7 @@ public class FaceletTagLibrary extends FunctionTagLib implements
 		}
 	}
 
-	private IComponent copy(IComponent c) {
+	private synchronized IComponent copy(IComponent c) {
 		Cloned cl = copies.get(((KbObject)c).getId());
 		if(cl == null) {
 			cl = new Cloned(c);
@@ -187,7 +200,7 @@ public class FaceletTagLibrary extends FunctionTagLib implements
 		if(!stringsEqual(compositeLibraryName, library.compositeLibraryName)) {
 			changes = Change.addChange(changes, new Change(this, COMPOSITE_LIBRARY_NAME, compositeLibraryName, library.compositeLibraryName));
 			compositeLibraryName = library.compositeLibraryName;
-			copies.clear();
+			disposeCopies();
 		}
 		return changes;
 	}
@@ -196,5 +209,12 @@ public class FaceletTagLibrary extends FunctionTagLib implements
 	public void loadXML(Element element, Properties context) {
 		super.loadXML(element, context);
 		setCompositeLibraryName(attributesInfo.get(COMPOSITE_LIBRARY_NAME));
+	}
+
+	@Override
+	public void dispose() {
+		disposeCopies();
+		super.dispose();
+		
 	}
 }

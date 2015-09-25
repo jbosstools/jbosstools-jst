@@ -665,4 +665,16 @@ public abstract class AbstractComponent extends KbObject implements IContextComp
 			}
 		}
 	}
+
+	@Override
+	public void dispose() {
+		IAttribute[] as = getAttributes();
+		for (IAttribute a: as) {
+			removeAttribute(a);
+			if(a instanceof KbObject) {
+				((KbObject)a).dispose();
+			}
+		}
+		super.dispose();
+	}
 }

@@ -188,7 +188,7 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 		return prefixes;
 	}
 
-	private static final IComponent[] EMPTY_ARRAY = new IComponent[0];
+	protected static final IComponent[] EMPTY_ARRAY = new IComponent[0];
 
 	protected IComponent[] getComponentsByPrefixes(KbQuery query, List<String> prefixes, IPageContext context) {
 		if(prefixes == null || prefixes.isEmpty()) {
@@ -627,5 +627,16 @@ public abstract class AbstractTagLib extends KbObject implements ITagLibrary {
 
 	protected void loadAttributeValues(Element element) {
 		setURI(attributesInfo.get(URI));
+	}
+
+	@Override
+	public void dispose() {
+		IComponent[] cs = getDeclaredComponents();
+		for (IComponent c: cs) {
+			((KbObject)c).dispose();
+		}
+		components.clear();
+		componentsArray = null;
+		super.dispose();
 	}
 }

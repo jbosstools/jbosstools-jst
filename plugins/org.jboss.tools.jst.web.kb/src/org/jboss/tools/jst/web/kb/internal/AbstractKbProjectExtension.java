@@ -245,4 +245,6 @@ public abstract class AbstractKbProjectExtension implements IKbProjectExtension 
 
 	protected abstract IKbProjectExtension loadWithFactory(IProject project, boolean resolve);
 
+	public void dispose() {
+	}
 }

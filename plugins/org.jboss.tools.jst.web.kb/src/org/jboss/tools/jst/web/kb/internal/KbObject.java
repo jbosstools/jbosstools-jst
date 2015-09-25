@@ -249,4 +249,8 @@ public class KbObject implements Cloneable {
 	public Object getAdapter(Class cls) {
 		return null;
 	}
+
+	public void dispose() {
+		attributesInfo.clear();
+	}
 }

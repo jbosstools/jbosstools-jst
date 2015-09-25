@@ -20,6 +20,7 @@ import org.jboss.tools.common.model.project.ext.event.Change;
 import org.jboss.tools.common.xml.XMLUtilities;
 import org.jboss.tools.jst.web.kb.internal.KbObject;
 import org.jboss.tools.jst.web.kb.internal.KbXMLStoreConstants;
+import org.jboss.tools.jst.web.kb.taglib.Facet;
 import org.jboss.tools.jst.web.kb.taglib.IELFunction;
 import org.jboss.tools.jst.web.kb.taglib.IFunctionLibrary;
 import org.w3c.dom.Element;
@@ -119,5 +120,18 @@ public abstract class FunctionTagLib extends AbstractTagLib implements IFunction
 			f.loadXML(e, context);
 			addFunction(f);
 		}
+	}
+
+	@Override
+	public void dispose() {
+		IELFunction[] fs = getFunctions();
+		for (IELFunction f: fs) {
+			((KbObject)f).dispose();
+		}
+		synchronized(functions) {
+			functions.clear();
+			functionArray = null;
+		}
+		super.dispose();
 	}
 }
