@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page 
+      		id="org.jboss.tools.jst.js.JavaScriptTools"
+      		name="JavaScript Tools"
+      		class="org.jboss.tools.jst.js.node.preference.JavaScriptToolsPreferencePage">
+      </page>
+      <page
+            category="org.jboss.tools.jst.js.JavaScriptTools"
+            class="org.jboss.tools.jst.js.node.preference.NodePreferencePage"
+            id="org.jboss.tools.jst.js.node.preference.NodePreferencesPage"
+            name="Node">
+      </page>
+   </extension>
+   <extension
+      point="org.eclipse.core.runtime.preferences">
+	   <initializer
+	         class="org.jboss.tools.jst.js.node.preference.NodePreferenceInitializer">
+	   </initializer>
+	</extension>
+</plugin>
