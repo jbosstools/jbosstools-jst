@@ -12,13 +12,15 @@ package org.jboss.tools.jst.web.ui.editor.test;
 
 import org.jboss.tools.jst.web.ui.internal.editor.preferences.JSPOccurrencesPreferencePage;
 import org.jboss.tools.tests.PreferencePageTest;
+import org.junit.Test;
 
 /**
  * @author eskimo
  *
  */
 public class JspPreferencesPageTest extends PreferencePageTest {
-	
+
+	@Test
 	public void testJSPOccurrencesPreferencePage() {
 		doDefaultTest("org.eclipse.wst.sse.ui.preferences.jsp.occurrences",JSPOccurrencesPreferencePage.class);
 	}

@@ -10,6 +10,7 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.test;
 
+import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -65,7 +66,7 @@ public class JstWebUiAllTests {
 		suite.addTestSuite(ConfigurationBlockTest.class);
 		suite.addTestSuite(WebViewsTest.class);
 		suite.addTestSuite(WebWizardsTest.class);
-		suite.addTestSuite(JstWebUiPreferencesPagesTest.class);
+		suite.addTest(new JUnit4TestAdapter(JstWebUiPreferencesPagesTest.class));
 
 		s = new TestSuite("Palette CA templates");
 		s.addTestSuite(HTML5PaletteCATest.class);

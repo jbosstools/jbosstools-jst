@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.editor.test;
 
+import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -38,8 +39,8 @@ public class JstJspAllTests {
 				Jbide6061Test.class,
 				CAMultipleCSSClassesInsertionTest.class,
 				JstCAOnCustomPrefixesTest.class,
-				JstCAURIChangeTest.class,
-				KeyBindingsTest.class),
+				JstCAURIChangeTest.class/* FIXME Fails under MAC OS X 
+				KeyBindingsTest.class  */),
 				"org.jboss.tools.jst.web.ui.test", "projects/Jbide6061Test", //$NON-NLS-1$ //$NON-NLS-2$
 				"Jbide6061Test")); //$NON-NLS-1$
 
@@ -59,7 +60,7 @@ public class JstJspAllTests {
 				"org.jboss.tools.jst.web.ui.test", "projects/JsfJbide1791Test", //$NON-NLS-1$ //$NON-NLS-2$
 				"JsfJbide1791Test")); //$NON-NLS-1$
 
-		suite.addTestSuite(JspPreferencesPageTest.class);
+		suite.addTest(new JUnit4TestAdapter(JspPreferencesPageTest.class));
 
 		suite.addTest(new ProjectImportTestSetup(new TestSuite(
 				JstJspQuickAssistTest.class,

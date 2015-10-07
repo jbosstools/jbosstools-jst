@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.ui.test;
 import org.jboss.tools.jst.web.ui.internal.preferences.LibSetPreferencePage;
 import org.jboss.tools.jst.web.ui.internal.preferences.LibrarySetsPreferencePage;
 import org.jboss.tools.tests.PreferencePageTest;
+import org.junit.Test;
 
 /**
  * @author eskimo
@@ -20,6 +21,7 @@ import org.jboss.tools.tests.PreferencePageTest;
  */
 public class JstWebUiPreferencesPagesTest extends PreferencePageTest {
 	
+	@Test
 	public void testLibrarySetsPreferencePage() {
 		doDefaultTest(LibrarySetsPreferencePage.ID,LibrarySetsPreferencePage.class);
 	}
