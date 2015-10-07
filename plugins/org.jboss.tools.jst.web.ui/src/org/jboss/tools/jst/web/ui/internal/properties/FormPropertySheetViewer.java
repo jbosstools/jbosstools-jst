@@ -28,6 +28,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -293,6 +294,13 @@ public class FormPropertySheetViewer extends Viewer implements SelectionListener
 			if(item != null && item.getData() != null) {
 				String category = item.getData().toString();
 				selectedViewer = setViewersByCategory.get(category);
+				if(selectedViewer instanceof AbstractPropertySetViewer) {
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							((AbstractPropertySetViewer)selectedViewer).updateUI();
+						}
+					});
+				}
 			}
 		}		
 	}

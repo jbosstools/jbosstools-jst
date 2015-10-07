@@ -96,7 +96,11 @@ public abstract class AbstractAdvancedPropertySetViewer extends AbstractProperty
 		scroll.addControlListener(new ControlAdapter() {
 			public void controlResized(ControlEvent e) {
 				if(fields != null && !fields.isDisposed()) {
-					fields.setSize(scroll.getSize().x, fields.getSize().y);
+					int x = scroll.getSize().x;
+					if(scroll.getVerticalBar() != null && scroll.getVerticalBar().isVisible()) {
+						x -= scroll.getVerticalBar().getSize().x;
+					}
+					fields.setSize(x, fields.getSize().y);
 					fields.layout(true);
 				}
 			}
@@ -221,11 +225,28 @@ public abstract class AbstractAdvancedPropertySetViewer extends AbstractProperty
 				e.update();
 			}		
 
-			fields.pack(true);
-			fields.setSize(scroll.getSize().x, fields.getSize().y);
+			needsUpdateUI = true;
+			if(fields.isVisible()) {
+				updateUI();
+			}
 			
 		}
 		isUpdating = false;
+	}
+	
+	boolean needsUpdateUI = false;
+
+	@Override
+	public void updateUI() {
+		if(needsUpdateUI && scroll != null && !scroll.isDisposed() && fields != null && !fields.isDisposed()) {
+			fields.pack(true);
+			int x = scroll.getSize().x;
+			if(scroll.getVerticalBar() != null && scroll.getVerticalBar().isVisible()) {
+				x -= scroll.getVerticalBar().getSize().x;
+			}
+			fields.setSize(x, fields.getSize().y);
+			needsUpdateUI = false;
+		}		
 	}
 
 	/**
