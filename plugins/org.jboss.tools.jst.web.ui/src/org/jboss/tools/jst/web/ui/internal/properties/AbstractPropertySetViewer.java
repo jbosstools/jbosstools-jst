@@ -89,4 +89,7 @@ public abstract class AbstractPropertySetViewer implements IPropertySetViewer {
 	@Override
 	public void applyEditorValue() {
 	}
+
+	public void updateUI() {
+	}
 }

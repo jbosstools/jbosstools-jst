@@ -121,17 +121,30 @@ public class DefaultPropertySetViewer extends AbstractPropertySetViewer {
 
 		table.addControlListener(new ControlAdapter() {
             public void controlResized(ControlEvent e) {
+            	updateUI();
                 Rectangle area = table.getClientArea();
-                TableColumn[] columns = table.getColumns();
-                if (area.width > 0) {
-                    columns[0].setWidth(area.width * 40 / 100);
-                    columns[1].setWidth(area.width - columns[0].getWidth() - 4);
+                if (area.width > 0 && area.width > table.getParent().getSize().x * 0.8) {
                     table.removeControlListener(this);
+                    needsUpdateUI = false;
                 }
             }
         });
-
     }
+	
+	boolean needsUpdateUI = true;
+
+	@Override
+	public void updateUI() {
+		if(needsUpdateUI && table != null && !table.isDisposed()) {
+			table.getParent().layout(true);
+            Rectangle area = table.getClientArea();
+            TableColumn[] columns = table.getColumns();
+            if (area.width > 0 && needsUpdateUI) {
+                columns[0].setWidth(area.width * 40 / 100);
+                columns[1].setWidth(area.width - columns[0].getWidth() - 4);
+             }
+		}
+	}
 
 	@Override
 	public void refresh(List<IPropertyDescriptor> descriptors) {
