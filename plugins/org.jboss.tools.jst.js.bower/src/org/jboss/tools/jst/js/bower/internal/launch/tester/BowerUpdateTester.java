@@ -15,7 +15,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.jboss.tools.jst.js.bower.Activator;
+import org.jboss.tools.jst.js.bower.BowerPlugin;
 import org.jboss.tools.jst.js.bower.util.BowerUtil;
 import org.eclipse.core.expressions.PropertyTester;
 
@@ -42,7 +42,7 @@ public final class BowerUpdateTester extends PropertyTester {
 				}
 			}
 		} catch (CoreException e) {
-			Activator.logError(e);
+			BowerPlugin.logError(e);
 		}
 		return false;
 	}

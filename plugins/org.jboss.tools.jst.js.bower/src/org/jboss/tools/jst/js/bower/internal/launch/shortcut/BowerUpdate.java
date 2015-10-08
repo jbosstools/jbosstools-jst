@@ -20,7 +20,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.jboss.tools.jst.js.bower.Activator;
+import org.jboss.tools.jst.js.bower.BowerPlugin;
 import org.jboss.tools.jst.js.bower.BowerCommands;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
 import org.jboss.tools.jst.js.bower.internal.ui.BowerExceptionNotifier;
@@ -50,10 +50,10 @@ public class BowerUpdate extends GenericNativeNodeLaunch {
 						BowerExceptionNotifier.bowerLocationNotDefined();
 					} else {
 						this.setWorkingProject(selectedResource.getProject());
-						execute(getWorkingDirectory(selectedResource), nodeLocation, bowerLocation);						
+						launchNodeTool(getWorkingDirectory(selectedResource), nodeLocation, bowerLocation);						
 					}
 				} catch (CoreException e) {
-					Activator.logError(e);
+					BowerPlugin.logError(e);
 				}
 			 }
 		}
@@ -86,7 +86,7 @@ public class BowerUpdate extends GenericNativeNodeLaunch {
 					try {
 						workingDir = getWorkingDirectory(project);
 					} catch (IOException e) {
-						Activator.logError(e);
+						BowerPlugin.logError(e);
 					}
 				}
 			}

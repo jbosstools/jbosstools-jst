@@ -8,35 +8,35 @@
  * Contributor:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.jboss.tools.jst.js.node;
+package org.jboss.tools.jst.js.bower;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.jboss.tools.jst.js.node.preference.NodePreferenceHolder;
+import org.jboss.tools.jst.js.bower.internal.preference.BowerPreferenceHolder;
 import org.osgi.framework.BundleContext;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
-public class Activator extends AbstractUIPlugin {
+public class BowerPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.jboss.tools.jst.js.node"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "org.jboss.tools.jst.js.bower"; //$NON-NLS-1$
 
 	// The shared instance
-	private static Activator plugin;
+	private static BowerPlugin plugin;
 
-	public Activator() {
+	public BowerPlugin() {
 	}
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		NodePreferenceHolder.setStore(store);
+		IPreferenceStore store = BowerPlugin.getDefault().getPreferenceStore();
+		BowerPreferenceHolder.setStore(store);
 	}
 
 	public void stop(BundleContext context) throws Exception {
@@ -44,7 +44,7 @@ public class Activator extends AbstractUIPlugin {
 		super.stop(context);
 	}
 
-	public static Activator getDefault() {
+	public static BowerPlugin getDefault() {
 		return plugin;
 	}
 	

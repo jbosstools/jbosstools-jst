@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %bundleName
 Bundle-SymbolicName: org.jboss.tools.jst.js.bower;singleton:=true
 Bundle-Version: 3.8.0.qualifier
-Bundle-Activator: org.jboss.tools.jst.js.bower.Activator
+Bundle-Activator: org.jboss.tools.jst.js.bower.BowerPlugin
 Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

@@ -32,7 +32,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.IConsoleConstants;
 import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.part.FileEditorInput;
-import org.jboss.tools.jst.js.node.Activator;
+import org.jboss.tools.jst.js.node.NodePlugin;
 
 /**
  * @author Ilya Buziuk (ibuziuk)
@@ -60,7 +60,7 @@ public final class WorkbenchResourceUtil {
 			try {
 				file.create(source, IResource.NONE, null);
 			} catch (CoreException e) {
-				Activator.logError(e);
+				NodePlugin.logError(e);
 			}
 		}
 	}
@@ -73,7 +73,7 @@ public final class WorkbenchResourceUtil {
 	}
 
 	public static IProject getSelectedProject() {
-		IWorkbenchWindow workbenchWindow = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchWindow workbenchWindow = NodePlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
 		if (workbenchWindow != null) {
 			IWorkbenchPage activePage = workbenchWindow.getActivePage();
 			if (activePage != null) {

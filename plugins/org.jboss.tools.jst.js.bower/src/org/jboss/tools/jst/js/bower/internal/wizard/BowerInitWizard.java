@@ -20,7 +20,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.jboss.tools.jst.js.bower.Activator;
+import org.jboss.tools.jst.js.bower.BowerPlugin;
 import org.jboss.tools.jst.js.bower.BowerJson;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
 import org.jboss.tools.jst.js.bower.internal.Messages;
@@ -37,7 +37,7 @@ public class BowerInitWizard extends Wizard implements INewWizard {
 
 	public BowerInitWizard() {
 		super();
-		setDefaultPageImageDescriptor(Activator.getImageDescriptor("/icons/bower_75.png")); //$NON-NLS-1$
+		setDefaultPageImageDescriptor(BowerPlugin.getImageDescriptor("/icons/bower_75.png")); //$NON-NLS-1$
 		setWindowTitle(Messages.BowerInitWizard_windowTitle);
 	}
 
@@ -68,7 +68,7 @@ public class BowerInitWizard extends Wizard implements INewWizard {
 				}
 			}
 		} catch (CoreException e) {
-			Activator.logError(e);
+			BowerPlugin.logError(e);
 			return false;
 		}
 		return true;

@@ -12,7 +12,7 @@ package org.jboss.tools.jst.js.bower.internal.preference;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.jboss.tools.jst.js.bower.Activator;
+import org.jboss.tools.jst.js.bower.BowerPlugin;
 import org.jboss.tools.jst.js.bower.internal.util.BowerDetector;
 
 /**
@@ -22,7 +22,7 @@ public class BowerPreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		IPreferenceStore store = BowerPlugin.getDefault().getPreferenceStore();
 		String bowerLocation = BowerDetector.detectBower();
 		store.setDefault(BowerPreferenceHolder.PREF_BOWER_LOCATION, ((bowerLocation != null) ? bowerLocation : "")); //$NON-NLS-1$
 	}

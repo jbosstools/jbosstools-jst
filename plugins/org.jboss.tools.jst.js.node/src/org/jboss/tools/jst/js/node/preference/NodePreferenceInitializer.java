@@ -12,7 +12,7 @@ package org.jboss.tools.jst.js.node.preference;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.jboss.tools.jst.js.node.Activator;
+import org.jboss.tools.jst.js.node.NodePlugin;
 import org.jboss.tools.jst.js.node.util.NodeDetector;
 
 /**
@@ -22,7 +22,7 @@ public class NodePreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		IPreferenceStore store = NodePlugin.getDefault().getPreferenceStore();
 		String nodeLocation = NodeDetector.detectNode();
 		store.setDefault(NodePreferenceHolder.PREF_NODE_LOCATION, ((nodeLocation != null) ? nodeLocation : "")); //$NON-NLS-1$
 	}

@@ -26,12 +26,12 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorPart;
-import org.jboss.tools.jst.js.node.Activator;
+import org.jboss.tools.jst.js.node.NodePlugin;
 import org.jboss.tools.jst.js.node.exception.NodeExceptionNotifier;
 import org.jboss.tools.jst.js.node.util.WorkbenchResourceUtil;
 
 /**
- * Generic {@link org.eclipse.debug.ui.ILaunchShortcut} which falls back on <strong>native</strong> node implementation
+ * Generic {@link org.eclipse.debug.ui.ILaunchShortcut} which falls back on <strong>native</strong> Node.js implementation
  *     
  * @author "Ilya Buziuk (ibuziuk)"
  */
@@ -55,7 +55,14 @@ public abstract class GenericNativeNodeLaunch implements ILaunchShortcut {
 	public void launch(IEditorPart editor, String mode) {			
 	}
 	
-	protected void execute(String workingDirectory, String nodeExecutableLocation, String toolExecutableLocation) {
+	/**
+	 * Launches an external Node.js tool (i.e bower, npm, grunt, gulp)
+	 *
+	 * @param  workingDirectory a directory from which external Node.js process will be launched 
+	 * @param  nodeExecutableLocation the location of the Node.js executable
+	 * @param  toolExecutableLocation the location of a specific Node.js tool (i.e bower, npm)
+	 */
+	protected void launchNodeTool(String workingDirectory, String nodeExecutableLocation, String toolExecutableLocation) {
 		ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
 		DebugPlugin.getDefault().addDebugEventListener(processTerminateListener);
 		ILaunchConfigurationType programType = manager.getLaunchConfigurationType(IExternalToolConstants.ID_PROGRAM_LAUNCH_CONFIGURATION_TYPE);
@@ -65,14 +72,15 @@ public abstract class GenericNativeNodeLaunch implements ILaunchShortcut {
 			wc.setAttribute(IExternalToolConstants.ATTR_LOCATION, nodeExecutableLocation);
 			wc.setAttribute(IExternalToolConstants.ATTR_WORKING_DIRECTORY, "${workspace_loc:" + workingDirectory + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 			wc.setAttribute(IExternalToolConstants.ATTR_SHOW_CONSOLE, true);
-			// The argument passed to Node are: 1) executable location 2) command name
+			
+			// The argument passed to Node are: 1) executable location 2) command name i.e 1) bower 2) update 
 			wc.setAttribute(IExternalToolConstants.ATTR_TOOL_ARGUMENTS, toolExecutableLocation + " " + getCommandName()); //$NON-NLS-1$
 			cfg = wc.doSave();
 			cfg.launch(ILaunchManager.RUN_MODE, null, false, true);
 			cfg.delete();
 			WorkbenchResourceUtil.showConsoleView();
 		} catch (CoreException e) {
-			Activator.logError(e);
+			NodePlugin.logError(e);
 			NodeExceptionNotifier.launchError(e);
 		}
 	}
@@ -93,7 +101,7 @@ public abstract class GenericNativeNodeLaunch implements ILaunchShortcut {
 								try {
 									getWorkingProject().refreshLocal(IResource.DEPTH_INFINITE, null);
 								} catch (CoreException e) {
-									Activator.logError(e);
+									NodePlugin.logError(e);
 								} finally {
 									DebugPlugin.getDefault().removeDebugEventListener(this);
 								}

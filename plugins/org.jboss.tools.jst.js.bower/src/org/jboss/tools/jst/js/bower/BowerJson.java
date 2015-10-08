@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Packages are defined by a manifest file bower.json. This is similar to Node’s package.json or Ruby’s Gemfile.
+ *
+ * @see <a href="http://bower.io/docs/creating-packages/#bowerjson">http://bower.io/docs/creating-packages/#bowerjson</a>
  * @author "Ilya Buziuk (ibuziuk)"
  */
 public class BowerJson {
