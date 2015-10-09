@@ -7,10 +7,12 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.JavaCore;
 import org.jboss.tools.common.preferences.SeverityPreferences;
 import org.jboss.tools.jst.web.kb.KbMessages;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.WebKbPlugin;
+import org.jboss.tools.jst.web.kb.preferences.ELSeverityPreferences;
 import org.jboss.tools.jst.web.kb.preferences.KBSeverityPreferences;
 
 public class KbBuilderMarker {
@@ -49,7 +51,9 @@ public class KbBuilderMarker {
 	public static IMarker createOrUpdateKbProblemMarker(IMarker m, IResource r, String message, int kind) throws CoreException {
 		String preferenceValue = getPreference(r.getProject(), kind);
 		
-		if(SeverityPreferences.IGNORE.equals(preferenceValue)) {
+		String s = KBSeverityPreferences.getInstance().getProjectPreference(r.getProject(), ELSeverityPreferences.ENABLE_BLOCK_PREFERENCE_NAME);
+
+		if(SeverityPreferences.IGNORE.equals(preferenceValue) || JavaCore.DISABLED.equals(s)) {
 			if(m != null) {
 				m.delete();
 			}

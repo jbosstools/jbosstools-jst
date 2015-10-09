@@ -19,6 +19,7 @@ import org.jboss.tools.jst.web.kb.test.builder.KbCobuilderTest;
 import org.jboss.tools.jst.web.kb.test.validation.BuilderOrderMarkerResolutionTest;
 import org.jboss.tools.jst.web.kb.test.validation.BuilderOrderValidationTest;
 import org.jboss.tools.jst.web.kb.test.validation.KBValidationTest;
+import org.jboss.tools.jst.web.kb.test.validation.KbCapabilitiesTest;
 import org.jboss.tools.test.util.ProjectImportTestSetup;
 
 /**
@@ -69,6 +70,9 @@ public class JstWebKbAllTests {
 				new String[]{"projects/TestBrokenBuilderOrder"},
 				new String[]{"TestBrokenBuilderOrder"});
 		suiteAll.addTest(testSetup);
+
+		suiteAll.addTestSuite(KbCapabilitiesTest.class);
+
 		return suiteAll;
 	}
 }
