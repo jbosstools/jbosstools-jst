@@ -20,6 +20,9 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ide.ResourceUtil;
 import org.jboss.tools.jst.js.bower.BowerPlugin;
 import org.jboss.tools.jst.js.bower.BowerCommands;
 import org.jboss.tools.jst.js.bower.internal.BowerConstants;
@@ -42,20 +45,24 @@ public class BowerUpdate extends GenericNativeNodeLaunch {
 			 if (element != null && element instanceof IResource) {
 				try {
 					IResource selectedResource = (IResource) element;
-					String nodeLocation = NodeExternalUtil.getNodeExecutableLocation();
-					String bowerLocation = BowerUtil.getBowerExecutableLocation();
-					if (nodeLocation == null || nodeLocation.isEmpty()) {
-						NodeExceptionNotifier.nodeLocationNotDefined();
-					} else if (bowerLocation == null || bowerLocation.isEmpty()) {
-						BowerExceptionNotifier.bowerLocationNotDefined();
-					} else {
-						this.setWorkingProject(selectedResource.getProject());
-						launchNodeTool(getWorkingDirectory(selectedResource), nodeLocation, bowerLocation);						
-					}
+					launchBower(selectedResource);
 				} catch (CoreException e) {
 					BowerPlugin.logError(e);
 				}
 			 }
+		}
+	}
+	
+	@Override
+	public void launch(IEditorPart editor, String mode) {
+		IEditorInput editorInput = editor.getEditorInput();
+		IFile file = ResourceUtil.getFile(editorInput);
+		if (file != null && file.exists() && BowerConstants.BOWER_JSON.equals(file.getName())) {
+			try {
+				launchBower(file);
+			} catch (CoreException e) {
+				BowerPlugin.logError(e);
+			}
 		}
 	}
 
@@ -92,6 +99,19 @@ public class BowerUpdate extends GenericNativeNodeLaunch {
 			}
 		}
 		return workingDir;
+	}
+	
+	private void launchBower(IResource resource) throws CoreException {
+		String nodeLocation = NodeExternalUtil.getNodeExecutableLocation();
+		String bowerLocation = BowerUtil.getBowerExecutableLocation();
+		if (nodeLocation == null || nodeLocation.isEmpty()) {
+			NodeExceptionNotifier.nodeLocationNotDefined();
+		} else if (bowerLocation == null || bowerLocation.isEmpty()) {
+			BowerExceptionNotifier.bowerLocationNotDefined();
+		} else {
+			this.setWorkingProject(resource.getProject());
+			launchNodeTool(getWorkingDirectory(resource), nodeLocation, bowerLocation);
+		}
 	}
 
 	/**
