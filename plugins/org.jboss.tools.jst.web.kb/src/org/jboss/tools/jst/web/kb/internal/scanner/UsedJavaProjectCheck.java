@@ -16,6 +16,8 @@ import org.jboss.tools.jst.web.kb.KbMessages;
 import org.jboss.tools.jst.web.kb.KbProjectFactory;
 import org.jboss.tools.jst.web.kb.internal.KbBuilderMarker;
 import org.jboss.tools.jst.web.kb.internal.KbProject;
+import org.jboss.tools.jst.web.kb.preferences.ELSeverityPreferences;
+import org.jboss.tools.jst.web.kb.preferences.KBSeverityPreferences;
 
 public class UsedJavaProjectCheck {
 	
@@ -26,7 +28,10 @@ public class UsedJavaProjectCheck {
 		List<IProject> list = getNonKbJavaProjects(project.getProject());
 		
 		IMarker[] ms = KbBuilderMarker.getOwnedMarkers(project.getProject(), KbBuilderMarker.KIND_DEPENDS_ON_NON_KB_POJECTS);
-		if(list.isEmpty()) {
+		
+		String s = KBSeverityPreferences.getInstance().getProjectPreference(project.getProject(), ELSeverityPreferences.ENABLE_BLOCK_PREFERENCE_NAME);
+
+		if(list.isEmpty() || JavaCore.DISABLED.equals(s)) {
 			if(ms != null) {
 				for (IMarker m: ms) {
 					m.delete();
