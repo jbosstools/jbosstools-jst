@@ -39,8 +39,8 @@ public class JstJspAllTests {
 				Jbide6061Test.class,
 				CAMultipleCSSClassesInsertionTest.class,
 				JstCAOnCustomPrefixesTest.class,
-				JstCAURIChangeTest.class/* FIXME Fails under MAC OS X 
-				KeyBindingsTest.class  */),
+				JstCAURIChangeTest.class,
+				KeyBindingsTest.class),
 				"org.jboss.tools.jst.web.ui.test", "projects/Jbide6061Test", //$NON-NLS-1$ //$NON-NLS-2$
 				"Jbide6061Test")); //$NON-NLS-1$
 
