@@ -66,7 +66,6 @@ public class KeyBindingsTest extends ContentAssistantTestCase {
 		project = ProjectImportTestSetup.loadProject(PROJECT_NAME);
 	}
 
-	/* FIXME Fails under Mac OS X */
 	public void testKeyBindings() {
 		for (String pageName : PAGE_NAMES) {
 			doTestKeyBindingsOnPage(pageName);
