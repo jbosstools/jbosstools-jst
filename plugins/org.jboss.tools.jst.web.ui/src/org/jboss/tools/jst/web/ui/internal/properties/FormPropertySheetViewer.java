@@ -297,7 +297,9 @@ public class FormPropertySheetViewer extends Viewer implements SelectionListener
 				if(selectedViewer instanceof AbstractPropertySetViewer) {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							((AbstractPropertySetViewer)selectedViewer).updateUI();
+							if(selectedViewer instanceof AbstractPropertySetViewer) {
+								((AbstractPropertySetViewer)selectedViewer).updateUI();
+							}
 						}
 					});
 				}
