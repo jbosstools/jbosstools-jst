@@ -32,11 +32,11 @@ public class NodeUITestCase extends TestCase {
 
 	@Override
 	protected void setUp() {
-		this.testProject = ResourcesPlugin.getWorkspace().getRoot().getProject("TestProject"); //$NON-NLS-1$
+		this.testProject = ResourcesPlugin.getWorkspace().getRoot().getProject("TestNodeProject"); //$NON-NLS-1$
 	}
 
 	public void testProject() {
-		assertNotNull("Can't load TestProject", this.testProject); //$NON-NLS-1$
+		assertNotNull("Can't load TestNodeProject", this.testProject); //$NON-NLS-1$
 		assertTrue(this.testProject.exists());
 	}
 	

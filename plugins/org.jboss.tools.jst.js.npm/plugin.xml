@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+	    <propertyTester
+	      	id="org.jboss.tools.jst.js.npm.update.tester"
+	      	type="org.eclipse.core.resources.IResource"
+	      	namespace="org.jboss.tools.jst.js.npm"
+	      	properties="isNpmInit"
+	      	class="org.jboss.tools.jst.js.npm.internal.launch.tester.NpmLaunchTester">
+	    </propertyTester>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="org.jboss.tools.jst.js.npm.internal.launch.shortcut.NpmUpdate"
+            id="org.jboss.tools.jst.js.npm.update"
+            label="npm Update"
+            icon="icons/npm_16.png"
+            modes="run">
+        <contextualLaunch>
+            <enablement>
+                <with variable="selection">
+                    <count value="1"/>
+                    <iterate>
+                        <adapt  type="org.eclipse.core.resources.IResource">
+	                        <test property="org.jboss.tools.jst.js.npm.isNpmInit" 
+	                           	forcePluginActivation="true"/>
+                        </adapt> 
+                    </iterate>
+                </with>
+            </enablement>
+         </contextualLaunch>
+      </shortcut>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="org.jboss.tools.jst.js.npm.internal.launch.shortcut.NpmInstall"
+            id="org.jboss.tools.jst.js.npm.install"
+            label="npm Install"
+            icon="icons/npm_16.png"
+            modes="run">
+        <contextualLaunch>
+            <enablement>
+                <with variable="selection">
+                    <count value="1"/>
+                    <iterate>
+                        <adapt  type="org.eclipse.core.resources.IResource">
+	                        <test property="org.jboss.tools.jst.js.npm.isNpmInit" 
+	                           	forcePluginActivation="true"/>
+                        </adapt> 
+                    </iterate>
+                </with>
+            </enablement>
+         </contextualLaunch>
+      </shortcut>
+   </extension>
+   <extension
+      point = "org.eclipse.ui.newWizards">
+      <wizard
+            id="org.jboss.tools.jst.js.wizards.npm.init"
+            name="npm Init"
+            class="org.jboss.tools.jst.js.npm.internal.wizard.NpmInitWizard"
+            category="org.eclipse.wst.jsdt.ui.java"
+            icon="icons/npm_16.png">
+            <description>npm Init</description>
+            <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.jboss.tools.jst.js.JavaScriptTools"
+            class="org.jboss.tools.jst.js.npm.internal.preference.NpmPreferencePage"
+            id="org.jboss.tools.jst.js.npm.preferences.NpmPreferencesPage"
+            name="npm">
+      </page>
+   </extension>
+   <extension
+      point="org.eclipse.core.runtime.preferences">
+	   <initializer
+	         class="org.jboss.tools.jst.js.npm.internal.preference.NpmPreferenceInitializer">
+	   </initializer>
+	</extension>
+</plugin>

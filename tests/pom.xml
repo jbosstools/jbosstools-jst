@@ -20,6 +20,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>org.jboss.tools.jst.jsdt.test</module>
 		<module>org.jboss.tools.jst.js.node.test</module>
 		<module>org.jboss.tools.jst.js.bower.test</module>
+		<module>org.jboss.tools.jst.js.npm.test</module>
 	</modules>
 	<build>
 		<plugins>

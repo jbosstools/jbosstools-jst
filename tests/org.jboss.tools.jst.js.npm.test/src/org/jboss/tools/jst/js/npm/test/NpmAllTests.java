@@ -8,7 +8,7 @@
  * Contributors:
  *     Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package org.jboss.tools.jst.js.node.test;
+package org.jboss.tools.jst.js.npm.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -17,20 +17,20 @@ import org.jboss.tools.test.util.ProjectImportTestSetup;
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
-public class NodeAllTests {
+public class NpmAllTests {
 	
 	public static final int DEFAULT_TIMEOUT = 5000;
 
 	public static Test suite() {
-		TestSuite suite = new TestSuite(NodeAllTests.class.getName());
-		TestSuite s = new TestSuite("Node content"); //$NON-NLS-1$
-		s.addTestSuite(NodeCoreTestCase.class);
-		s.addTestSuite(NodeUITestCase.class);
+		TestSuite suite = new TestSuite(NpmAllTests.class.getName());
+		TestSuite s = new TestSuite("npm content"); //$NON-NLS-1$
+		s.addTestSuite(NpmCoreTestCase.class);
+		s.addTestSuite(NpmUITestCase.class);
 		suite.addTest(
 				new ProjectImportTestSetup(s,
-				"org.jboss.tools.jst.js.node.test", //$NON-NLS-1$
-				new String[] { "projects/TestNodeProject" }, //$NON-NLS-1$
-				new String[] { "TestNodeProject" })); //$NON-NLS-1$
+				"org.jboss.tools.jst.js.npm.test", //$NON-NLS-1$
+				new String[] { "projects/TestNpmProject" }, //$NON-NLS-1$
+				new String[] { "TestNpmProject" })); //$NON-NLS-1$
 
 		return suite;
 	}

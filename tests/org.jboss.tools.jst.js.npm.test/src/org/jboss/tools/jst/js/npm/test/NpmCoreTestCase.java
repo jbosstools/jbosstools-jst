@@ -8,32 +8,30 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package org.jboss.tools.jst.js.node.test;
+package org.jboss.tools.jst.js.npm.test;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
-import org.jboss.tools.jst.js.node.util.WorkbenchResourceUtil;
 
 import junit.framework.TestCase;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
-public class NodeCoreTestCase extends TestCase {
+public class NpmCoreTestCase extends TestCase {
 
 	private IProject testProject;
 
 	
 	@Override
 	protected void setUp() {
-		this.testProject = ResourcesPlugin.getWorkspace().getRoot().getProject("TestNodeProject"); //$NON-NLS-1$
+		this.testProject = ResourcesPlugin.getWorkspace().getRoot().getProject("TestNpmProject"); //$NON-NLS-1$
 	}
 
 	public void testProject() {
-		assertNotNull("Can't load TestNodeProject", this.testProject); //$NON-NLS-1$
+		assertNotNull("Can't load TestNpmProject", this.testProject); //$NON-NLS-1$
 		assertTrue(this.testProject.exists());
 	}
 	
@@ -42,13 +40,9 @@ public class NodeCoreTestCase extends TestCase {
 		assertTrue(file.exists());
 	}
 	
-	public void testFindFileRecursively() throws CoreException {
-		IFile index = WorkbenchResourceUtil.findFileRecursively(testProject, "index.html"); //$NON-NLS-1$
-		assertNotNull(index);
-		assertTrue(index.exists());
-		
-		IFile nonExistingFile = WorkbenchResourceUtil.findFileRecursively(testProject, "nonExistingFile.html"); //$NON-NLS-1$
-		assertNull(nonExistingFile);
+	public void testPackageJson() {
+		IFile file = testProject.getFile(new Path("WebContent/pages/package.json"));  //$NON-NLS-1$
+		assertTrue(file.exists());
 	}
-		
+			
 }
