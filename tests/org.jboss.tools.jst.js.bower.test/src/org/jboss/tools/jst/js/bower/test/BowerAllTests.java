@@ -19,6 +19,8 @@ import org.jboss.tools.test.util.ProjectImportTestSetup;
  */
 public class BowerAllTests {
 
+	static final int DEFAULT_TIMEOUT = 5000;
+
 	public static Test suite() {
 		TestSuite suite = new TestSuite(BowerAllTests.class.getName());
 		TestSuite s = new TestSuite("Bower content"); //$NON-NLS-1$
