@@ -10,11 +10,13 @@
  ******************************************************************************/
 package org.jboss.tools.jst.jsp.test.openon;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -30,10 +32,12 @@ import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.hyperlink.AbstractHyperlinkDetector;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.DocumentProviderRegistry;
@@ -205,6 +209,15 @@ public class HyperlinkTestUtil extends TestCase{
 	}
 	
 	public static TestTextEditor openFileInTestTextEditor(IFile input) throws PartInitException {
+		if (input != null && input.exists()) {
+			IWorkbenchPage page = PlatformUI.getWorkbench()
+			.getActiveWorkbenchWindow().getActivePage();
+			return (TestTextEditor)IDE.openEditor(page, input, TEST_TEXT_EDITOR_ID, true);
+		}
+		return null;
+	}
+
+	public static TestTextEditor openFileInTestTextEditor(IEditorInput input) throws PartInitException {
 		if (input != null && input.exists()) {
 			IWorkbenchPage page = PlatformUI.getWorkbench()
 			.getActiveWorkbenchWindow().getActivePage();
@@ -539,4 +552,67 @@ public class HyperlinkTestUtil extends TestCase{
 				documentProvider.disconnect(editorInput);
 			}
 		}
+	
+	
+	public static void checkRegionsForExternalFile(String fileName, List<TestRegion> regionList, AbstractHyperlinkDetector elDetector) throws Exception {
+		File file= new File(fileName);
+		
+		FileStoreEditorInput editorInput = new FileStoreEditorInput(EFS.getLocalFileSystem().fromLocalFile(file));
+		
+		assertNotNull("The file \"" + fileName + "\" is not found", file);
+		assertTrue("The file \"" + fileName + "\" is not found", file.canRead());
+
+
+		IDocumentProvider documentProvider = DocumentProviderRegistry.getDefault().getDocumentProvider(editorInput);
+
+		assertNotNull("The document provider for the file \"" + fileName + "\" is not loaded", documentProvider);
+
+		documentProvider.connect(editorInput);
+		try{
+			IDocument document = documentProvider.getDocument(editorInput);
+			
+			assertNotNull("The document for the file \"" + fileName + "\" is not loaded", document);
+			
+			if(regionList.size() > 0 && regionList.get(0).region == null){
+				loadRegions(regionList, document);
+			}
+	
+	
+			TestTextEditor part = openFileInTestTextEditor(editorInput);
+			ISourceViewer viewer = part.getTextSourceViewer();
+			
+	
+			for (int i = 0; i < document.getLength(); i++) {
+				int lineNumber = document.getLineOfOffset(i);
+				int position = i - document.getLineOffset(lineNumber)+1;
+				lineNumber++;
+				
+				TestData testData = new TestData(document, i);
+				IHyperlink[] links = elDetector.detectHyperlinks(viewer, testData.getHyperlinkRegion(), true);
+	
+				boolean recognized = links != null;
+	
+				if (recognized) {
+					TestRegion testRegion = findOffsetInRegions(i, regionList); 
+					if(testRegion == null){
+						String information = findRegionInformation(document, i, regionList);
+						fail("Wrong detection for offset - "+i+" (line - "+lineNumber+" position - "+position+") "+information);
+					}else{
+						checkTestRegion(links, testRegion);
+					}
+				} 
+				else {
+					for(TestRegion testRegion : regionList){
+						if(i >= testRegion.region.getOffset() && i < testRegion.region.getOffset()+testRegion.region.getLength()) {
+							fail("Wrong detection for region - "+getRegionInformation(document, testRegion)+" offset - "+i+" (line - "+lineNumber+" position - "+position+")");
+						}
+					}
+				}
+			}
+		}finally{
+			documentProvider.disconnect(editorInput);
+		}
+
+	}
+	
 }
