@@ -21,6 +21,7 @@ public final class Constants {
 	public static final String PATH = "PATH"; //$NON-NLS-1$
 	public static final String NODE = "node"; //$NON-NLS-1$
 	public static final String NODE_EXE = "node.exe"; //$NON-NLS-1$
+	public static final String NODE_64_EXE = "node64.exe"; //$NON-NLS-1$
 	public static final String NODE_JS = "nodejs"; //$NON-NLS-1$
 	public static final String NODE_MODULES = "node_modules"; //$NON-NLS-1$
 
