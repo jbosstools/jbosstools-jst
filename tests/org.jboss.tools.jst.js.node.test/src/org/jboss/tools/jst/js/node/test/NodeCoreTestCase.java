@@ -50,5 +50,5 @@ public class NodeCoreTestCase extends TestCase {
 		IFile nonExistingFile = WorkbenchResourceUtil.findFileRecursively(testProject, "nonExistingFile.html"); //$NON-NLS-1$
 		assertNull(nonExistingFile);
 	}
-	
+		
 }

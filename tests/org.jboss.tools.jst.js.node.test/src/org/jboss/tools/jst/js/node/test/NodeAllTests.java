@@ -18,6 +18,8 @@ import org.jboss.tools.test.util.ProjectImportTestSetup;
  * @author "Ilya Buziuk (ibuziuk)"
  */
 public class NodeAllTests {
+	
+	public static final int DEFAULT_TIMEOUT = 5000;
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite(NodeAllTests.class.getName());
