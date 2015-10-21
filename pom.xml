@@ -27,8 +27,11 @@
 			Angular is on Early Access so after fetching a new version into 
 				http://download.jboss.org/jbosstools/updates/requirements/angularjs/, 
 
-		  You MUST submit a PR to update AngularJS in the Early Access target platform, which will affect this file:
+			You MUST submit a PR to update AngularJS in the Early Access target platform, which will affect this file:
 				https://github.com/jbosstools/jbosstools-discovery/blob/master/jbtearlyaccesstarget/multiple/jbtearlyaccess-multiple.target#L10-L11 
+
+			Update MANIFEST.MF in angularjs.test:
+				https://github.com/jbosstools/jbosstools-jst/blob/master/tests/org.jboss.tools.jst.angularjs.test/META-INF/MANIFEST.MF
 
 			These files may also be affected:
 				https://github.com/jbosstools/jbosstools-download.jboss.org/tree/master/jbosstools/neon/snapshots/updates/earlyaccess.properties 
