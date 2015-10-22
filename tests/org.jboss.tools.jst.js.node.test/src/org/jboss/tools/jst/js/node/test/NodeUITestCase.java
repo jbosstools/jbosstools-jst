@@ -53,7 +53,6 @@ public class NodeUITestCase extends TestCase {
 		bot.tree().expandNode("JavaScript Tools").select("Node"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		IFolder nodeInstallationFolder = testProject.getFolder(getNodeInstallationFolder());
-		assertNotNull("Can't load JBIDE-20989 folder", nodeInstallationFolder); //$NON-NLS-1$
 		assertTrue("JBIDE-20989 folder does not exist", nodeInstallationFolder.exists()); //$NON-NLS-1$
 		
 		SWTBotText locationInput = bot.textWithLabel("Node Location"); //$NON-NLS-1$
