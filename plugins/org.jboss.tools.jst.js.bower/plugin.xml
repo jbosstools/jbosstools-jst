@@ -4,11 +4,11 @@
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
 	    <propertyTester
-	      	id="org.jboss.tools.jst.js.bower.update.tester"
+	      	id="org.jboss.tools.jst.js.bower.tester"
 	      	type="org.eclipse.core.resources.IResource"
-	      	namespace="org.jboss.tools.jst.js.bower.update"
+	      	namespace="org.jboss.tools.jst.js.bower"
 	      	properties="isBowerInit"
-	      	class="org.jboss.tools.jst.js.bower.internal.launch.tester.BowerUpdateTester">
+	      	class="org.jboss.tools.jst.js.bower.internal.launch.tester.BowerTester">
 	    </propertyTester>
    </extension>
    <extension
@@ -25,7 +25,30 @@
                     <count value="1"/>
                     <iterate>
                         <adapt  type="org.eclipse.core.resources.IResource">
-	                        <test property="org.jboss.tools.jst.js.bower.update.isBowerInit" 
+	                        <test property="org.jboss.tools.jst.js.bower.isBowerInit" 
+	                           	forcePluginActivation="true"/>
+                        </adapt> 
+                    </iterate>
+                </with>
+            </enablement>
+         </contextualLaunch>
+      </shortcut>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="org.jboss.tools.jst.js.bower.internal.launch.shortcut.BowerInstall"
+            id="org.jboss.tools.jst.js.bower.install"
+            label="Bower Install"
+            icon="icons/bower_16.png"
+            modes="run">
+        <contextualLaunch>
+            <enablement>
+                <with variable="selection">
+                    <count value="1"/>
+                    <iterate>
+                        <adapt  type="org.eclipse.core.resources.IResource">
+	                        <test property="org.jboss.tools.jst.js.bower.isBowerInit" 
 	                           	forcePluginActivation="true"/>
                         </adapt> 
                     </iterate>

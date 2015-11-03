@@ -15,8 +15,8 @@ import org.jboss.tools.jst.js.bower.BowerCommands;
 /**
  * @author "Ilya Buziuk (ibuziuk)"
  */
-public class BowerUpdate extends GenericBowerLaunch {
-	private static final String LAUNCH_NAME = "Bower Update"; //$NON-NLS-1$
+public class BowerInstall extends GenericBowerLaunch {
+	private static final String LAUNCH_NAME = "Bower Install"; //$NON-NLS-1$
 	
 	@Override
 	protected String getLaunchName() {
@@ -25,7 +25,7 @@ public class BowerUpdate extends GenericBowerLaunch {
 	
 	@Override
 	protected String getCommandName() {
-		return BowerCommands.UPDATE.getValue();
+		return BowerCommands.INSTALL.getValue();
 	}
 
 }

@@ -22,10 +22,10 @@ import org.eclipse.core.expressions.PropertyTester;
 /**
  * @author Ilya Buziuk (ibuziuk)
  */
-public final class BowerUpdateTester extends PropertyTester {
+public final class BowerTester extends PropertyTester {
 	private static final String IS_BOWER_INIT = "isBowerInit"; //$NON-NLS-1$
 
-	public BowerUpdateTester() {
+	public BowerTester() {
 	}
 
 	@Override
