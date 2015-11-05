@@ -20,7 +20,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
-import org.jboss.tools.common.util.PlatformUtil;
+import org.jboss.tools.jst.js.node.util.PlatformUtil;
 import org.jboss.tools.jst.js.node.util.WorkbenchResourceUtil;
 import org.jboss.tools.jst.js.npm.PackageJson;
 import org.jboss.tools.jst.js.npm.internal.NpmConstants;

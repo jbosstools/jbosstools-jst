@@ -11,7 +11,7 @@
 package org.jboss.tools.jst.js.npm.internal.util;
 
 import java.io.File;
-import org.jboss.tools.common.util.PlatformUtil;
+import org.jboss.tools.jst.js.node.util.PlatformUtil;
 import static org.jboss.tools.jst.js.npm.internal.NpmConstants.*;
 
 /**

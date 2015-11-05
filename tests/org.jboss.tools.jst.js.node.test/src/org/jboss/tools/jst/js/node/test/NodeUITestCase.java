@@ -18,7 +18,7 @@ import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
-import org.jboss.tools.common.util.PlatformUtil;
+import org.jboss.tools.jst.js.node.util.PlatformUtil;
 
 import junit.framework.TestCase;
 

@@ -11,8 +11,6 @@
 package org.jboss.tools.jst.js.node.util;
 
 import java.io.File;
-
-import org.jboss.tools.common.util.PlatformUtil;
 import org.jboss.tools.jst.js.node.Constants;
 import org.jboss.tools.jst.js.node.preference.NodePreferenceHolder;
 

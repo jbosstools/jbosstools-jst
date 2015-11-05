@@ -15,10 +15,10 @@ import java.io.File;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.swt.widgets.Composite;
-import org.jboss.tools.common.util.PlatformUtil;
 import org.jboss.tools.jst.js.node.Constants;
 import org.jboss.tools.jst.js.node.Messages;
 import org.jboss.tools.jst.js.node.util.NodeExternalUtil;
+import org.jboss.tools.jst.js.node.util.PlatformUtil;
 
 /**
  * @author "Ilya Buziuk (ibuziuk)"
