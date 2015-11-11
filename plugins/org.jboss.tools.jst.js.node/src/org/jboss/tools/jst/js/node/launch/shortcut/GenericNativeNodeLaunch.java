@@ -74,7 +74,7 @@ public abstract class GenericNativeNodeLaunch implements ILaunchShortcut {
 			wc.setAttribute(IExternalToolConstants.ATTR_SHOW_CONSOLE, true);
 			
 			// The argument passed to Node are: 1) executable location 2) command name i.e 1) bower 2) update 
-			wc.setAttribute(IExternalToolConstants.ATTR_TOOL_ARGUMENTS, toolExecutableLocation + " " + getCommandName()); //$NON-NLS-1$
+			wc.setAttribute(IExternalToolConstants.ATTR_TOOL_ARGUMENTS, "\"" + toolExecutableLocation +  "\" " + getCommandName()); //$NON-NLS-1$ //$NON-NLS-2$
 			cfg = wc.doSave();
 			cfg.launch(ILaunchManager.RUN_MODE, null, false, true);
 			cfg.delete();
