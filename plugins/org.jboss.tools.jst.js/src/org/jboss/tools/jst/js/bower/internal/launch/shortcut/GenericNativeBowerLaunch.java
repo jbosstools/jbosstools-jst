@@ -80,7 +80,7 @@ public abstract class GenericNativeBowerLaunch implements ILaunchShortcut {
 			wc.setAttribute(IExternalToolConstants.ATTR_WORKING_DIRECTORY, "${workspace_loc:" + workingDirectory + "}"); //$NON-NLS-1$ //$NON-NLS-2$
 			wc.setAttribute(IExternalToolConstants.ATTR_SHOW_CONSOLE, true);
 			// The argument passed to Node are: 1) bower executable location 2) bower command name ("update", "install" etc.)
-			wc.setAttribute(IExternalToolConstants.ATTR_TOOL_ARGUMENTS, bowerExecutableLocation + " " + getCommandName()); //$NON-NLS-1$
+			wc.setAttribute(IExternalToolConstants.ATTR_TOOL_ARGUMENTS, "\"" + bowerExecutableLocation + "\" " + getCommandName()); //$NON-NLS-1$ //$NON-NLS-2$
 			cfg = wc.doSave();
 			cfg.launch(ILaunchManager.RUN_MODE, null, false, true);
 			cfg.delete();
