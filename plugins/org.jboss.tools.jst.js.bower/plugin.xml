@@ -57,6 +57,52 @@
          </contextualLaunch>
       </shortcut>
    </extension>
+
+   <extension point="org.eclipse.ui.commands">
+      <command
+            name="bower update"
+            description="Bower Update"
+            categoryId="org.eclipse.debug.ui.category.run"
+            id="org.jboss.tools.jst.js.bower.command.update"
+            >
+      </command>
+      
+      <!--keyBinding
+            keySequence="M3+M2+D E"
+            contextId="org.eclipse.ui.globalScope"
+            commandId="com.example.ExampleLaunchShortcutId.debug"
+            keyConfigurationId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </keyBinding-->
+   </extension>    
+
+<extension
+ point="org.eclipse.ui.commandImages">
+ <image
+  commandId="org.jboss.tools.jst.js.bower.command.update"
+  icon="icons/bower_16.png" />
+</extension>
+
+	<extension
+		point="org.eclipse.ui.handlers">
+
+		<handler
+			commandId="org.jboss.tools.jst.js.bower.command.update"
+			class="org.jboss.tools.jst.js.bower.internal.launch.shortcut.BowerUpdateCommandHandler">		
+			<activeWhen>
+                <with variable="selection">
+                    <count value="1"/>
+                    <iterate>
+                        <adapt  type="org.eclipse.core.resources.IResource">
+	                        <test property="org.jboss.tools.jst.js.bower.isBowerInit" 
+	                           	forcePluginActivation="true"/>
+                        </adapt> 
+                    </iterate>
+                </with>
+			</activeWhen>
+		</handler>
+		
+	</extension>	
+	
    <extension
       point = "org.eclipse.ui.newWizards">
       <wizard
