@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.jboss.tools.common.model.XModel;
@@ -44,6 +45,8 @@ public class KbResourceVisitor implements IResourceVisitor {
 	IPath[] webinfs = new IPath[0];
 	IPath[] jsf2resources = new IPath[0];
 	Set<IPath> jsf2resourcesProcessed = new HashSet<IPath>();
+	
+	IProgressMonitor monitor = null;
 
 	public KbResourceVisitor(KbProject p) {
 		this.p = p;
@@ -75,6 +78,10 @@ public class KbResourceVisitor implements IResourceVisitor {
 		}
 	}
 
+	public void setProgressMonitor(IProgressMonitor monitor) {
+		this.monitor = monitor;
+	}
+
 	public IResourceVisitor getVisitor() {
 		return this;
 	}
@@ -84,6 +91,7 @@ public class KbResourceVisitor implements IResourceVisitor {
 	}
 
 	public boolean visit(IResource resource) {
+		KbBuilder.checkCanceled(monitor);
 		if(resource instanceof IFile) {
 			IFile f = (IFile)resource;
 			for (int i = 0; i < outs.length; i++) {
@@ -112,7 +120,7 @@ public class KbResourceVisitor implements IResourceVisitor {
 					break;
 				}
 			}
-			for (IPath jsf2resource: jsf2resources) {int i = 0;
+			for (IPath jsf2resource: jsf2resources) {
 				if(jsf2resource.isPrefixOf(f.getFullPath()) && jsf2scanner.isLikelyComponentSource(f)) {
 					processJSF2Resources(jsf2resource);
 					break;
@@ -164,7 +172,7 @@ public class KbResourceVisitor implements IResourceVisitor {
 		if(!jsf2resourcesFolder.exists()) {
 			return;
 		}
-		JSF2ResourcesScanner scanner = new JSF2ResourcesScanner();
+		JSF2ResourcesScanner scanner = new JSF2ResourcesScanner(monitor);
 		Map<IPath,LoadedDeclarations> result = null;
 		try {
 			result = scanner.parse((IFolder) jsf2resourcesFolder, p);

@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.common.el.core.resolver.TypeInfoCollector;
 import org.jboss.tools.common.util.TypeResolutionCache;
@@ -139,6 +140,7 @@ public class KbBuilder extends IncrementalProjectBuilder {
 			throws CoreException {
 		try {
 			PageContextFactory.getInstance().cleanUp(getProject());
+			getResourceVisitor().setProgressMonitor(monitor);
 			getProject().accept(getResourceVisitor().getVisitor());
 		} catch (CoreException e) {
 			WebModelPlugin.getPluginLog().logError(e);
@@ -149,6 +151,7 @@ public class KbBuilder extends IncrementalProjectBuilder {
 			IProgressMonitor monitor) throws CoreException {
 		PageContextFactory.getInstance().cleanUp(delta);
 		// the visitor does the work.
+		getResourceVisitor().setProgressMonitor(monitor);
 		delta.accept(new SampleDeltaVisitor());
 	}
 	
@@ -206,6 +209,7 @@ public class KbBuilder extends IncrementalProjectBuilder {
 	
 	void buildExtensionModels(int kind, Map<String,String> args, IProgressMonitor monitor) throws CoreException {
 		for (Class<?> c: getCobuilders()) {
+			checkCanceled(monitor);
 			try {
 				IncrementalProjectBuilder builder = (IncrementalProjectBuilder)c.newInstance();
 				KbProjectFactory.setProjectToBuilder(builder, getProject());
@@ -217,6 +221,12 @@ public class KbBuilder extends IncrementalProjectBuilder {
 			} catch (IllegalAccessException e) {
 				WebKbPlugin.getDefault().logError(e);
 			}
+		}
+	}
+
+	public static void checkCanceled(IProgressMonitor monitor) {
+		if (monitor != null && monitor.isCanceled()) {
+			throw new OperationCanceledException();
 		}
 	}
 }

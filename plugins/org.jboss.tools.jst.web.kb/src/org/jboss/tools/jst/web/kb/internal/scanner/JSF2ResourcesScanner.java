@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.jboss.tools.common.model.XModel;
 import org.jboss.tools.common.model.XModelException;
 import org.jboss.tools.common.model.XModelObject;
@@ -18,6 +19,7 @@ import org.jboss.tools.common.model.project.ext.IValueInfo;
 import org.jboss.tools.common.model.project.ext.impl.ValueInfo;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
 import org.jboss.tools.jst.web.kb.IKbProject;
+import org.jboss.tools.jst.web.kb.internal.KbBuilder;
 import org.jboss.tools.jst.web.kb.internal.taglib.AbstractAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.composite.CompositeAttribute;
 import org.jboss.tools.jst.web.kb.internal.taglib.composite.CompositeComponent;
@@ -33,7 +35,13 @@ public class JSF2ResourcesScanner implements IFileScanner {
 	public static String ENT_COMPOSITE_COMPONENT = "FileJSF2Component"; //$NON-NLS-1$
 	public static String ENT_COMPOSITE_COMPONENT_22 = "FileJSF2Component22"; //$NON-NLS-1$
 
+	IProgressMonitor monitor;
+
 	public JSF2ResourcesScanner() {}
+
+	public JSF2ResourcesScanner(IProgressMonitor monitor) {
+		this.monitor = monitor;
+	}
 
 	public boolean isLikelyComponentSource(IFile f) {
 		if(!f.isSynchronized(IFile.DEPTH_ZERO) || !f.exists()) return false;
@@ -87,6 +95,7 @@ public class JSF2ResourcesScanner implements IFileScanner {
 		CompositeTagLibrary library22 = null;
 		XModelObject[] cs = o.getChildren();
 		for (XModelObject c: cs) {
+			KbBuilder.checkCanceled(monitor);
 			if(c.getFileType() == XModelObject.FOLDER) {
 				String n = c.getAttributeValue(XModelObjectConstants.ATTR_NAME);
 				IPath source1 = lib ? source : source.append(n);
@@ -99,14 +108,12 @@ public class JSF2ResourcesScanner implements IFileScanner {
 					library20 = new CompositeTagLibrary();
 					library20.setId(o);
 					library20.setURI(createValueInfo(uriPrefix));
-					System.out.println("Create " + uriPrefix);
 					ds.getLibraries().add(library20);
 				} else if(is22 && library22 == null) {
 					library22 = new CompositeTagLibrary();
 					library22.setId(o);
 					String uri = uriPrefix;
 					uri = URI_PREFIX_22 + uri.substring(URI_PREFIX.length());
-					System.out.println("Create " + uri);
 					library22.setURI(createValueInfo(uri));
 					ds.getLibraries().add(library22);
 				}
