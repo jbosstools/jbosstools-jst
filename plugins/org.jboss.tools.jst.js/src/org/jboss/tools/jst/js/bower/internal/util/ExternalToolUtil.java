@@ -34,12 +34,21 @@ public final class ExternalToolUtil {
 		String nodeExecutableLocation = null;
 		String nodeExecutableName = getNodeExecutableName();
 		File nodeExecutable = new File(BowerPreferenceHolder.getNodeLocation(), nodeExecutableName);
+		
 		if (nodeExecutable.exists()) {
 			nodeExecutableLocation = nodeExecutable.getAbsolutePath();
-		} else if (PlatformUtil.isLinux()) {
+		} else if (!PlatformUtil.isMacOS()) {
+			
 			// JBIDE-20351 Bower tooling doesn't detect node when the binary is called 'nodejs'
 			// If "nodejs" is not detected try to detect "node"
-			nodeExecutableName = BowerConstants.NODE; 
+			if (PlatformUtil.isLinux()) {
+				nodeExecutableName = BowerConstants.NODE;
+				
+			//JBIDE-20988 Preference validation fails on windows if node executable called node64.exe
+			} else if (PlatformUtil.isWindows()) {
+				nodeExecutableName = BowerConstants.NODE_64_EXE;
+			}
+			
 			nodeExecutable = new File(BowerPreferenceHolder.getNodeLocation(), nodeExecutableName);
 			if (nodeExecutable.exists()) {
 				nodeExecutableLocation = nodeExecutable.getAbsolutePath();
