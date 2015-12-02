@@ -51,13 +51,21 @@ public class NodeHomeFieldEditor extends DirectoryFieldEditor {
 		File nodeExecutable = new File(selectedFile, nodeExecutableName);
 		if (!nodeExecutable.exists()) {
 			
-			if (!PlatformUtil.isLinux()) {
+			if (PlatformUtil.isMacOS()) {
 				setErrorMessage(Messages.BowerPreferencePage_NotValidNodeError);
-				return false;				
-			} 
+				return false;
+			}
+			
 			// JBIDE-20351 Bower tooling doesn't detect node when the binary is called 'nodejs'
 			// If "nodejs" is not detected try to detect "node"
-			nodeExecutableName = BowerConstants.NODE;
+			if (PlatformUtil.isLinux()) {
+				nodeExecutableName = BowerConstants.NODE;
+			
+			//JBIDE-20988 Preference validation fails on windows if node executable called node64.exe
+			} else if (PlatformUtil.isWindows()) {
+				nodeExecutableName = BowerConstants.NODE_64_EXE;
+			}
+			
 			nodeExecutable = new File(selectedFile, nodeExecutableName);
 			if (!nodeExecutable.exists()) {
 				setErrorMessage(Messages.BowerPreferencePage_NotValidNodeError);

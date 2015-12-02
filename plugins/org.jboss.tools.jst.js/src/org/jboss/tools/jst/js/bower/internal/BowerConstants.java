@@ -25,6 +25,7 @@ public final class BowerConstants {
 	public static final String BOWER_COMPONENTS = "bower_components"; //$NON-NLS-1$
 	public static final String BOWER_JSON = "bower.json"; //$NON-NLS-1$
 	public static final String NODE = "node"; //$NON-NLS-1$
+	public static final String NODE_64_EXE = "node64.exe"; //$NON-NLS-1$
 	public static final String NODE_EXE = "node.exe"; //$NON-NLS-1$
 	public static final String NODE_JS = "nodejs"; //$NON-NLS-1$
 	public static final String NODE_MODULES = "node_modules"; //$NON-NLS-1$
