@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.js.bower.internal.launch.shortcut;
 
 import org.eclipse.core.externaltools.internal.IExternalToolConstants;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -26,7 +27,10 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ide.ResourceUtil;
+import org.jboss.tools.jst.js.bower.internal.BowerConstants;
 import org.jboss.tools.jst.js.bower.internal.ui.ExceptionNotifier;
 import org.jboss.tools.jst.js.bower.internal.util.ExternalToolUtil;
 import org.jboss.tools.jst.js.internal.Activator;
@@ -44,29 +48,42 @@ public abstract class GenericNativeBowerLaunch implements ILaunchShortcut {
 	@Override
 	public void launch(ISelection selection, String mode) {
 		if (selection instanceof IStructuredSelection) {
-			 Object element = ((IStructuredSelection)selection).getFirstElement();
-			 if (element != null && element instanceof IResource) {
+			Object element = ((IStructuredSelection) selection).getFirstElement();
+			if (element instanceof IResource) {
 				try {
 					IResource selectedResource = (IResource) element;
-					String nodeLocation = ExternalToolUtil.getNodeExecutableLocation();
-					String bowerLocation = ExternalToolUtil.getBowerExecutableLocation();
-					if (nodeLocation == null || nodeLocation.isEmpty()) {
-						ExceptionNotifier.nodeLocationNotDefined();
-					} else if (bowerLocation == null || bowerLocation.isEmpty()) {
-						ExceptionNotifier.bowerLocationNotDefined();
-					} else {
-						this.workingProject = selectedResource.getProject();
-						execute(getWorkingDirectory(selectedResource), nodeLocation, bowerLocation);						
-					}
+					launchBower(selectedResource);
 				} catch (CoreException e) {
 					Activator.logError(e);
 				}
-			 }
+			}
 		}
 	}
 
 	@Override
-	public void launch(IEditorPart editor, String mode) {			
+	public void launch(IEditorPart editor, String mode) {
+		IEditorInput editorInput = editor.getEditorInput();
+		IFile file = ResourceUtil.getFile(editorInput);
+		if (file != null && file.exists() && BowerConstants.BOWER_JSON.equals(file.getName())) {
+			try {
+				launchBower(file);
+			} catch (CoreException e) {
+				Activator.logError(e);
+			}
+		}
+	}
+	
+	private void launchBower(IResource resource) throws CoreException {
+		String nodeLocation = ExternalToolUtil.getNodeExecutableLocation();
+		String bowerLocation = ExternalToolUtil.getBowerExecutableLocation();
+		if (nodeLocation == null || nodeLocation.isEmpty()) {
+			ExceptionNotifier.nodeLocationNotDefined();
+		} else if (bowerLocation == null || bowerLocation.isEmpty()) {
+			ExceptionNotifier.bowerLocationNotDefined();
+		} else {
+			this.workingProject = resource.getProject();
+			execute(getWorkingDirectory(resource), nodeLocation, bowerLocation);
+		}
 	}
 	
 	protected void execute(String workingDirectory, String nodeExecutableLocation, String bowerExecutableLocation) {
