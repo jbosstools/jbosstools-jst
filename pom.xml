@@ -20,12 +20,12 @@
 			https://github.com/jbdevstudio/jbdevstudio-website/blob/master/content/9.0/snapshots/updates/earlyaccess.properties/master/devstudio-earlyaccess.properties
 		
 		-->
-		<tern.version>1.0.0.201508302102</tern.version>
+		<tern.version>1.1.0.201511082254</tern.version>
 		<tern.repo.url>${tern.reqs.url}/${tern.version}/</tern.repo.url>
 
 		<!-- 
 			Angular is on Early Access so after fetching a new version into 
-				http://download.jboss.org/jbosstools/updates/requirements/angularjs/, 
+				http://download.jboss.org/jbosstools/updates/requirements/angularjs/1.1.0.201511091212, 
 
 			You MUST submit a PR to update AngularJS in the Early Access target platform, which will affect this file:
 				https://github.com/jbosstools/jbosstools-discovery/blob/master/jbtearlyaccesstarget/multiple/jbtearlyaccess-multiple.target#L10-L11 
