@@ -35,12 +35,23 @@ import tern.eclipse.ide.ui.contentassist.JSTernCompletionProposal;
 public class JstJsdtTernCATest extends ContentAssistantTestCase {
 	private static final String PROJECT_NAME = "JavaScriptProject"; //$NON-NLS-1$
 	private static final String PAGE_NAME = "WebContent/index.html"; //$NON-NLS-1$
-	private static final String ECMA5_PREFIX_STRING = "Boolean"; //$NON-NLS-1$
+	private static final String ECMA6_PREFIX_STRING = 
+			"// Test Script"; //$NON-NLS-1$
+	private static final String[] ECMA6_PROPOSAL_STRINGS = {
+		"Array : Array - ecma6",  //$NON-NLS-1$
+		"ArrayBuffer : fn - ecma6",  //$NON-NLS-1$
+		"ArrayBuffer(length) - ecma6"  //$NON-NLS-1$
+		
+	};
+
+	private static final String ECMA5_PREFIX_STRING = 
+			"// Test Script"; //$NON-NLS-1$
 	private static final String[] ECMA5_PROPOSAL_STRINGS = {
 		"Boolean : fn - ecma5",  //$NON-NLS-1$
 		"Boolean(value) : bool - ecma5"  //$NON-NLS-1$
 	};
-	private static final String BROWSER_PREFIX_STRING = "CanvasRenderingContext2D"; //$NON-NLS-1$
+	private static final String BROWSER_PREFIX_STRING =
+		"// Test Script"; //$NON-NLS-1$ 
 	private static final String[] BROWSER_PROPOSAL_STRINGS = {
 		"CanvasRenderingContext2D : CanvasRenderingContext2D - browser" //$NON-NLS-1$
 	};
@@ -61,6 +72,10 @@ public class JstJsdtTernCATest extends ContentAssistantTestCase {
 		doJstJsdtTernCATest(PAGE_NAME, ECMA5_PREFIX_STRING, ECMA5_PROPOSAL_STRINGS);
 	}
 
+	public void testJstJsdtTernCAOnEcma6() {
+		doJstJsdtTernCATest(PAGE_NAME, ECMA6_PREFIX_STRING, ECMA6_PROPOSAL_STRINGS);
+	}
+
 	public void testJstJsdtTernCAOnBrowser() {
 		doJstJsdtTernCATest(PAGE_NAME, BROWSER_PREFIX_STRING, BROWSER_PROPOSAL_STRINGS);
 	}
@@ -70,12 +85,22 @@ public class JstJsdtTernCATest extends ContentAssistantTestCase {
 		try {		
 			String documentContent = document.get();
 			int start = (documentContent == null ? -1 : documentContent.indexOf(prefix)); //$NON-NLS-1$
-			int offsetToTest = start + prefix.length();
+			int offsetToTest = start;// + prefix.length();
 			
 			assertTrue("Cannot find the starting point in the test file  \"" + pageName + "\"", (start != -1)); //$NON-NLS-1$ //$NON-NLS-2$
 
 			List<ICompletionProposal> res = CATestUtil.collectProposals(contentAssistant, viewer, offsetToTest);
-	
+/*
+			if (res != null) {
+				int i = 0;
+				System.out.println("For prefix: " + prefix);
+				for (ICompletionProposal p : res) {
+					JSTernCompletionProposal proposal = (JSTernCompletionProposal)p;
+					String proposalString = proposal.getDisplayString();
+					System.out.println("#" + (i++) + ": " + proposalString);
+				}
+			}
+*/
 			assertTrue("Content Assistant returned no proposals", (res != null && res.size() > 0)); //$NON-NLS-1$
 			
 			Set<String> vals = new HashSet<String>();
