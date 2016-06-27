@@ -200,7 +200,7 @@ public class SelectionBar extends Composite {
 				/*
 				 * Hide the selection bar
 				 */
-				setVisible(false);
+				setRealBarVisible(false);
 				if(toggleSelBarState != null) toggleSelBarState.setValue(false);
 				WebUiPlugin.getDefault().getPreferenceStore().
 					setValue(IVpePreferencesPage.SHOW_SELECTION_TAG_BAR, false);
@@ -232,27 +232,23 @@ public class SelectionBar extends Composite {
 
 		return splitter;
 	}
-
-	/**
-	 * Sets {@code visible} state to this {@code SelectionBar} and fires
-	 * all registered {@code VisibilityListener}s.
-	 */
-	@Override
-	public void setVisible(boolean visible) {
+	
+	
+	public void setRealBarVisible(boolean visible){
 		if (visible != isBarVisible) {
 			isBarVisible = visible;
 			showOneOfRealOrEmptyBar(visible);
 		}
 	}
+	
+	public boolean isRealBarVisible(){
+		return isBarVisible;
+	}
 
 	private void showOneOfRealOrEmptyBar(boolean realBarIsVisible) {
-		if (realBarIsVisible) {
-			splitter.setVisible(realBar, true);
-			splitter.setVisible(emptyBar, false);
-		} else {
-			splitter.setVisible(realBar, false);
-			splitter.setVisible(emptyBar, true);
-		}
+		splitter.setVisible(realBar, realBarIsVisible);
+		splitter.setVisible(emptyBar, !realBarIsVisible);
+		
 		/* JBIDE-7387:
 		 * By default toolbar size is set to fit regular button ToolItems.
 		 * But drop-down items are a little bigger and do not
@@ -274,7 +270,7 @@ public class SelectionBar extends Composite {
 				visible = false;
 			}
 		}
-		setVisible(visible);
+		setRealBarVisible(visible);
 	}
 
 

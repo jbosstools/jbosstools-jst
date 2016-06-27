@@ -84,7 +84,7 @@ public class SelectionBarHandler extends AbstractHandler implements IElementUpda
 		 */
 		IEditorPart activeEditor = HandlerUtil.getActiveEditorChecked(event);
 		if(activeEditor instanceof JSPMultiPageEditor) {
-			((JSPMultiPageEditor) activeEditor).getSelectionBar().setVisible(visible);
+			((JSPMultiPageEditor) activeEditor).getSelectionBar().setRealBarVisible(visible);
 		}
 		return null;
 	}
