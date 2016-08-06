@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009 Red Hat, Inc. 
+ * Copyright (c) 2009-2016 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -13,6 +13,7 @@ package org.jboss.tools.jst.web.kb;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.internal.events.InternalBuilder;
 import org.eclipse.core.internal.resources.BuildConfiguration;
@@ -33,6 +34,7 @@ import org.jboss.tools.jst.web.kb.internal.KbBuilder;
 import org.jboss.tools.jst.web.kb.internal.KbProject;
 
 public class KbProjectFactory {
+	private static Set<String> accessedProjects = new HashSet<String>();
 
 	public static IKbProject getKbProject(IProject project, boolean resolve) {
 		return getKbProject(project, resolve, false);
@@ -69,12 +71,22 @@ public class KbProjectFactory {
 		IKbProject kbProject;
 			try {
 				kbProject = (IKbProject)project.getNature(IKbProject.NATURE_ID);
+				accessedProjects.add(project.getName());
 				if(resolve) kbProject.resolve();
 				return kbProject;
 			} catch (CoreException e) {
 				WebModelPlugin.getPluginLog().logError(e);
 			}
 		return null;
+	}
+
+	/**
+	 * Returns true if project has KbNature and it was created by getKbProject() method.
+	 * @param project
+	 * @return
+	 */
+	public static boolean isKbProjectAccessed(IProject project) {
+		return accessedProjects.contains(project.getName());
 	}
 
 	public static QualifiedName NATURE_MOCK = new QualifiedName("", IKbProject.NATURE_ID + ".mock");

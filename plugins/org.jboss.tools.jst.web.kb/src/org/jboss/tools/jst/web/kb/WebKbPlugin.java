@@ -1,5 +1,5 @@
 /******************************************************************************* 
- * Copyright (c) 2009-2014 Red Hat, Inc. 
+ * Copyright (c) 2009-2016 Red Hat, Inc. 
  * Distributed under license by Red Hat, Inc. All rights reserved. 
  * This program is made available under the terms of the 
  * Eclipse Public License v1.0 which accompanies this distribution, 
@@ -76,6 +76,9 @@ public class WebKbPlugin extends BaseUIPlugin {
 					case ISaveContext.FULL_SAVE:
 						IProject[] ps = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 						for (IProject p: ps) {
+							if(!KbProjectFactory.isKbProjectAccessed(p)) {
+								continue;
+							}
 							KbProject sp = (KbProject)KbProjectFactory.getKbProject(p, false, true);
 							if(sp != null && sp.getModificationsSinceLastStore() > 0) {
 //								sp.printModifications();
