@@ -202,6 +202,9 @@ public class KbProject extends KbObject implements IKbProject {
 		classPath.init();
 	}
 
+	public boolean exists() {
+		return project != null && project.isAccessible();
+	}
 	/**
 	 * 
 	 * @param p
