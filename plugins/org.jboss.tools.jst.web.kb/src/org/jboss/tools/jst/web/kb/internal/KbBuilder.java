@@ -92,7 +92,9 @@ public class KbBuilder extends IncrementalProjectBuilder {
 		if(sp == null) {
 			return null; 
 		}
-		
+
+		try {
+
 		long begin = System.currentTimeMillis();
 		
 		sp.postponeFiring();
@@ -132,6 +134,13 @@ public class KbBuilder extends IncrementalProjectBuilder {
 		resourceVisitor = null;
 	
 		buildExtensionModels(kind, args, monitor);
+
+		} catch (CoreException e) {
+			//if the project was removed while build was going, ignore errors which were caused by unavailable resources.
+			if(sp.exists()) {
+				throw e;
+			}
+		}
 
 		return null;
 	}
