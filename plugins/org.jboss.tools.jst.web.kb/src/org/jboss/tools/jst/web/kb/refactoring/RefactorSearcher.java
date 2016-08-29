@@ -117,6 +117,8 @@ public abstract class RefactorSearcher {
 			return;
 		}
 		updateEnvironment(project);
+		
+		List<IFile> outOfSync = new ArrayList<IFile>();
 
 		IJavaProject javaProject = EclipseUtil.getJavaProject(project);
 		
@@ -124,29 +126,24 @@ public abstract class RefactorSearcher {
 		if(javaProject != null) {
 			for(IResource resource : EclipseUtil.getJavaSourceRoots(project)){
 				if(resource instanceof IFolder)
-					if(!scan(monitor, (IFolder) resource, true)){
-						outOfSynch(resource);
-						return;
-					}
+					scan(monitor, (IFolder) resource, true, outOfSync);
 				else if(resource instanceof IFile)
-					if(!scan(monitor, (IFile) resource, true)){
-						outOfSynch(resource);
-						return;
-					}
+					scan(monitor, (IFile) resource, true, outOfSync);
 			}
 		}
 		
 		// searching jsp, xhtml and xml files in WebContent folders
 		
 		if(getViewFolder(project) != null){
-			if(!scan(monitor, getViewFolder(project), false)){
-				outOfSynch(project);
-				return;
-			}
-		}else{
-			if(!scan(monitor, project, false)){
-				outOfSynch(project);
-				return;
+			scan(monitor, getViewFolder(project), false, outOfSync);
+		} else {
+			scan(monitor, project, false, outOfSync);
+		}
+		if(!outOfSync.isEmpty()) {
+			if(outOfSync.size() < 5) {
+				for (IFile f: outOfSync) outOfSynch(f);
+			} else {
+				outOfSynch(outOfSync.get(0).getProject());
 			}
 		}
 	}
@@ -183,7 +180,7 @@ public abstract class RefactorSearcher {
 		return null;
 	}
 	
-	private boolean scan(IProgressMonitor monitor, IContainer container, boolean addJava) {
+	private boolean scan(IProgressMonitor monitor, IContainer container, boolean addJava, List<IFile> outOfSync) {
 		if(monitor != null && monitor.isCanceled()) {
 			return true;
 		}
@@ -199,11 +196,9 @@ public abstract class RefactorSearcher {
 		try{
 			for(IResource resource : container.members()){
 				if(resource instanceof IFolder){
-					if(!scan(monitor, (IFolder) resource, addJava))
-						return false;
-				}else if(resource instanceof IFile){
-					if(!scan(monitor, (IFile) resource, addJava))
-						return false;
+					scan(monitor, (IFolder) resource, addJava, outOfSync);
+				} else if(resource instanceof IFile){
+					scan(monitor, (IFile) resource, addJava, outOfSync);
 				}
 			}
 		}catch(CoreException ex){
@@ -229,12 +224,9 @@ public abstract class RefactorSearcher {
 	 * true - in order to continue searching
 	 * false - in order to stop searching
 	 */
-	private boolean scan(IProgressMonitor monitor, IFile file, boolean addJava){
+	private boolean scan(IProgressMonitor monitor, IFile file, boolean addJava, List<IFile> outOfSync){
 		if(isFilePhantom(file))
 			return true;
-		
-		if(isFileOutOfSynch(file))
-			return false;
 		
 		if(timeUsed > timeLimit) {
 			return true;
@@ -243,6 +235,8 @@ public abstract class RefactorSearcher {
 		if(monitor != null && monitor.isCanceled()) {
 			return true;
 		}
+		
+		boolean isOutOfSync = isFileOutOfSynch(file);
 
 		if(addJava && PROPERTIES_EXT.equalsIgnoreCase(file.getFileExtension())){
 			if(file.getName().equals(SEAM_PROPERTIES_FILE)){
@@ -250,8 +244,12 @@ public abstract class RefactorSearcher {
 				scanProperties(file, content);
 			} else {
 				long t = System.currentTimeMillis();
-				searchInCach(file);
+				boolean result = searchInCach(file, isOutOfSync);
 				timeUsed += System.currentTimeMillis() - t;
+				if(isOutOfSync && !result) {
+					outOfSync.add(file);
+//					return false;
+				}
 			}
 		} else if ((addJava && JAVA_EXT.equalsIgnoreCase(file.getFileExtension()))
 				|| JSP_EXT.equalsIgnoreCase(file.getFileExtension())
@@ -259,13 +257,17 @@ public abstract class RefactorSearcher {
 				|| XHTML_EXT.equalsIgnoreCase(file.getFileExtension())
 				|| XML_EXT.equalsIgnoreCase(file.getFileExtension())) {
 			long t = System.currentTimeMillis();
-			searchInCach(file);
+			boolean result = searchInCach(file, isOutOfSync);
 			timeUsed += System.currentTimeMillis() - t;
+			if(isOutOfSync && !result) {
+				outOfSync.add(file);
+//				return false;
+			}
 		}
 		return true;
 	}
 
-	private void resolveByResolvers(ELExpression operand, ELResolver[] resolvers, ELContext context, IRelevanceCheck[] checks, int offset, List<MatchArea> areas, IFile file){
+	private boolean resolveByResolvers(ELExpression operand, boolean isOutOfSync, ELResolver[] resolvers, ELContext context, IRelevanceCheck[] checks, int offset, List<MatchArea> areas, IFile file){
 		for (int i = 0; i < resolvers.length; i++) {
 			ELResolver resolver = resolvers[i];
 			if (!checks[i].isRelevant(operand.getText())) 
@@ -275,6 +277,9 @@ public abstract class RefactorSearcher {
 			
 			if(resolution != null) {
 				List<ELSegment> segments = resolution.findSegmentsByJavaElement(javaElement);
+				if(isOutOfSync && !segments.isEmpty()) {
+					return false;
+				}
 				for(ELSegment segment : segments){
 					int o = offset+segment.getSourceReference().getStartPosition();
 					int l = segment.getSourceReference().getLength();
@@ -286,18 +291,19 @@ public abstract class RefactorSearcher {
 				}
 			}
 		}
+		return true;
 	}
 	
-	protected void searchInCach(IFile file){
+	protected boolean searchInCach(IFile file, boolean isOutOfSync){
 		if(file == null || !file.isAccessible() || file.isDerived(IResource.CHECK_ANCESTORS)) {
-			return;
+			return true;
 		}
 		ELResolver[] resolvers = ELResolverFactoryManager.getInstance().getResolvers(file);
 		
 		ELContext context = PageContextFactory.createPageContext(file);
 		
 		if(context == null)
-			return;
+			return true;
 		
 		ELReference[] references = context.getELReferences();
 
@@ -308,11 +314,12 @@ public abstract class RefactorSearcher {
 			for(ELReference reference : references){
 				int offset = reference.getStartPosition();
 				for(ELExpression operand : reference.getEl()){
-					resolveByResolvers(operand, resolvers, context, checks, offset, areas, file);
-					
+					boolean result = resolveByResolvers(operand, isOutOfSync, resolvers, context, checks, offset, areas, file);
+					if(!result) return false;
 					for(ELObject child : operand.getChildren()){
 						if(child instanceof ELExpression){
-							resolveByResolvers((ELExpression)child, resolvers, context, checks, offset, areas, file);
+							result = resolveByResolvers((ELExpression)child, isOutOfSync, resolvers, context, checks, offset, areas, file);
+							if(!result) return false;
 						}
 					}
 				}
@@ -325,20 +332,23 @@ public abstract class RefactorSearcher {
 					if(operand instanceof ELInvocationExpression){
 						ELInvocationExpression expression = findComponentReference((ELInvocationExpression)operand);
 						if(expression != null){
-							checkMatch(file, expression, offset+getOffset(expression), getLength(expression));
+							boolean result = checkMatch(file, isOutOfSync, expression, offset+getOffset(expression), getLength(expression));
+							if(!result) return false;
 						}
 					}
 					for(ELObject child : operand.getChildren()){
 						if(child instanceof ELInvocationExpression){
 							ELInvocationExpression expression = findComponentReference((ELInvocationExpression)child);
 							if(expression != null){
-								checkMatch(file, expression, offset+getOffset(expression), getLength(expression));
+								boolean result = checkMatch(file, isOutOfSync, expression, offset+getOffset(expression), getLength(expression));
+								if(!result) return false;
 							}
 						}
 					}
 				}
 			}
 		}
+		return true;
 	}
 	
 	class MatchArea{
@@ -454,11 +464,15 @@ public abstract class RefactorSearcher {
 	
 	protected abstract void match(IFile file, int offset, int length);
 	
-	protected void checkMatch(IFile file, ELExpression operand, int offset, int length){
-		if(javaElement != null && operand != null)
-			resolve(file, operand, offset-getOffset((ELInvocationExpression)operand));
-		else
+	protected boolean checkMatch(IFile file, boolean isOutOfSync, ELExpression operand, int offset, int length){
+		if(javaElement != null && operand != null) {
+			return resolve(file, isOutOfSync, operand, offset-getOffset((ELInvocationExpression)operand));
+		} else if(isOutOfSync) {
+			return false;
+		} else {
 			match(file, offset, length);
+			return true;
+		}
 	}
 	
 	public static String getPropertyName(IMethod method, String methodName){
@@ -491,7 +505,7 @@ public abstract class RefactorSearcher {
 		return false;
 	}
 
-	protected void resolve(IFile file, ELExpression operand, int offset) {
+	protected boolean resolve(IFile file, boolean isOutOfSync, ELExpression operand, int offset) {
 		ELResolver[] resolvers = ELResolverFactoryManager.getInstance()
 				.getResolvers(file);
 
@@ -509,12 +523,15 @@ public abstract class RefactorSearcher {
 			ELResolution resolution = resolver.resolve(context, operand, offset);
 			if(resolution!=null) {
 				List<ELSegment> segments = resolution.findSegmentsByJavaElement(javaElement);
-				
-				for(ELSegment segment : segments){
+				if(isOutOfSync && !segments.isEmpty()) {
+					return false;
+				}
+				for(ELSegment segment : segments) {
 					match(file, offset+segment.getSourceReference().getStartPosition(), segment.getSourceReference().getLength());
 				}
 			}
 		}
+		return true;
 	}
 	// performance measure 
 //	private int totalSize = 0;
