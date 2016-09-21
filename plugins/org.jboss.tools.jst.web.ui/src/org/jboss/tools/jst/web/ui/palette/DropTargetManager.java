@@ -37,7 +37,6 @@ import org.jboss.tools.common.model.project.IModelNature;
 import org.jboss.tools.common.model.ui.dnd.DnDUtil;
 import org.jboss.tools.common.model.ui.dnd.ModelTransfer;
 import org.jboss.tools.common.model.util.EclipseResourceUtil;
-import org.jboss.tools.common.reporting.ProblemReportingHelper;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
 import org.jboss.tools.jst.web.ui.palette.model.IPaletteModel;
 import org.jboss.tools.jst.web.ui.palette.model.PaletteModel;
@@ -133,7 +132,7 @@ public class DropTargetManager extends DropTargetAdapter {
 			} catch (ActionDeclinedException de) {
 				//ignore
 			} catch (XModelException e) {
-				message(e);
+				WebUiPlugin.getDefault().logError(e);
 			}
 		} else {
 			event.detail = DND.DROP_NONE;
@@ -151,10 +150,6 @@ public class DropTargetManager extends DropTargetAdapter {
 			} 
 		}
 		return null;
-	}
-
-	private void message(Exception e) {
-		ProblemReportingHelper.reportProblem(WebUiPlugin.PLUGIN_ID, e);
 	}
 
 	private File getFile(DropTargetEvent event) {
