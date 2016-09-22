@@ -27,8 +27,6 @@ import org.jboss.tools.common.model.XModelObject;
 import org.jboss.tools.common.model.event.ActionDeclinedException;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.common.model.ui.dnd.DnDUtil;
-import org.jboss.tools.common.reporting.ProblemReportingHelper;
-import org.jboss.tools.jst.web.ui.WebUiPlugin;
 
 public class XDropAdapterAssistant extends CommonDropAdapterAssistant {
 
@@ -52,7 +50,7 @@ public class XDropAdapterAssistant extends CommonDropAdapterAssistant {
 			} catch (ActionDeclinedException de) {
 				return null;
 			} catch (XModelException e) {
-				ProblemReportingHelper.reportProblem(ModelUIPlugin.PLUGIN_ID, e);
+				ModelUIPlugin.getDefault().logError(e);
 			}
 		}
 		return null;

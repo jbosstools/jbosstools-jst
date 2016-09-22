@@ -25,8 +25,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.actions.WorkspaceModifyDelegatingOperation;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
-
-import org.jboss.tools.common.reporting.ProblemReportingHelper;
 import org.jboss.tools.common.meta.key.WizardKeys;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.jst.web.context.ImportWebWarContext;

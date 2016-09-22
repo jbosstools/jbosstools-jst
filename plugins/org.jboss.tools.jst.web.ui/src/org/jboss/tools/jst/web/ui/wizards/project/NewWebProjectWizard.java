@@ -11,6 +11,7 @@
 package org.jboss.tools.jst.web.ui.wizards.project;
 
 import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -25,7 +26,6 @@ import org.eclipse.ui.actions.WorkspaceModifyDelegatingOperation;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.jboss.tools.common.meta.key.WizardKeys;
-import org.jboss.tools.common.reporting.ProblemReportingHelper;
 import org.jboss.tools.common.model.ui.ModelUIPlugin;
 import org.jboss.tools.jst.web.project.helpers.NewWebProjectContext;
 import org.jboss.tools.jst.web.ui.WebUiPlugin;
@@ -84,13 +84,11 @@ public abstract class NewWebProjectWizard extends Wizard implements INewWizard, 
 			WebUiPlugin.getPluginLog().logError(e);
 			String message = WizardKeys.getString(CANNOT_CREATE_LOCATION + ".ErrorMessage") + ": " + context.getLocationPath(); //$NON-NLS-1$ //$NON-NLS-2$
 			Status status = new Status(IStatus.ERROR, "org.jboss.tools.jst.web.ui", 0, message, e); //$NON-NLS-1$
-			ProblemReportingHelper.reportProblem(status);
 			result = false;
 		} catch (InterruptedException e) {
 			WebUiPlugin.getPluginLog().logError(e);
 			String message = WizardKeys.getString(CANNOT_CREATE_LOCATION+".ErrorMessage")+": "+context.getLocationPath(); //$NON-NLS-1$ //$NON-NLS-2$
 			Status status = new Status(IStatus.ERROR, "org.jboss.tools.jst.web.ui", 0, message, e); //$NON-NLS-1$
-			ProblemReportingHelper.reportProblem(status);
 			result = false;
 		} 
 		return result;
