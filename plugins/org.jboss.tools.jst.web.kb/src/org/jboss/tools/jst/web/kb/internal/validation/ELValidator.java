@@ -1,5 +1,5 @@
  /*******************************************************************************
-  * Copyright (c) 2007-2012 Red Hat, Inc.
+  * Copyright (c) 2007-2016 Red Hat, Inc.
   * Distributed under license by Red Hat, Inc. All rights reserved.
   * This program is made available under the terms of the
   * Eclipse Public License v1.0 which accompanies this distribution,
@@ -509,7 +509,9 @@ public class ELValidator extends WebValidator implements IStringValidator {
 		LexicalToken token = segment.getToken();
 		if(token==null) {
 			WebKbPlugin.getDefault().logError("The token from unresolved segment is null. EL: [" + operand + "]");
+			return;
 		}
+		
 		varName = token.getText();
 		if(varName == null) {
 			//This is syntax error case. Reported by parser.
