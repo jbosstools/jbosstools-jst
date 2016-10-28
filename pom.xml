@@ -42,8 +42,6 @@
 				https://github.com/jbosstools/jbosstools-devdoc/blob/master/building/target_platforms/target_platforms_dependency_mirrors.adoc and 
 				https://github.com/jbosstools/jbosstools-devdoc/blob/master/building/target_platforms/target_platforms_updates.adoc
 		-->
-		<central.tpc.version>4.60.0.Final-SNAPSHOT</central.tpc.version>
-		<angularjs.repo.url>http://download.jboss.org/jbosstools/targetplatforms/jbtearlyaccesstarget/${central.tpc.version}/REPO/</angularjs.repo.url>
 	</properties>
 	<modules>
 		<module>plugins</module>
@@ -65,7 +63,7 @@
 		<repository>
 			<id>eclipse-angularjs</id>
 			<layout>p2</layout>
-			<url>${angularjs.repo.url}</url>
+			<url>http://download.jboss.org/jbosstools/targetplatforms/jbtearlyaccesstarget/${TARGET_PLATFORM_CENTRAL_MAX}/REPO/</url>
 		</repository>
 		<!-- To resolve parent artifact -->
 		<repository>
