@@ -22,7 +22,7 @@
 		-->
 		<!-- <tern.version>1.1.0.201511082254</tern.version>
 		<tern.repo.url>${tern.reqs.url}/${tern.version}/</tern.repo.url> -->
-		<tern.repo.url>http://download.jboss.org/jbosstools/neon/snapshots/builds/tern.java-1.1.x/2016-10-28_15-14-41-B1/all/repo/</tern.repo.url>
+		<tern.repo.url>http://download.jboss.org/jbosstools/updates/requirements/tern/1.2.1.201611022209/</tern.repo.url>
 
 		<!-- 
 			Angular is on Early Access so after fetching a new version into 
