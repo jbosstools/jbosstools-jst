@@ -74,6 +74,15 @@ public class HTMLTextViewerConfiguration extends
 		super();
 	}
 
+	@Override
+	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
+		String[] contentTypes = super.getConfiguredContentTypes(sourceViewer);
+		String[] result = new String[contentTypes.length + 1];
+		System.arraycopy(contentTypes, 0, result, 0, contentTypes.length);
+		result[contentTypes.length] = "org.eclipse.angularjs.ANGULAR_DEFAULT";
+		return result;
+	}
+
 	protected IContentAssistProcessor[] getContentAssistProcessors(
 			ISourceViewer sourceViewer, String partitionType) {
 		return new IContentAssistProcessor[] { 
