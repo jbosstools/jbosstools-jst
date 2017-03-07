@@ -27,16 +27,21 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 				<version>${tychoVersion}</version>
 				<configuration>
 					<product>org.jboss.tools.tests.application</product>
+					<includes>
+						<include>**/AllTests.class</include>
+						<include>**/*AllTests*.class</include>
+						<include>**/*AllBotTests*.class</include>
+						<include>**/*TestSuite*.class</include>
+					</includes>
 					<dependencies>
-                                                <dependency>
-                                                        <type>eclipse-plugin</type>
-                                                        <artifactId>org.eclipse.equinox.event</artifactId>
-                                                        <version>0.0.0</version>
-                                                </dependency>
-                                        </dependencies>
+						<dependency>
+							<type>eclipse-plugin</type>
+							<artifactId>org.eclipse.equinox.event</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+					</dependencies>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 </project>
-	
