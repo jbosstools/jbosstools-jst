@@ -2,7 +2,7 @@
 <feature
       id="org.jboss.tools.jst.jsdt.feature"
       label="%featureName"
-      version="3.9.100.qualifier"
+      version="3.9.101.qualifier"
       provider-name="%providerName"
       plugin="org.jboss.tools.jst.jsdt"
       license-feature="org.jboss.tools.foundation.license.feature"

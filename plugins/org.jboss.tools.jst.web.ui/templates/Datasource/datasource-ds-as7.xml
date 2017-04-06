@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<datasources xmlns="http://www.jboss.org/ironjacamar/schema">
+<datasources xmlns="http://www.ironjacamar.org/doc/schema">
  <datasource jndi-name="java:jboss/datasources/@datasourcename@" enabled="true" 
      use-java-context="true" pool-name="@datasourcename@">
   <connection-url>@jdbcUrl@</connection-url>
