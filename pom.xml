@@ -20,9 +20,7 @@
 			https://github.com/jbdevstudio/jbdevstudio-website/blob/master/content/10.0/snapshots/updates/earlyaccess.properties/master/devstudio-earlyaccess.properties
 		
 		-->
-		<!-- <tern.version>1.1.0.201511082254</tern.version>
-		<tern.repo.url>${tern.reqs.url}/${tern.version}/</tern.repo.url> -->
-		<tern.repo.url>http://download.jboss.org/jbosstools/updates/requirements/tern/1.2.1.201611022209/</tern.repo.url>
+		<tern.version>1.2.1.201611022209</tern.version>
 
 		<!-- 
 			Angular is on Early Access so after fetching a new version into 
@@ -59,7 +57,7 @@
 		<repository>
 			<id>eclipse-tern</id>
 			<layout>p2</layout>
-			<url>${tern.repo.url}</url>
+			<url>${tern.reqs.url}/${tern.version}/</url>
 		</repository>
 		<repository>
 			<id>eclipse-angularjs</id>
