@@ -14,17 +14,20 @@ Require-Bundle: org.eclipse.ui,
  org.jboss.tools.common.model.ui,
  org.jboss.tools.jst.web.ui,
  org.jboss.tools.jst.web
-Export-Package: org.jboss.tools.jst.reddeer.ui.perspectives,
- org.jboss.tools.jst.reddeer.web.ui.wizards.project,
- org.jboss.tools.jst.reddeer.wst.jsdt.ui.wizard,
- org.jboss.tools.jst.reddeer.web.ui.editor.jspeditor,
- org.jboss.tools.jst.reddeer.wst.css.ui.wizard,
- org.jboss.tools.jst.reddeer.web.ui,
- org.jboss.tools.jst.reddeer,
- org.jboss.tools.jst.reddeer.wst.html.ui.wizard,
- org.jboss.tools.jst.reddeer.palette,
+Export-Package: org.jboss.tools.jst.reddeer,
+ org.jboss.tools.jst.reddeer.common,
  org.jboss.tools.jst.reddeer.jsp.ui.wizard,
- org.jboss.tools.jst.reddeer.web.ui.navigator
+ org.jboss.tools.jst.reddeer.npm.ui,
+ org.jboss.tools.jst.reddeer.palette,
+ org.jboss.tools.jst.reddeer.tern.ui,
+ org.jboss.tools.jst.reddeer.ui.perspectives,
+ org.jboss.tools.jst.reddeer.web.ui,
+ org.jboss.tools.jst.reddeer.web.ui.editor.jspeditor,
+ org.jboss.tools.jst.reddeer.web.ui.navigator,
+ org.jboss.tools.jst.reddeer.web.ui.wizards.project,
+ org.jboss.tools.jst.reddeer.wst.css.ui.wizard,
+ org.jboss.tools.jst.reddeer.wst.html.ui.wizard,
+ org.jboss.tools.jst.reddeer.wst.jsdt.ui.wizard
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 
