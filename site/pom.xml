@@ -8,7 +8,9 @@
 	</parent>
 	<groupId>org.jboss.tools.jst</groupId>
 	<artifactId>jst.site</artifactId> 
-	<name>jst.site</name>
 	
 	<packaging>eclipse-repository</packaging>
+	<properties>
+		<skipDeployToJBossOrg>false</skipDeployToJBossOrg>
+	</properties>
 </project>
