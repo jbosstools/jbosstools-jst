@@ -10,8 +10,9 @@
  ******************************************************************************/
 package org.jboss.tools.jst.reddeer.wst.jsdt.ui.wizard;
 
-import org.jboss.reddeer.jface.wizard.WizardPage;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.core.reference.ReferencedComposite;
+import org.eclipse.reddeer.jface.wizard.WizardPage;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
 
 /**
  * 
@@ -21,12 +22,16 @@ import org.jboss.reddeer.swt.impl.text.LabeledText;
  */
 public class NewJSFileWizardPage extends WizardPage{
 
+	public NewJSFileWizardPage(ReferencedComposite referencedComposite) {
+		super(referencedComposite);
+	}
+
 	/**
 	 * Sets a given file name.
 	 * 
 	 * @param name Name
 	 */
 	public void setFileName(String fileName){
-		new LabeledText("File name:").setText(fileName);
+		new LabeledText(referencedComposite, "File name:").setText(fileName);
 	}
 }

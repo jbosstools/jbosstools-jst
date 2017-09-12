@@ -14,10 +14,18 @@
  */
 package org.jboss.tools.jst.reddeer.web.ui.wizards.project;
 
-import org.jboss.reddeer.swt.impl.text.DefaultText;
+import org.eclipse.reddeer.core.reference.ReferencedComposite;
+import org.eclipse.reddeer.jface.wizard.WizardPage;
+import org.eclipse.reddeer.swt.impl.text.DefaultText;
 
-public class ImportWebProjectWizardPage {
+public class ImportWebProjectWizardPage extends WizardPage{
+	
+	
+	public ImportWebProjectWizardPage(ReferencedComposite referencedComposite) {
+		super(referencedComposite);
+	}
+
 	public void setWebXmlLocation(String location){
-		new DefaultText(1).setText(location);
+		new DefaultText(referencedComposite, 1).setText(location);
 	}
 }
