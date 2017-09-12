@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.jboss.tools.jst.reddeer.ui.perspectives;
 
-import org.jboss.reddeer.eclipse.ui.perspectives.AbstractPerspective;
+import org.eclipse.reddeer.eclipse.ui.perspectives.AbstractPerspective;
 
 /**
  * Web Development perspective implementation

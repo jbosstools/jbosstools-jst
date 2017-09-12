@@ -10,23 +10,29 @@
  ******************************************************************************/
 package org.jboss.tools.jst.reddeer.wst.css.ui.wizard;
 
-import org.jboss.reddeer.jface.wizard.WizardPage;
-import org.jboss.reddeer.swt.impl.text.DefaultText;
-import org.jboss.reddeer.swt.impl.text.LabeledText;
-import org.jboss.reddeer.swt.impl.tree.DefaultTreeItem;
+import org.eclipse.reddeer.core.reference.ReferencedComposite;
+import org.eclipse.reddeer.jface.wizard.WizardPage;
+import org.eclipse.reddeer.swt.impl.text.DefaultText;
+import org.eclipse.reddeer.swt.impl.text.LabeledText;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTree;
+import org.eclipse.reddeer.swt.impl.tree.DefaultTreeItem;
 
 /**
  * Wizard page for creating a HTML File.
  * @author vpakan
  */
 public class NewCSSFileWizardPage extends WizardPage {
+	public NewCSSFileWizardPage(ReferencedComposite referencedComposite) {
+		super(referencedComposite);
+	}
+
 	/**
 	 * Sets a given file name.
 	 * 
 	 * @param name Name
 	 */
 	public void setFileName(String fileName){
-		new LabeledText("File name:").setText(fileName);
+		new LabeledText(referencedComposite, "File name:").setText(fileName);
 	}
 	
 	/**
@@ -34,27 +40,27 @@ public class NewCSSFileWizardPage extends WizardPage {
 	 * 
 	 */
 	public String getFileName(){
-		return new LabeledText("File Name:").getText();
+		return new LabeledText(referencedComposite, "File Name:").getText();
 	}
 	/**
 	 * Selects parent folder
 	 * @param path
 	 */
 	public void selectParentFolder (String... path){
-		new DefaultTreeItem(path).select();
+		new DefaultTreeItem(new DefaultTree(referencedComposite),path).select();
 	}
 	/**
 	 * Sets parent folder
 	 * @param path
 	 */
 	public void setParentFolder(String path){
-		new DefaultText(0).setText(path);
+		new DefaultText(referencedComposite, 0).setText(path);
 	}
 	/**
 	 * Gets parent folder
 	 * @return
 	 */
 	public String getParentFolder(){
-		return new DefaultText(0).getText();
+		return new DefaultText(referencedComposite, 0).getText();
 	}
 }
