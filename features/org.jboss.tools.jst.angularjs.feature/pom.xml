@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.jboss.tools.jst</groupId>
 		<artifactId>features</artifactId>
-		<version>3.8.100-SNAPSHOT</version>
+		<version>3.9.0-SNAPSHOT</version>
 	</parent>
 	<groupId>org.jboss.tools.jst.features</groupId>
 	<artifactId>org.jboss.tools.jst.angularjs.feature</artifactId> 

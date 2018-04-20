@@ -212,6 +212,10 @@ public abstract class ImportWebProjectWizard extends Wizard implements IImportWi
 				throws InvalidRegistryObjectException {
 			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
 		}
+		@Override
+		public int getHandleId() {
+			return -1;
+		}
 	}
 
 }

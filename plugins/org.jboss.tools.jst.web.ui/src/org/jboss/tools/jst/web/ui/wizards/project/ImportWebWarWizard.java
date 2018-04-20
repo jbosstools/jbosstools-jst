@@ -149,6 +149,10 @@ public abstract class ImportWebWarWizard extends Wizard implements IImportWizard
 				throws InvalidRegistryObjectException {
 			throw new UnsupportedOperationException("Not implemented."); //$NON-NLS-1$
 		}
+		@Override
+		public int getHandleId() {
+			return -1;
+		}
 	}
 
 }
