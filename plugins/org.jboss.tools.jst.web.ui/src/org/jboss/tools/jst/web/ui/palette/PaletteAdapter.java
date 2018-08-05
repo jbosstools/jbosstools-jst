@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 - 2015 Exadel, Inc. and Red Hat, Inc.
+ * Copyright (c) 2007 - 2018 Exadel, Inc. and Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v1.0 which accompanies this distribution,
@@ -230,7 +230,9 @@ public class PaletteAdapter implements IPaletteAdapter {
 			dropManager.dispose();
 		}
 		descriptionManager.dispose();
-		viewPart.getActionBars().getToolBarManager().removeAll();
+		if (viewPart.getActionBars() != null) {
+			viewPart.getActionBars().getToolBarManager().removeAll();
+		}
 		viewer = null;
 		viewPart = null;
 	}
