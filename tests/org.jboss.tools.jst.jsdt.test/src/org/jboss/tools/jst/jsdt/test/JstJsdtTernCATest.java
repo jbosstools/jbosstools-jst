@@ -35,20 +35,14 @@ import tern.eclipse.ide.ui.contentassist.JSTernCompletionProposal;
 public class JstJsdtTernCATest extends ContentAssistantTestCase {
 	private static final String PROJECT_NAME = "JavaScriptProject"; //$NON-NLS-1$
 	private static final String PAGE_NAME = "WebContent/index.html"; //$NON-NLS-1$
-	private static final String ECMA6_PREFIX_STRING = 
+	private static final String ECMASCRIPT_PREFIX_STRING = 
 			"// Test Script"; //$NON-NLS-1$
-	private static final String[] ECMA6_PROPOSAL_STRINGS = {
-		"Array : Array - ecma6",  //$NON-NLS-1$
-		"ArrayBuffer : fn - ecma6",  //$NON-NLS-1$
-		"ArrayBuffer(length) - ecma6"  //$NON-NLS-1$
-		
-	};
-
-	private static final String ECMA5_PREFIX_STRING = 
-			"// Test Script"; //$NON-NLS-1$
-	private static final String[] ECMA5_PROPOSAL_STRINGS = {
-		"Boolean : fn - ecma5",  //$NON-NLS-1$
-		"Boolean(value) : bool - ecma5"  //$NON-NLS-1$
+	private static final String[] ECMASCRIPT_PROPOSAL_STRINGS = {
+		"Array : fn - ecmascript",  //$NON-NLS-1$
+		"ArrayBuffer : fn - ecmascript",  //$NON-NLS-1$
+		"ArrayBuffer(length) - ecmascript",  //$NON-NLS-1$
+		"Boolean : fn - ecmascript",  //$NON-NLS-1$
+		"Boolean(value) : bool - ecmascript"  //$NON-NLS-1$
 	};
 	private static final String BROWSER_PREFIX_STRING =
 		"// Test Script"; //$NON-NLS-1$ 
@@ -68,12 +62,8 @@ public class JstJsdtTernCATest extends ContentAssistantTestCase {
 	protected void tearDown() throws Exception {
 	}
 
-	public void testJstJsdtTernCAOnEcma5() {
-		doJstJsdtTernCATest(PAGE_NAME, ECMA5_PREFIX_STRING, ECMA5_PROPOSAL_STRINGS);
-	}
-
-	public void testJstJsdtTernCAOnEcma6() {
-		doJstJsdtTernCATest(PAGE_NAME, ECMA6_PREFIX_STRING, ECMA6_PROPOSAL_STRINGS);
+	public void testJstJsdtTernCAOnEcmaScript() {
+		doJstJsdtTernCATest(PAGE_NAME, ECMASCRIPT_PREFIX_STRING, ECMASCRIPT_PROPOSAL_STRINGS);
 	}
 
 	public void testJstJsdtTernCAOnBrowser() {
@@ -106,11 +96,13 @@ public class JstJsdtTernCATest extends ContentAssistantTestCase {
 			Set<String> vals = new HashSet<String>();
 			vals.addAll(Arrays.asList(values));
 					
+			System.out.println("[doJstJsdtTernCATest] proposals: >>>");
 			for (ICompletionProposal p : res) {
 				assertTrue("Content Assistant returned proposals which type (" + p.getClass().getName() + ") differs from JSTernCompletionProposal", (p instanceof JSTernCompletionProposal));  //$NON-NLS-1$//$NON-NLS-2$
 				
 				JSTernCompletionProposal proposal = (JSTernCompletionProposal)p;
 				String proposalString = proposal.getDisplayString();
+				
 				for (String value : values) {
 					if (value.equals(proposalString)) {
 						vals.remove(value);
@@ -120,6 +112,7 @@ public class JstJsdtTernCATest extends ContentAssistantTestCase {
 					break;
 				}
 			}
+			System.out.println("[doJstJsdtTernCATest] proposals: <<<");
 			
 			String rest = "";
 			if (vals.size() > 0) {
@@ -132,7 +125,7 @@ public class JstJsdtTernCATest extends ContentAssistantTestCase {
 					rest += "[" + val + "]";
 				}
 			}
-			assertEquals("The proposal Display Strings is/are not found: " + rest, 0, vals.size()); 
+			assertEquals("The proposal Display Strings is/are not found: " + rest, vals.size(), 0); 
 		} finally {
 			closeEditor();
 		}
