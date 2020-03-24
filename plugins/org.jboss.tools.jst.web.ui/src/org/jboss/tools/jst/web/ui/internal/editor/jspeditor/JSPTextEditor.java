@@ -942,8 +942,12 @@ public class JSPTextEditor extends StructuredTextEditor implements
 	}
 
 	private void createDrop() {
-		DropTarget target = new DropTarget(getSourceViewer().getTextWidget(),
-				DND.DROP_MOVE | DND.DROP_COPY);
+		DropTarget target = (DropTarget) getSourceViewer().getTextWidget().getData(DND.DROP_TARGET_KEY);
+		if (target == null) {
+			target = new DropTarget(getSourceViewer().getTextWidget(),
+					DND.DROP_MOVE | DND.DROP_COPY); 
+		}
+				
 		Transfer[] types = new Transfer[] { ModelTransfer.getInstance(),
 				HTMLTransfer.getInstance(), TextTransfer.getInstance(),
 				FileTransfer.getInstance(), PaletteItemTransfer.getInstance() };
