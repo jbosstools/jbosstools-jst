@@ -37,11 +37,11 @@ import org.eclipse.wst.sse.ui.contentassist.CompletionProposalInvocationContext;
 import org.eclipse.wst.sse.ui.internal.ExtendedConfigurationBuilder;
 import org.eclipse.wst.sse.ui.internal.SSEUIPlugin;
 import org.eclipse.wst.sse.ui.internal.derived.HTMLTextPresenter;
-import org.eclipse.wst.sse.ui.internal.preferences.EditorPreferenceNames;
 import org.eclipse.wst.sse.ui.internal.provisional.style.LineStyleProvider;
 import org.eclipse.wst.sse.ui.internal.taginfo.AnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.TextHoverManager;
 import org.eclipse.wst.sse.ui.internal.util.EditorUtility;
+import org.eclipse.wst.sse.ui.preferences.AppearancePreferenceNames;
 import org.jboss.tools.common.text.ext.hyperlink.HyperlinkDetector;
 import org.jboss.tools.common.text.xml.BaseQuickAssistProcessor;
 import org.jboss.tools.common.text.xml.contentassist.ProposalSorter;
@@ -247,10 +247,10 @@ public class JSPTextViewerConfiguration extends StructuredTextViewerConfiguratio
 			assistant.setInformationControlCreator(getQuickAssistAssistantInformationControlCreator());
 
 			if (fPreferenceStore != null) {
-				Color color = getColor(EditorPreferenceNames.CODEASSIST_PROPOSALS_BACKGROUND);
+				Color color = getColor(AppearancePreferenceNames.CODEASSIST_PROPOSALS_BACKGROUND);
 				assistant.setProposalSelectorBackground(color);
 
-				color = getColor(EditorPreferenceNames.CODEASSIST_PROPOSALS_FOREGROUND);
+				color = getColor(AppearancePreferenceNames.CODEASSIST_PROPOSALS_FOREGROUND);
 				assistant.setProposalSelectorForeground(color);
 			}
 			fQuickAssistant = assistant;
