@@ -147,9 +147,7 @@ public class CreateNewFileHyperlinkTest extends TestCase{
 		checkWizard("css"); //$NON-NLS-1$
 	}
 
-	public void testJSWizard(){
-		checkWizard("js"); //$NON-NLS-1$
-	}
+
 
 	public void testJSPWizard(){
 		checkWizard("jsp"); //$NON-NLS-1$
