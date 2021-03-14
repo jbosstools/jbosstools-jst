@@ -27,7 +27,8 @@ Require-Bundle: org.jboss.tools.jst.web.ui,
  org.eclipse.core.databinding;bundle-version="1.4.0",
  org.eclipse.ui.views.properties.tabbed;bundle-version="3.5.200",
  org.eclipse.wst.css.core;bundle-version="1.1.500",
- org.eclipse.wst.html.core
+ org.eclipse.wst.html.core,
+ javax.xml
 Export-Package: org.jboss.tools.jst.web.ui.test,
  org.jboss.tools.jst.web.ui.editor.test.ca,
  org.jboss.tools.jst.web.ui.editor.test.commands,
