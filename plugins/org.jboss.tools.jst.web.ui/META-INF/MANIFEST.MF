@@ -106,6 +106,8 @@ Require-Bundle: org.eclipse.ui.ide;bundle-version="3.7.0",
  org.eclipse.datatools.connectivity.db.generic.ui;bundle-version="1.0.1",
  org.jboss.tools.common.el.ui,
  org.eclipse.wst.html.core;bundle-version="1.1.502"
-Bundle-Version: 3.10.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Version: 3.11.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ClassPath: .
+Import-Package: org.w3c.dom.css,
+ org.w3c.dom.stylesheets

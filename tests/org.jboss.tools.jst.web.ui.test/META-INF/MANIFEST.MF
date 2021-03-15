@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.jboss.tools.jst.web.ui.test;singleton:=true
-Bundle-Version: 3.10.0.qualifier
+Bundle-Version: 3.11.0.qualifier
 Bundle-Vendor: %Bundle-Vendor.0
 Require-Bundle: org.jboss.tools.jst.web.ui,
  org.jboss.tools.jst.web,
@@ -34,4 +34,6 @@ Export-Package: org.jboss.tools.jst.web.ui.test,
  org.jboss.tools.jst.web.ui.editor.test.selbar,
  org.jboss.tools.jst.web.ui.openon.test
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Import-Package: org.w3c.dom.css,
+ org.w3c.dom.stylesheets
