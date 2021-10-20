@@ -36,7 +36,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.apache.commons.io,
  org.eclipse.jst.jsf.facelet.ui;bundle-version="1.3.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: %providerName
 Export-Package: org.jboss.tools.jst.web.kb,
  org.jboss.tools.jst.web.kb.action,
