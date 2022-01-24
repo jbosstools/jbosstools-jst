@@ -13,7 +13,7 @@
 	<packaging>pom</packaging>
 	<properties>
 		<tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-jst.git</tycho.scmUrl>
-		<tern.reqs.url>http://download.jboss.org/jbosstools/updates/requirements/tern</tern.reqs.url>
+		<tern.reqs.url>https://download.jboss.org/jbosstools/updates/requirements/tern</tern.reqs.url>
 		<!-- Tern is included in this project's build's update site directly, so no need to worry about updating it in target platforms or classifying it in the JBT earlyaccess.properties files
 
 		However, Tern is still Early Access in JBDS, so please ensure this file is correct, or submit a PR to get it fixed:
@@ -62,7 +62,7 @@
 		<repository>
 			<id>eclipse-angularjs</id>
 			<layout>p2</layout>
-			<url>http://download.jboss.org/jbosstools/targetplatforms/jbtearlyaccesstarget/${TARGET_PLATFORM_CENTRAL_MAX}/REPO/</url>
+			<url>https://download.jboss.org/jbosstools/targetplatforms/jbtearlyaccesstarget/${TARGET_PLATFORM_CENTRAL_MAX}/REPO/</url>
 		</repository>
 		<!-- To resolve parent artifact -->
 		<repository>
