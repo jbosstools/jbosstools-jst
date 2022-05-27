@@ -10,14 +10,14 @@
  ******************************************************************************/
 package org.jboss.tools.jst.web.ui.internal.text.ext.hyperlink;
 
-import org.eclipse.mylyn.commons.workbench.browser.BrowserUtil;
 import org.eclipse.osgi.service.runnable.ParameterizedRunnable;
+import org.jboss.tools.foundation.ui.util.BrowserUtility;
 
 public class OpenWithBrowserLauncher implements ParameterizedRunnable {
 
 	@Override
 	public Object run(Object context) throws Exception {
-		BrowserUtil.openUrl((String)context, BrowserUtil.NO_RICH_EDITOR);
+		new BrowserUtility().openExternalBrowser((String)context);
 		return null;
 	}
 
