@@ -22,7 +22,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.jboss.tools.common.web.WebUtils;
@@ -335,7 +336,7 @@ public abstract class BaseTabControl extends Composite implements
 	}
 
 	private IFile getPageFile() {
-		IWorkbenchPage page = WebUiPlugin.getDefault().getWorkbench()
+		IWorkbenchPage page = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getActivePage();
 		if (page != null
 				&& page.getActiveEditor() != null
@@ -575,10 +576,10 @@ public abstract class BaseTabControl extends Composite implements
 
 		if (widget instanceof Text) {
 			getBindingContext().bindValue(
-					SWTObservables.observeText((Text) widget, SWT.Modify),
+					WidgetProperties.text(SWT.Modify).observe(widget),
 					attributeValue, targetToModel, modelToTarget);
 		} else if ((widget instanceof Combo)) {
-			getBindingContext().bindValue(SWTObservables.observeText(widget),
+			getBindingContext().bindValue(WidgetProperties.text().observe(widget),
 					attributeValue, targetToModel, modelToTarget);
 		} else if (widget instanceof CSSWidget) {
 			getBindingContext().bindValue(
