@@ -6,12 +6,6 @@
 	<feature id="org.jboss.tools.jst.feature">
 		<category name="org.jboss.tools.jst.nightly.category" />
 	</feature>
-	<feature id="org.jboss.tools.jst.jsdt.feature">
-		<category name="org.jboss.tools.jst.nightly.category" />
-	</feature>
-	<feature id="org.jboss.tools.jst.angularjs.feature">
-		<category name="org.jboss.tools.jst.nightly.category" />
-	</feature>
 	<feature id="org.jboss.tools.jst.test.feature">
 		<category name="org.jboss.tools.jst.nightly.category" />
 	</feature>
@@ -20,31 +14,8 @@
 	<feature id="org.jboss.tools.jst.feature.source">
 		<category name="org.jboss.tools.jst.nightly.category" />
 	</feature>
-	<feature id="org.jboss.tools.jst.jsdt.feature.source">
-		<category name="org.jboss.tools.jst.nightly.category" />
-	</feature>
-	<feature id="org.jboss.tools.jst.angularjs.feature.source">
-		<category name="org.jboss.tools.jst.nightly.category" />
-	</feature>
 	<feature id="org.jboss.tools.jst.test.feature.source">
 		<category name="org.jboss.tools.jst.nightly.category" />
 	</feature>
 
-	<bundle id="minimal-json" />
-	<bundle id="minimatch.java" />
-	<feature id="tern-feature">
-		<category name="org.jboss.tools.jst.nightly.category" />
-	</feature>
-	<feature id="tern-jsdt-feature">
-		<category name="org.jboss.tools.jst.nightly.category" />
-	</feature>
-	<feature id="tern-server-nodejs-feature">
-		<category name="org.jboss.tools.jst.nightly.category" />
-	</feature>
-	<feature id="tern.eclipse.ide.server.nodejs.embed">
-		<category name="org.jboss.tools.jst.nightly.category" />
-	</feature>
-	<feature id="tern.eclipse.ide.tools.feature">
-		<category name="org.jboss.tools.jst.nightly.category" />
-	</feature>
 </site>
