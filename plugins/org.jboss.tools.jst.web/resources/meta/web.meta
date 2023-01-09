@@ -420,6 +420,8 @@
      <value name="2.5"/>
      <value name="3.0"/>
      <value name="3.1"/>
+     <value name="4.0"/>
+     <value name="5.0"/>
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
@@ -672,6 +674,8 @@
      <value name="2.5"/>
      <value name="3.0"/>
      <value name="3.1"/>
+     <value name="4.0"/>
+     <value name="5.0"/>
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
@@ -879,6 +883,8 @@
      <value name="2.5"/>
      <value name="3.0"/>
      <value name="3.1"/>
+     <value name="4.0"/>
+     <value name="5.0"/>
     </Constraint>
     <Editor name="List"/>
    </XModelAttribute>
