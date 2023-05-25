@@ -10,8 +10,6 @@
  ******************************************************************************/ 
 package org.jboss.tools.jst.web.ui.test;
 
-import junit.framework.TestCase;
-
 import org.eclipse.gef.ui.views.palette.PaletteView;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveRegistry;
@@ -19,9 +17,9 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
-import org.jboss.tools.common.model.ui.views.palette.PaletteViewPart;
 import org.jboss.tools.jst.web.ui.WebDevelopmentPerspectiveFactory;
-import org.jboss.tools.jst.web.ui.navigator.WebProjectsNavigator;
+
+import junit.framework.TestCase;
 
 /**
  * @author eskimo
@@ -60,11 +58,7 @@ public class WebViewsTest extends TestCase {
 		}
 	}
 	
-	public void testWebProjectsViewIsShowed() {
-		IViewPart webProjectsView = findView(WebProjectsNavigator.VIEW_ID);
-		assertNotNull("Web project Navigator hasn't been loaded",webProjectsView);
-	}
-	
+
 	public void testPaletteViewIsShowed() {
 		IViewPart paletteView = findView(PaletteView.ID/*PaletteViewPart.VIEW_ID*/);
 		assertNotNull("Palette View hasn't been loaded",paletteView);

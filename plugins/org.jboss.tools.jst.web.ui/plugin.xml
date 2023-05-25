@@ -246,12 +246,12 @@
 		</commonWizard>
 	</extension>
 
-   <extension id="org.jboss.tools.jst.web.ui.views" name="JBoss Tools" point="org.eclipse.ui.views">
+   <!--<extension id="org.jboss.tools.jst.web.ui.views" name="JBoss Tools" point="org.eclipse.ui.views">
       <category id="web.views.category.id" name="%ViewCategory_JBossToolsWeb">
       </category>
       <view category="web.views.category.id" class="org.jboss.tools.jst.web.ui.navigator.WebProjectsNavigator" icon="$nl$/images/xstudio/views/web_project.gif" id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView" name="%ViewName_WebProjects">
       </view>
-   </extension>
+   </extension>-->
 
 
 
@@ -382,8 +382,8 @@
          </newWizardShortcut>
          <viewShortcut id="org.eclipse.gef.ui.palette_view">
          </viewShortcut>
-         <viewShortcut id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView">
-         </viewShortcut>
+         <!--<viewShortcut id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView">
+         </viewShortcut>-->
          <viewShortcut id="org.jboss.tools.jst.web.ui.action.BrowserView">
          </viewShortcut>
          <viewShortcut id="org.eclipse.jdt.ui.PackageExplorer">
@@ -398,28 +398,28 @@
          </viewShortcut>
          <viewShortcut id="org.eclipse.ui.views.TaskList">
          </viewShortcut>
-         <viewShortcut id="org.eclipse.ui.views.ResourceNavigator">
-         </viewShortcut>
+         <!-- <viewShortcut id="org.eclipse.ui.views.ResourceNavigator">
+         </viewShortcut> -->
          <perspectiveShortcut id="org.eclipse.debug.ui.DebugPerspective">
          </perspectiveShortcut>
       </perspectiveExtension>
       <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">
          <perspectiveShortcut id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective">
          </perspectiveShortcut>
-         <viewShortcut id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
-         </viewShortcut>
+         <!--<viewShortcut id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
+         </viewShortcut>-->
       </perspectiveExtension>
       <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
          <perspectiveShortcut id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective">
          </perspectiveShortcut>
-         <viewShortcut id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
-         </viewShortcut>
+         <!--<viewShortcut id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
+         </viewShortcut>-->
       </perspectiveExtension>
       <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
          <perspectiveShortcut id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective">
          </perspectiveShortcut>
-         <viewShortcut id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
-         </viewShortcut>
+         <!--<viewShortcut id="org.jboss.tools.common.model.ui.navigator.NavigatorViewPart">
+         </viewShortcut>-->
       </perspectiveExtension>
       <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaBrowsingPerspective">
          <perspectiveShortcut id="org.jboss.tools.jst.web.ui.WebDevelopmentPerspective">
@@ -850,10 +850,10 @@
       		type="showintarget"
             value="org.eclipse.jdt.ui.PackageExplorer"
 			target="org.eclipse.jst.jsp.core.jspsource" />
-		<provisionalDefinition
+		<!--<provisionalDefinition
       		type="showintarget"
             value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
-			target="org.eclipse.jst.jsp.core.jspsource" />
+			target="org.eclipse.jst.jsp.core.jspsource" />-->
 		<provisionalDefinition
 			type="spellingregions"
 			value="XML_COMMENT_TEXT, JSP_COMMENT_TEXT, XML_CONTENT, HTML_CONTENT"
@@ -899,10 +899,10 @@
       		type="showintarget"
             value="org.eclipse.jdt.ui.PackageExplorer"
 			target="org.jboss.tools.jst.jsp.jspincludesource" />
-		<provisionalDefinition
+		<!--<provisionalDefinition
       		type="showintarget"
             value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
-			target="org.jboss.tools.jst.jsp.jspincludesource" />
+			target="org.jboss.tools.jst.jsp.jspincludesource" />-->
 		<provisionalDefinition
 			type="spellingregions"
 			value="XML_COMMENT_TEXT, JSP_COMMENT_TEXT, XML_CONTENT, HTML_CONTENT"
@@ -960,10 +960,10 @@
       		type="showintarget"
             value="org.eclipse.jdt.ui.PackageExplorer"
 			target="org.eclipse.wst.html.core.htmlsource" />
-		<provisionalDefinition
+		<!--<provisionalDefinition
       		type="showintarget"
             value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
-			target="org.eclipse.wst.html.core.htmlsource" />
+			target="org.eclipse.wst.html.core.htmlsource" />-->
 		<provisionalDefinition
 			type="spellingregions"
 			value="XML_COMMENT_TEXT, XML_CONTENT"
@@ -1009,10 +1009,10 @@
       		type="showintarget"
             value="org.eclipse.jdt.ui.PackageExplorer"
 			target="jsf.facelet" />
-		<provisionalDefinition
+		<!--<provisionalDefinition
       		type="showintarget"
             value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
-			target="jsf.facelet" />
+			target="jsf.facelet" />-->
 		<provisionalDefinition
 			type="spellingregions"
 			value="XML_COMMENT_TEXT, XML_CONTENT"
@@ -1030,18 +1030,18 @@
       			type="showintarget"
             	value="org.eclipse.jdt.ui.PackageExplorer"
 				target="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor" />
-		  <provisionalDefinition
+		  <!--<provisionalDefinition
       			type="showintarget"
             	value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
-				target="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor" />
+				target="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.JSPTextEditor" />-->
 		  <provisionalDefinition
       			type="showintarget"
             	value="org.eclipse.jdt.ui.PackageExplorer"
 				target="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.HTMLTextEditor" />
-		  <provisionalDefinition
+		  <!--<provisionalDefinition
       			type="showintarget"
             	value="org.jboss.tools.jst.web.ui.navigator.WebProjectsView"
-				target="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.HTMLTextEditor" />
+				target="org.jboss.tools.jst.web.ui.internal.editor.jspeditor.HTMLTextEditor" />-->
 		  <provisionalConfiguration
 				type="foldingstrategy"
 				class="org.eclipse.wst.xml.ui.internal.projection.XMLFoldingStrategy"
@@ -1545,7 +1545,7 @@
 				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
 				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
 			</contentType>
-			<contentType id="org.jboss.tools.seam.xml.ui.pages20xmlsource">
+			<!--<contentType id="org.jboss.tools.seam.xml.ui.pages20xmlsource">
 				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
 				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
 				<partitionType id="org.eclipse.wst.xml.XML_PI" />
@@ -1554,7 +1554,7 @@
 				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
 				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
 				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
-			</contentType>
+			</contentType>-->
 			<contentType id="org.eclipse.jst.jsf.facesconfig.facesConfigFile">
 				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
 				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
@@ -1675,7 +1675,7 @@
 				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
 				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
 			</contentType>
-			<contentType id="org.jboss.tools.seam.xml.ui.pages20xmlsource">
+			<!--<contentType id="org.jboss.tools.seam.xml.ui.pages20xmlsource">
 				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
 				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
 				<partitionType id="org.eclipse.wst.xml.XML_PI" />
@@ -1684,7 +1684,7 @@
 				<partitionType id="org.eclipse.wst.xml.dtd.internal_subset" />
 				<partitionType id="org.eclipse.wst.sse.ST_DEFAULT" />
 				<partitionType id="org.eclipse.wst.sse.UNKNOWN_PARTITION_TYPE" />
-			</contentType>
+			</contentType>-->
 			<contentType id="org.eclipse.jst.jsf.facesconfig.facesConfigFile">
 				<partitionType id="org.eclipse.wst.xml.XML_DEFAULT" />
 				<partitionType id="org.eclipse.wst.xml.XML_CDATA" />
@@ -1910,15 +1910,15 @@
        <viewShortcut
              id="org.eclipse.ui.views.TaskList">
        </viewShortcut>
-       <viewShortcut
+       <!--<viewShortcut
              id="org.jboss.tools.seam.ui.views.SeamComponentsNavigator">
-       </viewShortcut>
+       </viewShortcut> -->
        <viewShortcut
              id="org.eclipse.ui.views.PropertySheet">
        </viewShortcut>
-       <viewShortcut
+       <!--<viewShortcut
              id="org.jboss.tools.jst.web.ui.navigator.WebProjectsView">
-       </viewShortcut>
+       </viewShortcut>-->
        <viewShortcut
              id="org.jboss.ide.eclipse.archives.ui.ProjectArchivesView">
        </viewShortcut>
@@ -1931,9 +1931,9 @@
        <perspectiveShortcut
              id="org.eclipse.jst.j2ee.J2EEPerspective">
        </perspectiveShortcut>
-       <perspectiveShortcut
+       <!-- <perspectiveShortcut
              id="org.jboss.tools.seam.ui.SeamPerspective">
-       </perspectiveShortcut>
+       </perspectiveShortcut> -->
        <newWizardShortcut
              id="org.jboss.tools.jst.web.ui.wizards.newfile.NewCSSClassWizard">
        </newWizardShortcut>
