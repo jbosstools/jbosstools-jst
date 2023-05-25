@@ -9,7 +9,7 @@
 	</parent>
 	<artifactId>jst</artifactId>
 	<name>jbosstools-jst</name>
-	<version>3.10.301-SNAPSHOT</version>
+	<version>3.10.400-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<properties>
 		<tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-jst.git</tycho.scmUrl>
