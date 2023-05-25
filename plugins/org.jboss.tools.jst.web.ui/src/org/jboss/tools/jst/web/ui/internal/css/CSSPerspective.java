@@ -39,8 +39,8 @@ public class CSSPerspective implements IPerspectiveFactory {
 		IFolderLayout leftTop = layout.createFolder(
 				"leftTop", IPageLayout.LEFT, (float) 0.2, editorArea); //$NON-NLS-1$
 		leftTop.addView(JavaUI.ID_PACKAGES);
-		leftTop.addView("org.jboss.tools.jst.web.ui.navigator.WebProjectsView"); //$NON-NLS-1$
-		leftTop.addPlaceholder(IPageLayout.ID_RES_NAV);
+		//leftTop.addView("org.jboss.tools.jst.web.ui.navigator.WebProjectsView"); //$NON-NLS-1$
+		leftTop.addPlaceholder(IPageLayout.ID_PROJECT_EXPLORER);
 
 		IFolderLayout leftBottom = layout.createFolder(
 				"leftBottom", IPageLayout.BOTTOM, (float) 0.64, "leftTop"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -64,8 +64,8 @@ public class CSSPerspective implements IPerspectiveFactory {
 		layout.addActionSet(IPageLayout.ID_NAVIGATE_ACTION_SET);
 
 		// views - seam
-		layout
-				.addShowViewShortcut("org.jboss.tools.seam.ui.views.SeamComponentsNavigator"); //$NON-NLS-1$
+		//layout
+		//		.addShowViewShortcut("org.jboss.tools.seam.ui.views.SeamComponentsNavigator"); //$NON-NLS-1$
 
 		// views - java
 		layout.addShowViewShortcut(JavaUI.ID_PACKAGES);
@@ -75,7 +75,7 @@ public class CSSPerspective implements IPerspectiveFactory {
 		// views - standard workbench
 		layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
 		layout.addShowViewShortcut(IPageLayout.ID_PROBLEM_VIEW);
-		layout.addShowViewShortcut(IPageLayout.ID_RES_NAV);
+		layout.addShowViewShortcut(IPageLayout.ID_PROJECT_EXPLORER);
 
 		// new actions - Java project creation wizard
 		layout
