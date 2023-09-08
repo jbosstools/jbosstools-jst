@@ -48,8 +48,8 @@ public class MobileDrawerEditPart extends CustomDrawerEditPart {
                                 return createToolTip();
                         }
                 };
-                fig.setExpanded(getDrawer().isInitiallyOpen());
-                fig.setPinned(getDrawer().isInitiallyPinned());
+                fig.setExpanded(getModel().isInitiallyOpen());
+                fig.setPinned(getModel().isInitiallyPinned());
                 fig.getCollapseToggle().setRequestFocusEnabled(true);
                 fig.getCollapseToggle().addFocusListener(new FocusListener() {
                         public void focusGained(FocusEvent fe) {
@@ -66,8 +66,8 @@ public class MobileDrawerEditPart extends CustomDrawerEditPart {
                                 return createToolTip();
                         }
                 };
-                fig.setExpanded(getDrawer().isInitiallyOpen());
-                fig.setPinned(getDrawer().isInitiallyPinned());
+                fig.setExpanded(getModel().isInitiallyOpen());
+                fig.setPinned(getModel().isInitiallyPinned());
                 fig.getCollapseToggle().setRequestFocusEnabled(true);
                 fig.getCollapseToggle().addFocusListener(new FocusListener() {
                         public void focusGained(FocusEvent fe) {
@@ -128,7 +128,7 @@ public class MobileDrawerEditPart extends CustomDrawerEditPart {
 		}
         
         private boolean isNoVisibleItems(){
-        	for(Object child : getDrawer().getChildren()){
+        	for(Object child : getModel().getChildren()){
         		if(!(child instanceof PaletteSeparator) && ((PaletteTool)child).isVisible()){
         			return false;
         		}
@@ -137,7 +137,7 @@ public class MobileDrawerEditPart extends CustomDrawerEditPart {
         }
         
         private boolean isEmpty(){
-        	for(Object child : getDrawer().getChildren()){
+        	for(Object child : getModel().getChildren()){
         		if(!(child instanceof PaletteSeparator)){
         			return false;
         		}
