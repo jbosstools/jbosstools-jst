@@ -34,8 +34,8 @@ public class CustomDrawerEditPart extends DrawerEditPart {
 				return createToolTip();
 			}
 		};
-		fig.setExpanded(getDrawer().isInitiallyOpen());
-		fig.setPinned(getDrawer().isInitiallyPinned());
+		fig.setExpanded(getModel().isInitiallyOpen());
+		fig.setPinned(getModel().isInitiallyPinned());
 		fig.getCollapseToggle().setRequestFocusEnabled(true);
 		fig.getCollapseToggle().addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent fe) {
